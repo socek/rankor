@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  backend:
+    build: backend
+    env_file: .env
+    volumes:
+      - ./backend/code:/code
+    command: ./scripts/start_dev
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+

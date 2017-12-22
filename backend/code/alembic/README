@@ -1,0 +1,2 @@
+Single-database configuration. Configuration (url for database) is not taken from alembic.ini, rather from application
+settings itself.

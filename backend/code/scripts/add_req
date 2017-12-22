@@ -1,0 +1,12 @@
+#!/bin/bash
+# This script adds requiretment and send it to the requirements.txt
+ABSPATH=`realpath $0`
+BINDIR=`dirname $ABSPATH`
+SRCDIR=`dirname $BINDIR`
+
+cd $SRCDIR
+pip install $1
+ER=$?
+if [ "$ER" == "0" ] ; then
+    pip freeze | grep -v mypet > requirements.txt
+fi

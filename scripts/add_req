@@ -1,0 +1,5 @@
+#!/bin/bash
+# This script adds requiretment and send it to the requirements.txt
+docker-compose build
+docker-compose run --rm -u 0 backend ./scripts/add_req $1
+docker-compose build
