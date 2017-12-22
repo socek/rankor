@@ -18,6 +18,9 @@ setup(
         'pyramid', 'SQLAlchemy', 'psycopg2', 'PyYAML', 'alembic', 'raven',
         'celery', 'marshmallow', 'sapp==0.1'
     ],
+    dependency_links=[
+        'git://github.com/socek/qapla/@eb2ab448ce7f176991e12c64faff99a90547de02#egg=sapp-0.1'
+    ],
     tests_require=['coverage', 'freezegun', 'pytest', 'pytest-cov', 'WebTest'],
     long_description=__doc__,
     author='Dominik "Socek" Długajczyk',
@@ -27,7 +30,7 @@ setup(
     # url='',
     keywords=['pet'],
     entry_points={
-        'paste.app_factory': ['app = mypet:app'],
+        'paste.app_factory': ['main = mypet.application.startpoints:uwsgi'],
     },
     classifiers=[
         'Development Status :: 4 - Beta', 'Environment :: Web Environment',
