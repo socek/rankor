@@ -10,3 +10,13 @@ services:
     ports:
       - "${BACKEND_PORT:-8000}:8000"
 
+  postgres:
+    image: postgres:10.1
+    env_file: .env
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

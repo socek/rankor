@@ -16,10 +16,11 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pyramid', 'SQLAlchemy', 'psycopg2', 'PyYAML', 'alembic', 'raven',
-        'celery', 'marshmallow', 'sapp==0.1'
+        'celery', 'marshmallow',
+        'sapp==0.1'
     ],
     dependency_links=[
-        'git://github.com/socek/qapla/@eb2ab448ce7f176991e12c64faff99a90547de02#egg=sapp-0.1'
+        'git://github.com/socek/qapla/@pluginable#egg=sapp-0.1'
     ],
     tests_require=['coverage', 'freezegun', 'pytest', 'pytest-cov', 'WebTest'],
     long_description=__doc__,
@@ -27,7 +28,7 @@ setup(
     author_email='msocek@gmail.com',
     license='MIT',
     zip_safe=False,
-    # url='',
+    url='http://github.com/socek/mypet',
     keywords=['pet'],
     entry_points={
         'paste.app_factory': ['main = mypet.application.startpoints:uwsgi'],
