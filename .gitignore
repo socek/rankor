@@ -106,3 +106,5 @@ ENV/
 .mypy_cache/
 /backend/code/update.txt
 *.sublime-*
+.awcache
+coverag

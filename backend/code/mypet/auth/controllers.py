@@ -1,36 +1,69 @@
 from marshmallow import ValidationError
 from pyramid.security import forget
 from pyramid.security import remember
-from sapp.plugins.pyramid.controller import HttpController
 from sapp.plugins.pyramid.controller import RestfulController
 from sqlalchemy.orm.exc import NoResultFound
 
+from mypet import app
 from mypet.auth.drivers import UserReadDriver
 from mypet.auth.schemas import LoginSchema
-from mypet import app
 
 
-class LoginController(HttpController):
-    renderer = 'mypet.auth:templates/login.jinja2'
+class FormSerializer(object):
+    schema = LoginSchema
 
-    def get(self):
-        self.context['errors'] = {}
-        self.context['form'] = {}
+    def __init__(self):
+        self._create_clean_form()
 
-    def post(self):
-        self.get()
+    def _create_clean_form(self):
+        self.fullform = {
+            'error': None,
+            'validated': False,
+            'fields': {},
+        }
 
-        fields = self.request.POST
-        self.context['form'] = fields
+    def parse_json(self, json):
+        for name, field in json.items():
+            self.fullform['fields'][name] = {
+                'error': None,
+                'value': field['value'],
+            }
+
+    def fields(self):
+        data = {}
+        for name, field in self.fullform['fields'].items():
+            data[name] = field['value']
+        return data
+
+    def validate(self):
         try:
-            LoginSchema(strict=True).load(fields)
-            if self.authenticated(fields):
-                self.on_success(fields)
-            else:
-                self.on_fail()
+            self.schema(strict=True).load(self.fields())
+            self.set_form_error(None)
+            return True
         except ValidationError as err:
-            self.context['errors'] = err.messages
-            return
+            for name, errors in err.messages.items():
+                self.fullform['fields'][name]['error'] = errors[0]
+            return False
+
+    def set_form_error(self, error):
+        self.fullform['validated'] = False
+        self.fullform['error'] = error
+
+    def set_form_ok(self):
+        self.fullform['validated'] = True
+
+
+class LoginController(RestfulController):
+    def post(self):
+        form = FormSerializer()
+        form.parse_json(self.request.json_body)
+        self.context['form'] = form.fullform
+
+        if form.validate():
+            if self.authenticated(form.fields()):
+                self.on_success(form)
+            else:
+                self.on_fail(form)
 
     def authenticated(self, fields):
         with app as context:
@@ -43,24 +76,20 @@ class LoginController(HttpController):
                 # user can not be authenticated if he/she does not exists
                 return False
 
-    def on_success(self, fields):
-        self.context['form_error'] = ''
-        self.context['validate'] = True
+    def on_success(self, form):
         headers = remember(self.request, self.user_id)
         self.request.response.headerlist.extend(headers)
-        self.redirect('auth')
+        form.set_form_ok()
 
-    def on_fail(self):
-        self.context['validate'] = False
-        self.context['form_error'] = "Username and/or password do not match."
+    def on_fail(self, form):
+        form.set_form_error('Username and/or password do not match.')
 
 
-class LogoutController(HttpController):
+class LogoutController(RestfulController):
     def get(self):
         headers = forget(self.request)
         self.request.response.headerlist.extend(headers)
         self.context['is_authenticated'] = False
-        self.redirect('auth')
 
 
 class AuthDataController(RestfulController):

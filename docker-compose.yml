@@ -1,6 +1,19 @@
 version: '3'
 
 services:
+  traefik:
+    image: traefik
+    command: -c /dev/null --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+    env_file: .env
+    labels:
+      - "traefik.enable=false"
+    ports:
+      - "${TRAEFIK_HTTP_PORT:-80}:80"
+      - "${TRAEFIK_HTTPS_PORT:-443}:443"
+      - "${TRAEFIK_ADMIN_PORT:-8080}:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   backend:
     build: backend
     env_file: .env
@@ -9,6 +22,21 @@ services:
     command: ./scripts/start_dev
     ports:
       - "${BACKEND_PORT:-8000}:8000"
+    labels:
+      - "traefik.backend=backend"
+      - "traefik.frontend.rule=PathPrefixStrip:/api/"
+
+  frontend:
+    build: ./frontend
+    env_file: .env
+    volumes:
+      - ./frontend/code:/code
+    command: npm run dev
+    ports:
+      - "${FRONTEND_PORT:-9080}:8080"
+    labels:
+      - "traefik.backend=frontend"
+      - "traefik.frontend.rule=PathPrefix:/"
 
   postgres:
     image: postgres:10.1

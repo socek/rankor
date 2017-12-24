@@ -1,0 +1,126 @@
+last_index: 14
+rbh.containers.BackendContainerBuild:
+  aborted: false
+  dependencies:
+  - builded: true
+    filename: /home/socek/projects/rotarran/data/flags/backend_dockerfile_flag
+    index: 2
+    name: baelfire.dependencies.file.FileDoesNotExists
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/backend/Dockerfile
+    index: 3
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/backend/requirements_dev.txt
+    index: 4
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/backend/code/setup.py
+    index: 5
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  needtorun: false
+  runned: false
+  signal: null
+  success: false
+rbh.containers.FrontendContainerBuild:
+  aborted: false
+  dependencies:
+  - builded: true
+    filename: /home/socek/projects/rotarran/data/flags/frontend_dockerfile_flag
+    index: 7
+    name: baelfire.dependencies.file.FileDoesNotExists
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/frontend/Dockerfile
+    index: 8
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/frontend/code/package.json
+    index: 9
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  needtorun: false
+  runned: false
+  signal: null
+  success: false
+rbh.containers.NginxContainerBuild:
+  aborted: false
+  dependencies:
+  - builded: true
+    filename: /home/socek/projects/rotarran/data/flags/nginx_dockerfile_flag
+    index: 11
+    name: baelfire.dependencies.file.FileDoesNotExists
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/nginx/Dockerfile
+    index: 12
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    filename: /home/socek/projects/rotarran/nginx/nginx.conf
+    index: 13
+    name: baelfire.dependencies.file.FileChanged
+    phase_validation: true
+    should_build: false
+    success: true
+  needtorun: false
+  runned: false
+  signal: null
+  success: false
+rbh.containers.RunNginxContainer:
+  aborted: false
+  dependencies:
+  - builded: true
+    index: 0
+    name: rbh.dependecies.ContainerIsNotRunning
+    phase_validation: true
+    should_build: false
+    success: true
+  - builded: true
+    index: 1
+    name: baelfire.dependencies.task.RunTask
+    phase_validation: true
+    should_build: false
+    success: true
+    task: rbh.containers.BackendContainerBuild
+  - builded: true
+    index: 6
+    name: baelfire.dependencies.task.RunTask
+    phase_validation: true
+    should_build: false
+    success: true
+    task: rbh.containers.FrontendContainerBuild
+  - builded: true
+    index: 10
+    name: baelfire.dependencies.task.RunTask
+    phase_validation: true
+    should_build: false
+    success: true
+    task: rbh.containers.NginxContainerBuild
+  needtorun: false
+  runned: false
+  signal: null
+  success: false
