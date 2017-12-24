@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>My title</title>
+    </head>
+    <body>
+        <p>Hello</p>
+        {% if form_error %}
+            <p>{{form_error}}</p>
+        {% endif %}
+        {% for key, error in errors.items() %}
+            <p>Error for {{key}}: {{error[0]}}</p>
+        {% endfor %}
+        <form method="post">
+            <p><input type="text" name="email"  placeholder="email" value="{{form['email']}}"></p>
+            <p><input type="password" name="password"  placeholder="password"></p>
+            <p><input type="submit" value="Zaloguj"></p>
+        </form>
+    </body>
+</html>

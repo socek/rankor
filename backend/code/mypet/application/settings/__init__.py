@@ -1,8 +1,11 @@
 from mypet.application.settings.default import default
+from mypet.application.settings.pyramid import pyramid_specific
 
 
 def pyramid():
-    return default()
+    settings = default()
+    pyramid_specific(settings)
+    return settings
 
 
 def command():

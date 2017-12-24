@@ -7,6 +7,6 @@ from mypet.application.model import Model
 # import or define all models here to ensure they are attached to the
 # Model.metadata prior to any initialization routines
 
-import mypet.home.models
+import mypet.auth.models
 
 AlembicEnv(app, Model, 'dbsession').run()
