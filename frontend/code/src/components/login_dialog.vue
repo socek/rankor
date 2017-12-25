@@ -3,72 +3,40 @@
     <div class="modal-dialog">
       <div class="loginmodal-container">
         <h1>Login to Your Account</h1><br>
-        <form v-on:submit.prevent="onSubmit">
-          <div class="form-group has-error" v-if="form.error">
-            <label class="control-label">{{ form.error }}</label>
-          </div>
-
-          <div class="form-group" v-bind:class="{ 'has-error': form.fields.email.error }">
-            <label class="control-label">{{ form.fields.email.error }}</label>
-            <input type="text" class="form-control" v-bind:class="{ 'form-control-danger': form.fields.email.error }" placeholder="Email" v-model="form.fields.email.value">
-          </div>
-
-          <div class="form-group" v-bind:class="{ 'has-error': form.fields.password.error }">
-            <label class="control-label">{{ form.fields.password.error }}</label>
-            <input type="password" class="form-control" placeholder="Password" v-model="form.fields.password.value" v-bind:class="{ 'form-control-danger': form.fields.password.error }">
-          </div>
-
+        <baseForm :form="form" @onSuccess="onSuccess" @onFail="onFail" url="/api/auth/login">
+          <textInput :form="form" :field="form.fields.email" placeholder="Email">XCX</textInput>
+          <passwordInput :form="form" :field="form.fields.password" placeholder="Password">XCX</passwordInput>
           <input type="submit" name="login" class="login loginmodal-submit" value="Login">
-        </form>
-
-        <!-- <div class="login-help">
-          <a href="#">Register</a> - <a href="#">Forgot Password</a>
-        </div> -->
+        </baseForm>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
+  // import axios from 'axios'
+  import baseForm from './forms/base-form'
+  import textInput from './forms/text-input'
+  import passwordInput from './forms/password-input'
 
   export default {
     data () {
       return {
-        form: {
-          error: null,
-          fields: {
-            email: {
-              error: null,
-              value: ''
-            },
-            password: {
-              error: null,
-              value: ''
-            }
-          }
-        }
+        form: baseForm.init(['email', 'password'])
       }
     },
     methods: {
-      onSubmit: function (event) {
-        var self = this
-        axios.post(
-          '/api/auth/login',
-          this.form.fields,
-          {
-            responseType: 'json'
-          }
-        )
-        .then(function (response) {
-          var data = response.data
-          if (data.form.validated) {
-            location.reload()
-          } else {
-            self.form = data.form
-          }
-        })
+      onSuccess (data) {
+        location.reload()
+      },
+      onFail (data) {
+        this.form = data.form
       }
+    },
+    components: {
+      textInput,
+      passwordInput,
+      baseForm
     }
   }
 </script>

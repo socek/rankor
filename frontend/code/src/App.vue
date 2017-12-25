@@ -24,30 +24,30 @@
   </div>
 </template>
 
-<script>
-import './assets/dashboard.css'
-
-import sidebar from './components/sidebar'
-import login from './components/login'
-import loginDialog from './components/login_dialog'
-
-export default {
-  name: 'app',
-  components: {
-    sidebar,
-    login,
-    loginDialog
-  }
-}
-</script>
-
 <style>
-#content {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #content {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
 </style>
+
+<script>
+  import './assets/dashboard.css'
+
+  import sidebar from './components/sidebar'
+  import login from './components/login'
+  import loginDialog from './components/login_dialog'
+
+  export default {
+    name: 'app',
+    components: {
+      sidebar,
+      login,
+      loginDialog
+    }
+  }
+</script>

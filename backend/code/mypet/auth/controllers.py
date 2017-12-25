@@ -1,8 +1,6 @@
-from marshmallow import ValidationError
 from pyramid.security import forget
 from pyramid.security import remember
 from sapp.plugins.pyramid.controller import RestfulController
-from sqlalchemy.orm.exc import NoResultFound
 
 from mypet import app
 from mypet.auth.drivers import UserReadDriver
@@ -10,10 +8,10 @@ from mypet.auth.schemas import LoginSchema
 
 
 class FormSerializer(object):
-    schema = LoginSchema
-
-    def __init__(self):
+    def __init__(self, schema):
         self._create_clean_form()
+        self.schema = schema
+        self.serialized = None
 
     def _create_clean_form(self):
         self.fullform = {
@@ -36,14 +34,14 @@ class FormSerializer(object):
         return data
 
     def validate(self):
-        try:
-            self.schema(strict=True).load(self.fields())
-            self.set_form_error(None)
-            return True
-        except ValidationError as err:
-            for name, errors in err.messages.items():
+        self.serialized, errors = self.schema.load(self.fields())
+        if errors:
+            for name, errors in errors.items():
                 self.fullform['fields'][name]['error'] = errors[0]
             return False
+        else:
+            self.set_form_error(None)
+            return True
 
     def set_form_error(self, error):
         self.fullform['validated'] = False
@@ -55,29 +53,24 @@ class FormSerializer(object):
 
 class LoginController(RestfulController):
     def post(self):
-        form = FormSerializer()
+        form = FormSerializer(LoginSchema())
         form.parse_json(self.request.json_body)
         self.context['form'] = form.fullform
 
         if form.validate():
-            if self.authenticated(form.fields()):
-                self.on_success(form)
+            user_id = self.authenticated(form.fields())
+            if user_id:
+                self.on_success(form, user_id)
             else:
                 self.on_fail(form)
 
     def authenticated(self, fields):
         with app as context:
             driver = UserReadDriver(context.dbsession)
-            try:
-                user = driver.get_by_email(fields['email'])
-                self.user_id = user.id
-                return user.validate_password(fields['password'])
-            except NoResultFound:
-                # user can not be authenticated if he/she does not exists
-                return False
+            return driver.get_user_id(fields['email'], fields['password'])
 
-    def on_success(self, form):
-        headers = remember(self.request, self.user_id)
+    def on_success(self, form, user_id):
+        headers = remember(self.request, user_id)
         self.request.response.headerlist.extend(headers)
         form.set_form_ok()
 
