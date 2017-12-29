@@ -7,3 +7,5 @@ class MypetRouting(Routing):
         self.add('mypet.auth.controllers.LoginController', 'login', '/auth/login')
         self.add('mypet.auth.controllers.LogoutController', 'logout', '/auth/logout')
         self.add('mypet.auth.controllers.AuthDataController', 'auth', '/auth')
+
+        self.add('mypet.menu.controllers.Menu', 'menu', '/menu')
