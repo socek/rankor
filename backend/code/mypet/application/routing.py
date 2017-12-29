@@ -1,11 +1,12 @@
 from sapp.plugins.pyramid.routing import Routing
 
+from mypet.menu.routing import meny_routing
+from mypet.home.routing import home_routing
+from mypet.auth.routing import auth_routing
+
 
 class MypetRouting(Routing):
     def make(self):
-        self.add('mypet.home.controllers.Home', 'home', '/')
-        self.add('mypet.auth.controllers.LoginController', 'login', '/auth/login')
-        self.add('mypet.auth.controllers.LogoutController', 'logout', '/auth/logout')
-        self.add('mypet.auth.controllers.AuthDataController', 'auth', '/auth')
-
-        self.add('mypet.menu.controllers.Menu', 'menu', '/menu')
+        home_routing(self)
+        auth_routing(self)
+        meny_routing(self)
