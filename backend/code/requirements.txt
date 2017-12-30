@@ -27,7 +27,6 @@ ptyprocess==0.5.2
 pycparser==2.18
 Pygments==2.2.0
 pyramid==1.9.1
-pyramid-jinja2==2.7
 python-dateutil==2.6.1
 python-editor==1.0.3
 pytz==2017.3

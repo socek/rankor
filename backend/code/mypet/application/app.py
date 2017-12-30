@@ -9,7 +9,6 @@ from sapp.plugins.pyramid.plugins import SessionPlugin
 from sapp.plugins.settings import SettingsPlugin
 from sapp.plugins.sqlalchemy.plugin import Database
 
-from mypet.application.plugins import Jinja2Plugin
 from mypet.application.routing import MypetRouting
 
 
@@ -19,7 +18,6 @@ class MypetConfigurator(ConfiguratorWithPyramid):
         self.add_plugin(LoggingPlugin())
         self.add_plugin(Database('dbsession'))
         self.add_plugin(RoutingPlugin(MypetRouting))
-        self.add_plugin(Jinja2Plugin())
         self.add_plugin(SessionPlugin(SignedCookieSessionFactory))
         self.add_plugin(
             AuthPlugin(AuthTktAuthenticationPolicy, ACLAuthorizationPolicy))
