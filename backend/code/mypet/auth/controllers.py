@@ -3,52 +3,9 @@ from pyramid.security import remember
 from sapp.plugins.pyramid.controller import RestfulController
 
 from mypet import app
+from mypet.application.forms import FormSerializer
 from mypet.auth.drivers import UserReadDriver
 from mypet.auth.schemas import LoginSchema
-
-
-class FormSerializer(object):
-    def __init__(self, schema):
-        self._create_clean_form()
-        self.schema = schema
-        self.serialized = None
-
-    def _create_clean_form(self):
-        self.fullform = {
-            'error': None,
-            'validated': False,
-            'fields': {},
-        }
-
-    def parse_json(self, json):
-        for name, field in json.items():
-            self.fullform['fields'][name] = {
-                'error': None,
-                'value': field['value'],
-            }
-
-    def fields(self):
-        data = {}
-        for name, field in self.fullform['fields'].items():
-            data[name] = field['value']
-        return data
-
-    def validate(self):
-        self.serialized, errors = self.schema.load(self.fields())
-        if errors:
-            for name, errors in errors.items():
-                self.fullform['fields'][name]['error'] = errors[0]
-            return False
-        else:
-            self.set_form_error(None)
-            return True
-
-    def set_form_error(self, error):
-        self.fullform['validated'] = False
-        self.fullform['error'] = error
-
-    def set_form_ok(self):
-        self.fullform['validated'] = True
 
 
 class LoginController(RestfulController):
@@ -58,16 +15,18 @@ class LoginController(RestfulController):
         self.context['form'] = form.fullform
 
         if form.validate():
-            user_id = self.authenticated(form.fields())
+            user_id = self.authenticated_user_id(form.fields())
             if user_id:
                 self.on_success(form, user_id)
             else:
                 self.on_fail(form)
 
-    def authenticated(self, fields):
+    def authenticated_user_id(self, fields):
         with app as context:
             driver = UserReadDriver(context.dbsession)
-            return driver.get_user_id(fields['email'], fields['password'])
+            user = driver.find_by_email(fields['email'])
+            if user and user.validate_password(fields'password']):
+                return user.id
 
     def on_success(self, form, user_id):
         headers = remember(self.request, user_id)

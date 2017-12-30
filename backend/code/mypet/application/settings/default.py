@@ -7,6 +7,7 @@ def default():
     settings = {
         'paths': PrefixedStringsDict('/code/'),
     }
+    alembic(settings)
     logging(settings)
     database(settings)
     return settings
@@ -64,3 +65,7 @@ def logging(settings):
 def database(settings):
     settings['db:dbsession:url'] = environ['BACKEND_DB_URL']
     settings['db:dbsession:default_url'] = environ['BACKEND_DB_DEFAULT_URL']
+
+
+def alembic(settings):
+    settings['paths']['alembic:migrations'] = 'alembic'

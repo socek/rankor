@@ -1,5 +1,6 @@
 from mypet.application.settings.default import default
 from mypet.application.settings.pyramid import pyramid_specific
+from mypet.application.settings.tests import tests_specific
 
 
 def pyramid():
@@ -10,3 +11,9 @@ def pyramid():
 
 def command():
     return default()
+
+
+def tests():
+    settings = default()
+    tests_specific(settings)
+    return settings

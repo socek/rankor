@@ -1,6 +1,5 @@
 from sapp.plugins.sqlalchemy.driver import ReadDriver
 from sapp.plugins.sqlalchemy.driver import WriteDriver
-from sqlalchemy.orm.exc import NoResultFound
 
 from mypet.auth.models import User
 
@@ -8,17 +7,11 @@ from mypet.auth.models import User
 class UserReadDriver(ReadDriver):
     model = User
 
-    def get_by_email(self, email):
-        return self.query().filter(self.model.email == email).one()
+    def _get_by_email(self, email):
+        return self.query().filter(self.model.email == email)
 
-    def get_user_id(self, email, password):
-        try:
-            user = self.get_by_email(email)
-            if user.validate_password(password):
-                return user.id
-        except NoResultFound:
-            # user can not be authenticated if he/she does not exists
-            return
+    def find_by_email(self, email):
+        return self._get_by_email(email).first()
 
 
 class UserWriteDriver(WriteDriver):
