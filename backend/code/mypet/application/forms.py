@@ -31,7 +31,7 @@ class FormSerializer(object):
                 self.fullform['fields'][name]['error'] = errors[0]
             return False
         else:
-            self.set_form_error(None)
+            self.set_form_ok()
             return True
 
     def set_form_error(self, error):
@@ -40,3 +40,4 @@ class FormSerializer(object):
 
     def set_form_ok(self):
         self.fullform['validated'] = True
+        self.fullform['error'] = None
