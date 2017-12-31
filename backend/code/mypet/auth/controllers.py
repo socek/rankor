@@ -1,6 +1,7 @@
 from pyramid.security import forget
 from pyramid.security import remember
 from sapp.plugins.pyramid.controller import RestfulController
+from sapp.decorators import WithContext
 
 from mypet import app
 from mypet.application.forms import FormSerializer
@@ -12,7 +13,6 @@ class LoginController(RestfulController):
     def post(self):
         form = FormSerializer(LoginSchema())
         form.parse_json(self.request.json_body)
-        self.context['form'] = form.fullform
 
         if form.validate():
             user_id = self.authenticated_user_id(form.fields())
@@ -20,13 +20,14 @@ class LoginController(RestfulController):
                 self.on_success(form, user_id)
             else:
                 self.on_fail(form)
+        return dict(form=form.fullform)
 
-    def authenticated_user_id(self, fields):
-        with app as context:
-            driver = UserReadDriver(context.dbsession)
-            user = driver.find_by_email(fields['email'])
-            if user and user.validate_password(fields'password']):
-                return user.id
+    @WithContext(app, args=['dbsession'])
+    def authenticated_user_id(self, fields, dbsession):
+        driver = UserReadDriver(dbsession)
+        user = driver.find_by_email(fields['email'])
+        if user and user.validate_password(fields['password']):
+            return user.id
 
     def on_success(self, form, user_id):
         headers = remember(self.request, user_id)
@@ -41,10 +42,10 @@ class LogoutController(RestfulController):
     def get(self):
         headers = forget(self.request)
         self.request.response.headerlist.extend(headers)
-        self.context['is_authenticated'] = False
+        return dict(is_authenticated=False)
 
 
 class AuthDataController(RestfulController):
     def get(self):
-        self.context[
-            'is_authenticated'] = self.request.authenticated_userid is not None
+        is_authenticated = self.request.authenticated_userid is not None
+        return dict(is_authenticated=is_authenticated)
