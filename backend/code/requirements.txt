@@ -33,6 +33,7 @@ py==1.5.2
 pycparser==2.18
 Pygments==2.2.0
 pyramid==1.9.1
+pyramid-ipython==0.2
 pytest==3.3.1
 pytest-cov==2.5.1
 python-dateutil==2.6.1
