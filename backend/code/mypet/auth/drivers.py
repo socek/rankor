@@ -20,8 +20,7 @@ class UserWriteDriver(WriteDriver):
     def create(self, **kwargs):
         password = None
         obj = self.model()
-        if 'password' in kwargs:
-            password = kwargs.pop('password')
+        password = kwargs.pop('password', None)
 
         for key, value in kwargs.items():
             setattr(obj, key, value)

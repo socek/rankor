@@ -1,7 +1,7 @@
 """create users
 
 Revision ID: fe253ab42e3d
-Revises: 
+Revises:
 Create Date: 2017-12-23 23:12:34.913529
 
 """
@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('is_admin', sa.Boolean(), nullable=False),
-    sa.Column('password', sa.String(length=100), nullable=True),
+    sa.Column('password', sa.Binary(length=100), nullable=True),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_users')),
     sa.UniqueConstraint('email', name=op.f('uq_users_email'))
     )

@@ -15,5 +15,6 @@ def command():
 
 def tests():
     settings = default()
+    pyramid_specific(settings)
     tests_specific(settings)
     return settings
