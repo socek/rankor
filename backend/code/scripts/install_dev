@@ -1,8 +1,12 @@
 #!/bin/bash
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 if [ "$IS_DEV" != "true" ] ; then
     echo "Skipping dev build"
     exit 0
 fi
 
-echo "WARNING: Creating dev build"
+echo -e "${YELLOW}WARNING: Creating dev build"
 pip install -r requirements_dev.txt
+echo -en "${NC}"

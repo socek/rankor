@@ -23,8 +23,6 @@ services:
     volumes:
       - ./backend/code:/code
     command: ./scripts/start_dev
-    ports:
-      - "${BACKEND_PORT:-8000}:8000"
     labels:
       - "traefik.backend=backend"
       - "traefik.frontend.rule=PathPrefixStrip:/api/"
@@ -38,8 +36,6 @@ services:
     volumes:
       - ./frontend/code:/code
     command: npm run dev
-    ports:
-      - "${FRONTEND_PORT:-9080}:8080"
     labels:
       - "traefik.backend=frontend"
       - "traefik.frontend.rule=PathPrefix:/"
