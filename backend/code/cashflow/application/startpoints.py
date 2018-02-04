@@ -3,7 +3,7 @@ from cashflow import app
 
 def uwsgi(settings):
     app.start('pyramid')
-    return app.make_wsgi_object
+    return app.make_wsgi_object()
 
 
 def tests(settings):
