@@ -1,7 +1,4 @@
 """
-Clearcode Ads
--------------
-
 About this project
 
 """
@@ -10,7 +7,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='mypet',
+    name='cashflow',
     version='0.1',
     description='',
     packages=find_packages(),
@@ -28,10 +25,10 @@ setup(
     author_email='msocek@gmail.com',
     license='MIT',
     zip_safe=False,
-    url='http://github.com/socek/mypet',
+    url='http://github.com/socek/cashflow',
     keywords=['pet'],
     entry_points={
-        'paste.app_factory': ['main = mypet.application.startpoints:uwsgi'],
+        'paste.app_factory': ['main = cashflow.application.startpoints:uwsgi'],
     },
     classifiers=[
         'Development Status :: 4 - Beta', 'Environment :: Web Environment',

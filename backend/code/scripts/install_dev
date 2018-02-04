@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ "$IS_DEV" != "true" ] ; then
+    echo "Skipping dev build"
+    exit 0
+fi
+
+echo "WARNING: Creating dev build"
+pip install -r requirements_dev.txt

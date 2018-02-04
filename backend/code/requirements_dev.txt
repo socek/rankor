@@ -1,0 +1,55 @@
+freezegun==0.3.9
+  python-dateutil==2.6.1
+    six==1.11.0
+  six==1.11.0
+ipdb==0.10.3
+  ipython==6.2.1
+    decorator==4.1.2
+    jedi==0.11.1
+      parso==0.1.1
+    pexpect==4.3.1
+      ptyprocess==0.5.2
+    pickleshare==0.7.4
+    prompt-toolkit==1.0.15
+      six==1.11.0
+      wcwidth==0.1.7
+    Pygments==2.2.0
+    setuptools==36.2.0
+    simplegeneric==0.8.1
+    traitlets==4.3.2
+      decorator==4.1.2
+      ipython-genutils==0.2.0
+      six==1.11.0
+  setuptools==36.2.0
+pipdeptree==0.10.1
+pyramid-ipython==0.2
+  ipython==6.2.1
+    decorator==4.1.2
+    jedi==0.11.1
+      parso==0.1.1
+    pexpect==4.3.1
+      ptyprocess==0.5.2
+    pickleshare==0.7.4
+    prompt-toolkit==1.0.15
+      six==1.11.0
+      wcwidth==0.1.7
+    Pygments==2.2.0
+    setuptools==36.2.0
+    simplegeneric==0.8.1
+    traitlets==4.3.2
+      decorator==4.1.2
+      ipython-genutils==0.2.0
+      six==1.11.0
+pytest-cov==2.5.1
+  coverage==4.4.2
+  pytest==3.3.1
+    attrs==17.3.0
+    pluggy==0.6.0
+    py==1.5.2
+    setuptools==36.2.0
+    six==1.11.0
+WebTest==2.0.29
+  beautifulsoup4==4.6.0
+  six==1.11.0
+  waitress==1.1.0
+  WebOb==1.7.4

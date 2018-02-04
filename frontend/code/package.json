@@ -1,7 +1,7 @@
 {
-  "name": "mypet",
+  "name": "cashflow",
   "version": "1.0.0",
-  "description": "MyPet Frontend",
+  "description": "CashFlow Frontend",
   "author": "",
   "private": true,
   "scripts": {
