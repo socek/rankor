@@ -8,5 +8,6 @@ from cashflow.application.model import Model
 # Model.metadata prior to any initialization routines
 
 import cashflow.auth.models
+import cashflow.wallet.models
 
 AlembicEnv(app, Model, 'dbsession').run()
