@@ -1,2 +1,2 @@
 def home_routing(routing):
-    routing.add('cashflow.home.controllers.Home', 'home', '/')
+    routing.add('cashflow.home.views.Home', 'home', '/')

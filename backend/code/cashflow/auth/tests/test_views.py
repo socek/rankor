@@ -1,9 +1,9 @@
 from pytest import fixture
 from sapp.plugins.pyramid.testing import ControllerFixtureMixin
 
-from cashflow.auth.controllers import AuthDataController
-from cashflow.auth.controllers import LoginController
-from cashflow.auth.controllers import LogoutController
+from cashflow.auth.views import AuthDataController
+from cashflow.auth.views import LoginController
+from cashflow.auth.views import LogoutController
 
 
 class TestAuthDataController(ControllerFixtureMixin):

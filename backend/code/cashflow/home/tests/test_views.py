@@ -2,18 +2,18 @@ from pytest import fixture
 
 from sapp.plugins.pyramid.testing import ControllerFixtureMixin
 
-from cashflow.home.controllers import Home
+from cashflow.home.views import Home
 
 
 class TestHome(ControllerFixtureMixin):
     @fixture
-    def controller(self, mroot_factory, mrequest):
+    def view(self, mroot_factory, mrequest):
         return Home(mroot_factory, mrequest)
 
-    def test_get(self, controller):
+    def test_get(self, view):
         """
         This is sample test.
         """
-        controller.get()
+        view.get()
 
-        assert controller.context == {'elo': 1}
+        assert view.context == {'elo': 1}

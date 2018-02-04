@@ -17,4 +17,4 @@ class Wallet(Model):
     name = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
-    user = relationship('User', backref='wallets', lazy='dynamic')
+    user = relationship('User', backref='wallets')
