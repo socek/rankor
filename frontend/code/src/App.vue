@@ -3,7 +3,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">My Pet</a>
+          <a class="navbar-brand" href="#">Cash Flow</a>
         </div>
         <login></login>
       </div>
