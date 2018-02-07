@@ -1,6 +1,7 @@
+from uuid import uuid4
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import MetaData
-
 
 # Recommended naming convention used by Alembic, as various different database
 # providers will autogenerate vastly different names making migrations more
@@ -16,3 +17,7 @@ NAMING_CONVENTION = {
 metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
 Model = declarative_base(metadata=metadata)
+
+
+def uuid_default():
+    return uuid4().hex

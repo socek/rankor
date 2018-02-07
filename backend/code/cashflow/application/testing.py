@@ -6,6 +6,7 @@ from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 
 from cashflow.application.app import CashflowConfigurator
 from cashflow.auth.models import User
+from cashflow.wallet.models import Wallet
 
 
 class CashflowFixturesMixin(object):
@@ -25,17 +26,32 @@ class CashflowFixturesMixin(object):
     }
 
     @fixture
-    def user(self, app):
+    def dbsession(self, app):
+        return app.dbsession
+
+    @fixture
+    def user(self, dbsession):
         user_data = dict(self.user_data)
         password = user_data.pop('password')
         user = User(**self.user_data)
         user.set_password(password)
-        app.dbsession.add(user)
-        app.dbsession.commit()
+        dbsession.add(user)
+        dbsession.commit()
 
         yield user
 
-        app.dbsession.delete(user)
+        dbsession.delete(user)
+
+    @fixture
+    def wallet(self, user, dbsession):
+        wallet = Wallet(name='my wallet', user=user)
+
+        dbsession.add(wallet)
+        dbsession.commit()
+
+        yield wallet
+
+        dbsession.delete(wallet)
 
 
 class IntegrationFixture(CashflowFixturesMixin, BaseIntegrationFixture):
