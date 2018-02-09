@@ -10,6 +10,8 @@ from cashflow.wallet.schemas import WalletSchema
 
 
 class WalletListView(RestfulController):
+    permission = 'edit'
+
     @WithContext(app, args=['dbsession'])
     def get(self, dbsession):
         schema = WalletSchema()

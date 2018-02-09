@@ -5,11 +5,14 @@ from cashflow.wallet.drivers import WalletReadDriver
 class TestWalletList(WebTestFixture):
     url = '/wallets'
 
-    def test_empty_list(self, fake_app):
+    def test_logged_out(self, fake_app):
+        fake_app.get(self.url, status=403)
+
+    def test_empty_list(self, fake_app, authenticated_user):
         result = fake_app.get(self.url)
         assert result.json == {'elements': []}
 
-    def test_one_element_list(self, fake_app, wallet):
+    def test_one_element_list(self, fake_app, wallet, authenticated_user):
         result = fake_app.get(self.url)
         assert result.json == {
             'elements': [{

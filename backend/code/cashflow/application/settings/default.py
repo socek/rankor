@@ -33,7 +33,7 @@ def logging(settings):
         'loggers': {
             '': {
                 'level': 'DEBUG',
-                'handlers': [],
+                'handlers': ['console'],
             },
             'sqlalchemy': {
                 'level': 'ERROR',

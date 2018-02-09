@@ -59,4 +59,34 @@ class IntegrationFixture(CashflowFixturesMixin, BaseIntegrationFixture):
 
 
 class WebTestFixture(CashflowFixturesMixin, BaseWebTestFixture):
-    pass
+    login_url = '/auth/login'
+    authenticated_user_data = {
+        'name': 'user',
+        'email': 'user2@my.pl',
+        'is_admin': False,
+        'password': 'mypassword',
+    }
+
+    def generate_form_json(self, fields):
+        json = {}
+        for name, value in fields.items():
+            json[name] = {
+                'value': value,
+            }
+        return json
+
+    @fixture
+    def authenticated_user(self, dbsession, fake_app):
+        user_data = dict(self.authenticated_user_data)
+        password = user_data.pop('password')
+        user = User(**user_data)
+        user.set_password(password)
+        dbsession.add(user)
+        dbsession.commit()
+
+        params = self.generate_form_json(dict(email=user_data['email'], password=password))
+        fake_app.post_json(self.login_url, params=params, status=200)
+
+        yield user
+
+        dbsession.delete(user)

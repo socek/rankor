@@ -6,14 +6,6 @@ class TestWebAdsController(WebTestFixture):
     login_url = '/auth/login'
     logout_url = '/auth/logout'
 
-    def generate_form_json(self, fields):
-        json = {}
-        for name, value in fields.items():
-            json[name] = {
-                'value': value,
-            }
-        return json
-
     def test_auth_information(self, fake_app):
         """
         /auth should return information about authentication status
