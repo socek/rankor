@@ -58,6 +58,11 @@ def logging(settings):
                 'handlers': ['console'],
                 'level': 'ERROR',
             },
+            'parso.python.diff': {
+                'handlers': [],
+                'level': 'DEBUG',
+                'propagate': False
+            }
         }
     }
 
