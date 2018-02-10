@@ -17,7 +17,6 @@ services:
     env_file: .env
     volumes:
       - ./backend/code:/code
-    command: ./scripts/start_dev
     labels:
       - "traefik.backend=backend"
       - "traefik.frontend.rule=PathPrefixStrip:/api/"

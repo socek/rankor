@@ -17,7 +17,7 @@ ARG IS_DEV
 ENV IS_DEV=$IS_DEV
 RUN ./scripts/install_dev
 
-CMD ./entrypoint.sh
+CMD ./scripts/start_webapp
 
 USER user
 EXPOSE 8000
