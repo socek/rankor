@@ -27,6 +27,7 @@
     },
     methods: {
       onSuccess (data) {
+        this.$router.push({name: 'Dashboard'})
         location.reload()
       },
       onFail (data) {

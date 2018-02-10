@@ -1,5 +1,5 @@
 <template>
   <div class="hello">
-    This is creazy.
+    This is dashboard.
   </div>
 </template>
