@@ -18,6 +18,7 @@
   import baseForm from './forms/base-form'
   import textInput from './forms/text-input'
   import passwordInput from './forms/password-input'
+  import User from '@/models/user'
 
   export default {
     data () {
@@ -27,6 +28,7 @@
     },
     methods: {
       onSuccess (data) {
+        User.logIn()
         this.$router.push({name: 'Dashboard'})
         location.reload()
       },

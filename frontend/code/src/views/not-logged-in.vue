@@ -1,5 +1,8 @@
 <template>
   <div class="hello">
-    Please log in.
+    <img src="../assets/logo.png">
+    <div>
+      Please log in.
+    </div>
   </div>
 </template>

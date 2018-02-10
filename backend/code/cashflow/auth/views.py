@@ -8,6 +8,8 @@ from cashflow.application.forms import FormSerializer
 from cashflow.auth.drivers import UserReadDriver
 from cashflow.auth.schemas import LoginSchema
 
+GROUPS = ['authenticated']
+
 
 class LoginController(RestfulController):
     def post(self):
@@ -42,10 +44,11 @@ class LogoutController(RestfulController):
     def get(self):
         headers = forget(self.request)
         self.request.response.headerlist.extend(headers)
-        return dict(is_authenticated=False)
+        return dict(is_authenticated=False, groups=[])
 
 
 class AuthDataController(RestfulController):
     def get(self):
         is_authenticated = self.request.authenticated_userid is not None
-        return dict(is_authenticated=is_authenticated)
+        groups = GROUPS if is_authenticated else []
+        return dict(is_authenticated=is_authenticated, groups=groups)
