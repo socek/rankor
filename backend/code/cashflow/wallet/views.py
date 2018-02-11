@@ -2,6 +2,7 @@ from sapp.decorators import WithContext
 from sapp.plugins.pyramid.controller import RestfulController
 
 from cashflow import app
+from cashflow.application.forms import FormSerializer
 from cashflow.auth.view_mixins import AuthMixin
 from cashflow.wallet.drivers import WalletReadDriver
 from cashflow.wallet.drivers import WalletWriteDriver
@@ -23,14 +24,20 @@ class WalletListView(RestfulController, AuthMixin):
 
     @WithContext(app, args=['dbsession'])
     def post(self, dbsession):
-        schema = CreateWalletSchema()
         wallet_wd = WalletWriteDriver(dbsession)
+        form = FormSerializer(CreateWalletSchema())
+        form.parse_json(self.request.json_body)
 
-        data = schema.load(self.request.json).data
-        data['user_id'] = self.get_user().id
+        result = {}
 
-        wallet = wallet_wd.create(**data)
+        if form.validate():
+            data = form.fields()
+            data['user_id'] = self.get_user().id
 
-        return {
-            'uuid': wallet.uuid,
-        }
+            wallet = wallet_wd.create(**data)
+            result['uuid'] = wallet.uuid
+
+        result['form'] = form.fullform
+        return result
+
+

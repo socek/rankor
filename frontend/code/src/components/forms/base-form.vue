@@ -29,11 +29,15 @@
     methods: {
       onSubmit: function (event) {
         var self = this
+        let data = this.form.fields
         axios.post(
           this.url,
-          this.form.fields,
+          data,
           {
-            responseType: 'json'
+            responseType: 'json',
+            headers: {
+              'Content-Type': 'application/json'
+            }
           }
         )
         .then(function (response) {

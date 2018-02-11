@@ -1,17 +1,14 @@
 <template>
   <div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li v-if="is_authenticated"><a v-on:click="logout" href="#">Logout</a></li>
-        <li v-else><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
-      </ul>
-    </div>
+    <b-nav-item v-if="is_authenticated" v-on:click="logout">Logout</b-nav-item>
+    <loginDialog :is_authenticated="is_authenticated"></loginDialog>
   </div>
 </template>
 
 <script>
-  import AjaxView from '../models/ajax'
+  import AjaxView from '@/models/ajax'
   import User from '@/models/user'
+  import loginDialog from '@/components/login_dialog'
 
   export default {
     data () {
@@ -39,6 +36,9 @@
       after: function (event) {
         location.reload()
       }
+    },
+    components: {
+      loginDialog
     }
   }
 </script>

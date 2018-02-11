@@ -1,15 +1,13 @@
 <template>
-  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-      <div class="loginmodal-container">
-        <h1>Login to Your Account</h1><br>
-        <baseForm :form="form" @onSuccess="onSuccess" @onFail="onFail" url="/api/auth/login">
-          <textInput :form="form" :field="form.fields.email" placeholder="Email">XCX</textInput>
-          <passwordInput :form="form" :field="form.fields.password" placeholder="Password">XCX</passwordInput>
-          <input type="submit" name="login" class="login loginmodal-submit" value="Login">
-        </baseForm>
-      </div>
-    </div>
+  <div>
+    <b-nav-item v-if="!is_authenticated" v-b-modal="'modal2'">Login</b-nav-item>
+
+    <b-modal id="modal2" title="Login to Your Account">
+      <baseForm :form="form" @onSuccess="onSuccess" @onFail="onFail" url="/api/auth/login">
+        <textInput :form="form" :field="form.fields.email" placeholder="Email"></textInput>
+        <passwordInput :form="form" :field="form.fields.password" placeholder="Password"></passwordInput>
+      </baseForm>
+    </b-modal>
   </div>
 </template>
 
@@ -21,6 +19,7 @@
   import User from '@/models/user'
 
   export default {
+    props: ['is_authenticated'],
     data () {
       return {
         form: baseForm.init(['email', 'password'])

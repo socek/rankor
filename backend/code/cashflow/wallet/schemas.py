@@ -8,5 +8,4 @@ class WalletSchema(Schema):
 
 
 class CreateWalletSchema(Schema):
-    user_uuid = fields.String()
     name = fields.String()
