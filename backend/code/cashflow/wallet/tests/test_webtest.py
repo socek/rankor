@@ -19,15 +19,16 @@ class TestWalletList(WebTestFixture):
         result = fake_app.get(self.url)
         assert result.json == {'elements': []}
 
-    def test_one_element_list(self, fake_app, wallet, authenticated_user):
+    def test_one_element_list(self, fake_app, wallet, authenticated_user,
+                              authenticated_user_wallet):
         """
         Service should return all element if elements are present.
         """
         result = fake_app.get(self.url)
         assert result.json == {
             'elements': [{
-                'name': wallet.name,
-                'uuid': wallet.uuid
+                'name': authenticated_user_wallet.name,
+                'uuid': authenticated_user_wallet.uuid
             }]
         }
 

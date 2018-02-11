@@ -17,7 +17,7 @@ class TestAuthDataController(ControllerFixtureMixin):
         """
         mrequest.method = 'GET'
 
-        assert ctrl() == {'is_authenticated': True}
+        assert ctrl() == {'is_authenticated': True, 'groups': ['authenticated']}
 
 
 class TestLoginController(ControllerFixtureMixin):

@@ -19,8 +19,15 @@ class CashflowFixturesMixin(object):
         recreate.make()
 
     user_data = {
-        'name': 'user',
+        'name': 'user1',
         'email': 'user1@my.pl',
+        'is_admin': False,
+        'password': 'mypassword',
+    }
+
+    second_user_data = {
+        'name': 'user2',
+        'email': 'user2@my.pl',
         'is_admin': False,
         'password': 'mypassword',
     }
@@ -43,8 +50,32 @@ class CashflowFixturesMixin(object):
         dbsession.delete(user)
 
     @fixture
+    def second_user(self, dbsession):
+        user_data = dict(self.second_user_data)
+        password = user_data.pop('password')
+        user = User(**self.second_user_data)
+        user.set_password(password)
+        dbsession.add(user)
+        dbsession.commit()
+
+        yield user
+
+        dbsession.delete(user)
+
+    @fixture
     def wallet(self, user, dbsession):
         wallet = Wallet(name='my wallet', user=user)
+
+        dbsession.add(wallet)
+        dbsession.commit()
+
+        yield wallet
+
+        dbsession.delete(wallet)
+
+    @fixture
+    def wallet_second_user(self, second_user, dbsession):
+        wallet = Wallet(name='my wallet 2', user=second_user)
 
         dbsession.add(wallet)
         dbsession.commit()
@@ -61,8 +92,8 @@ class IntegrationFixture(CashflowFixturesMixin, BaseIntegrationFixture):
 class WebTestFixture(CashflowFixturesMixin, BaseWebTestFixture):
     login_url = '/auth/login'
     authenticated_user_data = {
-        'name': 'user',
-        'email': 'user2@my.pl',
+        'name': 'user3',
+        'email': 'user3@my.pl',
         'is_admin': False,
         'password': 'mypassword',
     }
@@ -90,3 +121,14 @@ class WebTestFixture(CashflowFixturesMixin, BaseWebTestFixture):
         yield user
 
         dbsession.delete(user)
+
+    @fixture
+    def authenticated_user_wallet(self, authenticated_user, dbsession):
+        wallet = Wallet(name='my wallet', user=authenticated_user)
+
+        dbsession.add(wallet)
+        dbsession.commit()
+
+        yield wallet
+
+        dbsession.delete(wallet)

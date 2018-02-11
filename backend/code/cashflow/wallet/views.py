@@ -16,7 +16,7 @@ class WalletListView(RestfulController, AuthMixin):
     def get(self, dbsession):
         schema = WalletSchema()
         driver = WalletReadDriver(dbsession)
-        wallets = driver.list_all()
+        wallets = driver.list_for_user(user_id=self.get_user_id())
         data = schema.dump(wallets, many=True).data
 
         return dict(elements=data)

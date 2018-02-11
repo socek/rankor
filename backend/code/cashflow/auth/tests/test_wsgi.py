@@ -11,7 +11,7 @@ class TestWebAdsController(WebTestFixture):
         /auth should return information about authentication status
         """
         result = fake_app.get(self.url, status=200)
-        assert result.json == {'is_authenticated': False}
+        assert result.json == {'is_authenticated': False, 'groups': []}
 
     def test_login_with_bad_email(self, fake_app):
         """
@@ -104,7 +104,7 @@ class TestWebAdsController(WebTestFixture):
         }
 
         result = fake_app.get(self.url, status=200)
-        assert result.json == {'is_authenticated': True}
+        assert result.json == {'is_authenticated': True, 'groups': ['authenticated']}
 
     def test_logout(self, fake_app, user):
         """
@@ -127,4 +127,4 @@ class TestWebAdsController(WebTestFixture):
             status=200)
 
         result = fake_app.get(self.url, status=200)
-        assert result.json == {'is_authenticated': False}
+        assert result.json == {'is_authenticated': False, 'groups': []}
