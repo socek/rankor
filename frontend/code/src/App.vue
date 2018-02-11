@@ -5,7 +5,7 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="#/dashboard">Wallets</b-nav-item>
+          <b-nav-item v-if="isAuthenticated" href="#/dashboard">Wallets</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -15,18 +15,10 @@
       </b-collapse>
     </b-navbar>
 
-    <div class="container-fluid">
+    <div class="container" id="content_container">
       <div class="row">
-        <sidebar></sidebar>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
-        <div id="content">
+        <div class="col-lg-12 align-self-center" id="content">
           <router-view></router-view>
-          <b-btn v-b-modal.modal1>Launch demo modal</b-btn>
-
-          <!-- Modal Component -->
-          <b-modal id="modal1" title="Bootstrap-Vue">
-            <p class="my-4">Hello from modal!</p>
-          </b-modal>
         </div>
       </div>
     </div>
@@ -37,13 +29,17 @@
 <script>
   import './assets/dashboard.css'
 
-  import sidebar from './components/sidebar'
   import login from './components/login'
+  import User from '@/models/user'
 
   export default {
+    data () {
+      return {
+        isAuthenticated: User.isAuthenticated()
+      }
+    },
     name: 'app',
     components: {
-      sidebar,
       login
     }
   }
