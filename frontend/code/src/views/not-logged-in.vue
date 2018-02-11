@@ -1,11 +1,13 @@
 <template>
-  <div class="col-lg-3">
-    <h1>Please log in</h1>
-    <baseForm :form="form" @onSuccess="onSuccess" @onFail="onFail" url="/api/auth/login">
-      <textInput :form="form" :field="form.fields.email" placeholder="Email"></textInput>
-      <passwordInput :form="form" :field="form.fields.password" placeholder="Password"></passwordInput>
-      <input type="submit" name="login" class="btn btn-primary" value="Login">
-    </baseForm>
+  <div class="row justify-content-md-center">
+    <div class="col-lg-4">
+      <h1>Please log in</h1>
+      <baseForm :form="form" @onSuccess="onSuccess" @onFail="onFail" url="/api/auth/login">
+        <textInput :form="form" :field="form.fields.email" placeholder="Email"></textInput>
+        <passwordInput :form="form" :field="form.fields.password" placeholder="Password"></passwordInput>
+        <input type="submit" name="login" class="btn btn-primary" value="Login">
+      </baseForm>
+    </div>
   </div>
 </template>
 

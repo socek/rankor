@@ -16,11 +16,7 @@
     </b-navbar>
 
     <div class="container" id="content_container">
-      <div class="row">
-        <div class="col-lg-12 align-self-center" id="content">
-          <router-view></router-view>
-        </div>
-      </div>
+      <router-view></router-view>
     </div>
 
   </div>
