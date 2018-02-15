@@ -1,7 +1,12 @@
 <template>
-  <div class="form-group" :class="{ 'has-error': field.error }">
-    <label class="control-label">{{ field.error }}</label>
-    <input type="text" class="form-control" :class="{ 'form-control-danger': field.error }" :placeholder="placeholder" v-model="field.value">
+  <div role="group">
+    <b-form-input v-model.trim="field.value"
+        type="text"
+        :state="field.error ? false : ''"
+        :placeholder="placeholder"></b-form-input>
+    <b-form-invalid-feedback>
+      {{ field.error }}
+    </b-form-invalid-feedback>
   </div>
 </template>
 

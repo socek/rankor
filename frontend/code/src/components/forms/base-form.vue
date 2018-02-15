@@ -1,11 +1,11 @@
 <template>
-  <form v-on:submit.prevent="onSubmit">
-    <div class="form-group has-error" v-if="form.error">
-      <label class="control-label">{{ form.error }}</label>
-    </div>
+  <b-form @submit.prevent="onSubmit">
+    <b-form-invalid-feedback>
+      {{ form.error }}
+    </b-form-invalid-feedback>
 
     <slot></slot>
-  </form>
+  </b-form>
 </template>
 
 <script>
@@ -14,6 +14,7 @@
   export default {
     props: ['form', 'url'],
     init (fields) {
+      this.fields = fields
       let form = {
         error: null,
         fields: {}
@@ -26,8 +27,15 @@
       }
       return form
     },
+    reset (form) {
+      for (let name of Object.keys(form.fields)) {
+        let field = form.fields[name]
+        field.error = ''
+        field.value = ''
+      }
+    },
     methods: {
-      onSubmit: function (event) {
+      onSubmit (event) {
         var self = this
         let data = this.form.fields
         axios.post(
@@ -41,11 +49,15 @@
           }
         )
         .then(function (response) {
-          var data = response.data
-          if (data.form.validated) {
-            self.$emit('onSuccess', data)
-          } else {
+          self.$emit('onSuccess', data)
+        })
+        .catch(function (error) {
+          if (error.response.status === 400) {
+            var data = error.response.data
+            console.log(data)
             self.$emit('onFail', data)
+          } else {
+            throw error
           }
         })
       }

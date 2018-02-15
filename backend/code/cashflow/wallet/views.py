@@ -36,6 +36,8 @@ class WalletListView(RestfulController, AuthMixin):
 
             wallet = wallet_wd.create(**data)
             result['uuid'] = wallet.uuid
+        else:
+            self.request.response.status_code = 400
 
         result['form'] = form.fullform
         return result

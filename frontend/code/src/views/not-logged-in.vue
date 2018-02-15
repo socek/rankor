@@ -2,42 +2,54 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-4">
       <h1>Please log in</h1>
-      <baseForm :form="form" @onSuccess="onSuccess" @onFail="onFail" url="/api/auth/login">
-        <textInput :form="form" :field="form.fields.email" placeholder="Email"></textInput>
-        <passwordInput :form="form" :field="form.fields.password" placeholder="Password"></passwordInput>
-        <input type="submit" name="login" class="btn btn-primary" value="Login">
-      </baseForm>
+        <b-form @submit="form.onSubmit($event, onSuccess)">
+          <b-form-invalid-feedback :force-show="true">{{form.data.error}}</b-form-invalid-feedback>
+          <b-form-group id="form_email_label"
+                        label="Email address:"
+                        label-for="form_email"
+                        description="We'll never share your email with anyone else.">
+            <b-form-input id="form_email"
+                          type="email"
+                          v-model="form.data.fields.email.value"
+                          required
+                          placeholder="Enter email">
+            </b-form-input>
+          </b-form-group>
+
+          <b-form-group id="form_password_label"
+                        label="Password:"
+                        label-for="form_password">
+            <b-form-input id="form_password"
+                          type="password"
+                          v-model="form.data.fields.password.value"
+                          required
+                          placeholder="Enter password">
+            </b-form-input>
+          </b-form-group>
+          <b-button type="submit" variant="primary">Login</b-button>
+        </b-form>
     </div>
   </div>
 </template>
 
 <script>
-  import baseForm from '@/components/forms/base-form'
-  import textInput from '@/components/forms/text-input'
-  import passwordInput from '@/components/forms/password-input'
-  import User from '@/models/user'
+import User from '@/models/user'
+import FormSerializer from '@/forms/serializer'
 
-  export default {
-    props: ['is_authenticated'],
-    data () {
-      return {
-        form: baseForm.init(['email', 'password'])
-      }
-    },
-    methods: {
-      onSuccess (data) {
-        User.logIn()
-        this.$router.push({name: 'Dashboard'})
-        location.reload()
-      },
-      onFail (data) {
-        this.form = data.form
-      }
-    },
-    components: {
-      textInput,
-      passwordInput,
-      baseForm
+export default {
+  props: ['is_authenticated'],
+  data () {
+    let form = new FormSerializer('/api/auth/login', ['email', 'password'])
+    return {
+      form: form
+    }
+  },
+  methods: {
+    onSuccess (data) {
+      User.logIn()
+      this.$router.push({name: 'Dashboard'})
+      location.reload()
     }
   }
+}
 </script>

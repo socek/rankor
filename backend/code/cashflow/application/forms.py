@@ -12,7 +12,7 @@ class FormSerializer(object):
         }
 
     def parse_json(self, json):
-        for name, field in json.items():
+        for name, field in json['fields'].items():
             self.fullform['fields'][name] = {
                 'error': None,
                 'value': field['value'],

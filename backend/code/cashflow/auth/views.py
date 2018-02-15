@@ -22,6 +22,9 @@ class LoginController(RestfulController):
                 self.on_success(form, user_id)
             else:
                 self.on_fail(form)
+        else:
+            self.on_fail(form)
+
         return dict(form=form.fullform)
 
     @WithContext(app, args=['dbsession'])
@@ -38,6 +41,7 @@ class LoginController(RestfulController):
 
     def on_fail(self, form):
         form.set_form_error('Username and/or password do not match.')
+        self.request.response.status_code = 400
 
 
 class LogoutController(RestfulController):

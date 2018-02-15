@@ -24,7 +24,7 @@ class TestWebAdsController(WebTestFixture):
         result = fake_app.post_json(
             self.login_url,
             params=params,
-            status=200)
+            status=400)
 
         assert result.json == {
             'form': {

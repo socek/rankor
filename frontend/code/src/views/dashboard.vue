@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
-      <h1>List of wallets <walletCreateDialog></walletCreateDialog></h1>
+      <h1>List of wallets <walletCreateDialog @onSuccess="refresh"></walletCreateDialog></h1>
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
@@ -32,10 +32,15 @@
       }
     },
     created: function () {
-      var self = this
-      new AjaxView(function (response) {
-        self.wallets = response.data.elements
-      }).run('/api/wallets').then(self.fillWidget)
+      this.refresh()
+    },
+    methods: {
+      refresh () {
+        var self = this
+        new AjaxView(function (response) {
+          self.wallets = response.data.elements
+        }).run('/api/wallets').then(self.fillWidget)
+      }
     },
     components: {
       walletCreateDialog

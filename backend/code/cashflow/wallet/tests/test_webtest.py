@@ -49,7 +49,7 @@ class TestWalletCreate(WebTestFixture):
         """
         Service should create proper wallet.
         """
-        result = fake_app.post_json(self.url, dict(name='new'))
+        result = fake_app.post_json(self.url, {'name': {'value': 'new'}})
         driver = WalletReadDriver(dbsession)
         wallet = driver.get_by_uuid(result.json['uuid'])
 
@@ -58,3 +58,10 @@ class TestWalletCreate(WebTestFixture):
             assert wallet.user == authenticated_user
         finally:
             dbsession.delete(wallet)
+
+    def test_validate_form(self, fake_app, authenticated_user, dbsession):
+        """
+        Endpoint should validate the form.
+        """
+        result = fake_app.post_json(self.url, {'name': {'value': ''}}, status=400)
+        assert result.json['form']['fields']['name']['error'] == 'Field cannot be blank'
