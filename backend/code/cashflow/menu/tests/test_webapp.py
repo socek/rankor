@@ -1,4 +1,4 @@
-from cashflow.application.testing import WebTestFixture
+from rankor.application.testing import WebTestFixture
 
 
 class TestWebAdsController(WebTestFixture):

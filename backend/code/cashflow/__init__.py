@@ -1,3 +1,3 @@
-from cashflow.application.app import CashflowConfigurator
+from rankor.application.app import RankorConfigurator
 
-app = CashflowConfigurator()
+app = RankorConfigurator()

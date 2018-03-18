@@ -39,13 +39,12 @@ import FormSerializer from '@/forms/serializer'
 export default {
   props: ['is_authenticated'],
   data () {
-    let form = new FormSerializer('/api/auth/login', ['email', 'password'])
     return {
-      form: form
+      form: new FormSerializer('/api/auth/login', ['email', 'password'])
     }
   },
   methods: {
-    onSuccess (data) {
+    onSuccess () {
       User.logIn()
       this.$router.push({name: 'Dashboard'})
       location.reload()

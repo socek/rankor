@@ -1,4 +1,4 @@
-from cashflow import app
+from rankor import app
 
 
 def setup(env):

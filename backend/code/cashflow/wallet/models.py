@@ -4,8 +4,8 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
-from cashflow.application.model import Model
-from cashflow.application.model import uuid_default
+from rankor.application.model import Model
+from rankor.application.model import uuid_default
 
 
 class Wallet(Model):

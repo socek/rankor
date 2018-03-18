@@ -1,7 +1,7 @@
-from cashflow.application.drivers import ReadDriver
-from cashflow.application.drivers import WriteDriver
-from cashflow.wallet.models import Wallet
-from cashflow.auth.models import User
+from rankor.application.drivers import ReadDriver
+from rankor.application.drivers import WriteDriver
+from rankor.wallet.models import Wallet
+from rankor.auth.models import User
 
 
 class WalletReadDriver(ReadDriver):

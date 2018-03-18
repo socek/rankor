@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from cashflow.auth.models import User
+from rankor.auth.models import User
 
 
 class TestUser(object):

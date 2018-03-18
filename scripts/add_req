@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script adds requiretment and send it to the requirements.txt
-rm backend/code/cashflow.egg-info
+rm backend/code/rankor.egg-info
 docker-compose build
 docker-compose run --rm -u 0 backend ./scripts/add_req $1
 docker-compose build
-g c -- backend/code/cashflow.egg-info
+g c -- backend/code/rankor.egg-info

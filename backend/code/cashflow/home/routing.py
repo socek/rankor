@@ -1,2 +1,2 @@
 def home_routing(routing):
-    routing.add('cashflow.home.views.Home', 'home', '/')
+    routing.add('rankor.home.views.Home', 'home', '/')

@@ -7,7 +7,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='cashflow',
+    name='rankor',
     version='0.1',
     description='',
     packages=find_packages(),
@@ -25,10 +25,10 @@ setup(
     author_email='msocek@gmail.com',
     license='MIT',
     zip_safe=False,
-    url='http://github.com/socek/cashflow',
+    url='http://github.com/socek/rankor',
     keywords=['pet'],
     entry_points={
-        'paste.app_factory': ['main = cashflow.application.startpoints:uwsgi'],
+        'paste.app_factory': ['main = rankor.application.startpoints:uwsgi'],
     },
     classifiers=[
         'Development Status :: 4 - Beta', 'Environment :: Web Environment',

@@ -2,7 +2,7 @@ from marshmallow import Schema
 from marshmallow import fields
 from pytest import fixture
 
-from cashflow.application.forms import FormSerializer
+from rankor.application.forms import FormSerializer
 
 
 class ExampleSchema(Schema):

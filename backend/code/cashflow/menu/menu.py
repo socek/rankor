@@ -1,9 +1,9 @@
-from cashflow.menu.models import Menu
-from cashflow.menu.models import MenuElement
-from cashflow.auth.view_mixins import AuthMixin
+from rankor.menu.models import Menu
+from rankor.menu.models import MenuElement
+from rankor.auth.view_mixins import AuthMixin
 
 
-class CashflowMenu(Menu, AuthMixin):
+class RankorMenu(Menu, AuthMixin):
 
     def make_menu(self):
         if self.is_authenticated():

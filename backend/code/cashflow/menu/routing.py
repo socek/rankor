@@ -1,2 +1,2 @@
 def meny_routing(routing):
-    routing.add('cashflow.menu.views.Menu', 'menu', '/menu')
+    routing.add('rankor.menu.views.Menu', 'menu', '/menu')

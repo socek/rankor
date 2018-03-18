@@ -4,13 +4,13 @@ from sapp.plugins.pyramid.testing import BaseWebTestFixture
 from sapp.plugins.sqlalchemy.migration import RecreateDatabases
 from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 
-from cashflow.application.app import CashflowConfigurator
-from cashflow.auth.models import User
-from cashflow.wallet.models import Wallet
+from rankor.application.app import RankorConfigurator
+from rankor.auth.models import User
+from rankor.wallet.models import Wallet
 
 
-class CashflowFixturesMixin(object):
-    CONFIGURATOR_CLASS = CashflowConfigurator
+class RankorFixturesMixin(object):
+    CONFIGURATOR_CLASS = RankorConfigurator
 
     def after_configurator_start(self, config):
         paths = config.settings['paths']
@@ -85,11 +85,11 @@ class CashflowFixturesMixin(object):
         dbsession.delete(wallet)
 
 
-class IntegrationFixture(CashflowFixturesMixin, BaseIntegrationFixture):
+class IntegrationFixture(RankorFixturesMixin, BaseIntegrationFixture):
     pass
 
 
-class WebTestFixture(CashflowFixturesMixin, BaseWebTestFixture):
+class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
     login_url = '/auth/login'
     authenticated_user_data = {
         'name': 'user3',

@@ -1,8 +1,8 @@
 from pyramid.security import authenticated_userid
 from sapp.decorators import WithContext
 
-from cashflow import app
-from cashflow.auth.drivers import UserReadDriver
+from rankor import app
+from rankor.auth.drivers import UserReadDriver
 
 
 class AuthMixin(object):

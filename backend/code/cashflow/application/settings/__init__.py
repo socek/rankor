@@ -1,6 +1,6 @@
-from cashflow.application.settings.default import default
-from cashflow.application.settings.pyramid import pyramid_specific
-from cashflow.application.settings.tests import tests_specific
+from rankor.application.settings.default import default
+from rankor.application.settings.pyramid import pyramid_specific
+from rankor.application.settings.tests import tests_specific
 
 
 def pyramid():

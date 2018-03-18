@@ -1,12 +1,12 @@
 from sapp.plugins.pyramid.routing import Routing
 
-from cashflow.auth.routing import auth_routing
-from cashflow.home.routing import home_routing
-from cashflow.menu.routing import meny_routing
-from cashflow.wallet.routing import wallet_routing
+from rankor.auth.routing import auth_routing
+from rankor.home.routing import home_routing
+from rankor.menu.routing import meny_routing
+from rankor.wallet.routing import wallet_routing
 
 
-class CashflowRouting(Routing):
+class RankorRouting(Routing):
     def make(self):
         home_routing(self)
         auth_routing(self)

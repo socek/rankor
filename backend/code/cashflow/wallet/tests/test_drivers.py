@@ -2,8 +2,8 @@ from pytest import fixture
 from pytest import mark
 from pytest import raises
 
-from cashflow.application.testing import IntegrationFixture
-from cashflow.wallet.drivers import WalletReadDriver
+from rankor.application.testing import IntegrationFixture
+from rankor.wallet.drivers import WalletReadDriver
 
 
 class TestWalletReadDriver(IntegrationFixture):

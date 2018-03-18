@@ -1,13 +1,13 @@
 # flake8: noqa
 from sapp.plugins.sqlalchemy.env import AlembicEnv
 
-from cashflow import app
-from cashflow.application.model import Model
+from rankor import app
+from rankor.application.model import Model
 
 # import or define all models here to ensure they are attached to the
 # Model.metadata prior to any initialization routines
 
-import cashflow.auth.models
-import cashflow.wallet.models
+import rankor.auth.models
+import rankor.wallet.models
 
 AlembicEnv(app, Model, 'dbsession').run()

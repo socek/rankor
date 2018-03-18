@@ -3,10 +3,10 @@ from pyramid.security import remember
 from sapp.plugins.pyramid.controller import RestfulController
 from sapp.decorators import WithContext
 
-from cashflow import app
-from cashflow.application.forms import FormSerializer
-from cashflow.auth.drivers import UserReadDriver
-from cashflow.auth.schemas import LoginSchema
+from rankor import app
+from rankor.application.forms import FormSerializer
+from rankor.auth.drivers import UserReadDriver
+from rankor.auth.schemas import LoginSchema
 
 GROUPS = ['authenticated']
 

@@ -1,5 +1,5 @@
-from cashflow.application.testing import WebTestFixture
-from cashflow.wallet.drivers import WalletReadDriver
+from rankor.application.testing import WebTestFixture
+from rankor.wallet.drivers import WalletReadDriver
 
 
 class TestWalletList(WebTestFixture):

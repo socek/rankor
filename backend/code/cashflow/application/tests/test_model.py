@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from cashflow.application.model import uuid_default
+from rankor.application.model import uuid_default
 
 
 def test_uuid_default():

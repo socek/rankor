@@ -1,9 +1,9 @@
 from pytest import fixture
 
-from cashflow.application.testing import IntegrationFixture
-from cashflow.auth.drivers import UserReadDriver
-from cashflow.auth.drivers import UserWriteDriver
-from cashflow.auth.models import User
+from rankor.application.testing import IntegrationFixture
+from rankor.auth.drivers import UserReadDriver
+from rankor.auth.drivers import UserWriteDriver
+from rankor.auth.models import User
 
 
 class TestUserReadDriver(IntegrationFixture):

@@ -1,7 +1,7 @@
 {
-  "name": "cashflow",
+  "name": "rankor",
   "version": "1.0.0",
-  "description": "CashFlow Frontend",
+  "description": "Rankor Frontend",
   "author": "",
   "private": true,
   "scripts": {

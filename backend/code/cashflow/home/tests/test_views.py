@@ -2,7 +2,7 @@ from pytest import fixture
 
 from sapp.plugins.pyramid.testing import ControllerFixtureMixin
 
-from cashflow.home.views import Home
+from rankor.home.views import Home
 
 
 class TestHome(ControllerFixtureMixin):

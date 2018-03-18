@@ -10,29 +10,17 @@ services:
       - ./nginx:/etc/nginx
 
   backend:
-    build:
-      context: backend
-      args:
-        IS_DEV: "true"
+    build: backend
     env_file: .env
     volumes:
       - ./backend/code:/code
-    labels:
-      - "traefik.backend=backend"
-      - "traefik.frontend.rule=PathPrefixStrip:/api/"
 
   frontend:
-    build:
-      context: frontend
-      args:
-        IS_DEV: "true"
+    build: frontend
     env_file: .env
     volumes:
       - ./frontend/code:/code
     command: npm run dev
-    labels:
-      - "traefik.backend=frontend"
-      - "traefik.frontend.rule=PathPrefix:/"
 
   postgres:
     image: postgres:10.1

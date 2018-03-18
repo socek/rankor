@@ -1,13 +1,13 @@
 from sapp.decorators import WithContext
 from sapp.plugins.pyramid.controller import RestfulController
 
-from cashflow import app
-from cashflow.application.forms import FormSerializer
-from cashflow.auth.view_mixins import AuthMixin
-from cashflow.wallet.drivers import WalletReadDriver
-from cashflow.wallet.drivers import WalletWriteDriver
-from cashflow.wallet.schemas import CreateWalletSchema
-from cashflow.wallet.schemas import WalletSchema
+from rankor import app
+from rankor.application.forms import FormSerializer
+from rankor.auth.view_mixins import AuthMixin
+from rankor.wallet.drivers import WalletReadDriver
+from rankor.wallet.drivers import WalletWriteDriver
+from rankor.wallet.schemas import CreateWalletSchema
+from rankor.wallet.schemas import WalletSchema
 
 
 class WalletListView(RestfulController, AuthMixin):

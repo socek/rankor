@@ -3,13 +3,13 @@ from unittest.mock import patch
 
 from pytest import fixture
 
-from cashflow.application.routing import CashflowRouting
+from rankor.application.routing import RankorRouting
 
 
-class TestCashflowRouting(object):
+class TestRankorRouting(object):
     @fixture
     def madd(self):
-        with patch.object(CashflowRouting, 'add') as mock:
+        with patch.object(RankorRouting, 'add') as mock:
             yield mock
 
     @fixture
@@ -20,6 +20,6 @@ class TestCashflowRouting(object):
         """
         This is syntax check of the routing.
         """
-        CashflowRouting(mpyramid).make()
+        RankorRouting(mpyramid).make()
 
         madd.assert_called()
