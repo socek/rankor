@@ -5,7 +5,7 @@ from sapp.decorators import WithContext
 
 from rankor import app
 from rankor.application.forms import FormSerializer
-from rankor.auth.drivers import UserReadDriver
+from rankor.auth.drivers import UserQuery
 from rankor.auth.schemas import LoginSchema
 
 GROUPS = ['authenticated']
@@ -29,7 +29,7 @@ class LoginController(RestfulController):
 
     @WithContext(app, args=['dbsession'])
     def authenticated_user_id(self, fields, dbsession):
-        driver = UserReadDriver(dbsession)
+        driver = UserQuery(dbsession)
         user = driver.find_by_email(fields['email'])
         if user and user.validate_password(fields['password']):
             return user.id

@@ -1,10 +1,10 @@
-from rankor.application.drivers import ReadDriver
-from rankor.application.drivers import WriteDriver
+from rankor.application.drivers import Query
+from rankor.application.drivers import Command
 
 from rankor.auth.models import User
 
 
-class UserReadDriver(ReadDriver):
+class UserQuery(Query):
     model = User
 
     def _get_by_email(self, email):
@@ -14,7 +14,7 @@ class UserReadDriver(ReadDriver):
         return self._get_by_email(email).first()
 
 
-class UserWriteDriver(WriteDriver):
+class UserCommand(Command):
     model = User
 
     def create(self, **kwargs):

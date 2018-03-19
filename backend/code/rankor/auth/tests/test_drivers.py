@@ -1,15 +1,15 @@
 from pytest import fixture
 
 from rankor.application.testing import IntegrationFixture
-from rankor.auth.drivers import UserReadDriver
-from rankor.auth.drivers import UserWriteDriver
+from rankor.auth.drivers import UserQuery
+from rankor.auth.drivers import UserCommand
 from rankor.auth.models import User
 
 
-class TestUserReadDriver(IntegrationFixture):
+class TestUserQuery(IntegrationFixture):
     @fixture
     def driver(self, app):
-        return UserReadDriver(app.dbsession)
+        return UserQuery(app.dbsession)
 
     def test_find_by_email(self, driver, user):
         assert driver.find_by_email(self.user_data['email']).id == user.id
@@ -18,7 +18,7 @@ class TestUserReadDriver(IntegrationFixture):
         assert driver.find_by_email(self.user_data['email']) is None
 
 
-class TestUserWriteDriver(IntegrationFixture):
+class TestUserCommand(IntegrationFixture):
     data = dict(
         name='user1',
         email='user1@my.pl',
@@ -27,7 +27,7 @@ class TestUserWriteDriver(IntegrationFixture):
 
     @fixture
     def driver(self, app):
-        yield UserWriteDriver(app.dbsession)
+        yield UserCommand(app.dbsession)
         app.dbsession.commit()
 
     def test_create(self, driver, app):
