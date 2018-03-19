@@ -11,4 +11,3 @@ class MainRoot(object):
 
     def __init__(self, owner):
         self.owner = owner
-        print('c', self.owner, 'dddd')

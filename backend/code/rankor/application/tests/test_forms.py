@@ -12,20 +12,24 @@ class ExampleSchema(Schema):
 
 class TestFormSerializer(object):
     good_json = {
-        'one': {
-            'value': 'sample@email.com',
-        },
-        'two': {
-            'value': 'sample',
+        'fields': {
+            'one': {
+                'value': 'sample@email.com',
+            },
+            'two': {
+                'value': 'sample',
+            }
         }
     }
 
     bad_json = {
-        'one': {
-            'value': 'sample',
-        },
-        'two': {
-            'value': None,
+        'fields': {
+            'one': {
+                'value': 'sample',
+            },
+            'two': {
+                'value': None,
+            }
         }
     }
 

@@ -6,7 +6,6 @@ from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 
 from rankor.application.app import RankorConfigurator
 from rankor.auth.models import User
-from rankor.wallet.models import Wallet
 
 
 class RankorFixturesMixin(object):
@@ -62,28 +61,6 @@ class RankorFixturesMixin(object):
 
         dbsession.delete(user)
 
-    @fixture
-    def wallet(self, user, dbsession):
-        wallet = Wallet(name='my wallet', user=user)
-
-        dbsession.add(wallet)
-        dbsession.commit()
-
-        yield wallet
-
-        dbsession.delete(wallet)
-
-    @fixture
-    def wallet_second_user(self, second_user, dbsession):
-        wallet = Wallet(name='my wallet 2', user=second_user)
-
-        dbsession.add(wallet)
-        dbsession.commit()
-
-        yield wallet
-
-        dbsession.delete(wallet)
-
 
 class IntegrationFixture(RankorFixturesMixin, BaseIntegrationFixture):
     pass
@@ -99,9 +76,9 @@ class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
     }
 
     def generate_form_json(self, fields):
-        json = {}
+        json = {'fields': {}}
         for name, value in fields.items():
-            json[name] = {
+            json['fields'][name] = {
                 'value': value,
             }
         return json
@@ -122,13 +99,3 @@ class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
 
         dbsession.delete(user)
 
-    @fixture
-    def authenticated_user_wallet(self, authenticated_user, dbsession):
-        wallet = Wallet(name='my wallet', user=authenticated_user)
-
-        dbsession.add(wallet)
-        dbsession.commit()
-
-        yield wallet
-
-        dbsession.delete(wallet)

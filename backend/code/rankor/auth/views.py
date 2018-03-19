@@ -21,7 +21,7 @@ class LoginController(RestfulController):
             if user_id:
                 self.on_success(form, user_id)
             else:
-                self.on_fail(form)
+                self.on_fail(form, 'Username and/or password do not match.')
         else:
             self.on_fail(form)
 
@@ -39,8 +39,9 @@ class LoginController(RestfulController):
         self.request.response.headerlist.extend(headers)
         form.set_form_ok()
 
-    def on_fail(self, form):
-        form.set_form_error('Username and/or password do not match.')
+    def on_fail(self, form, message=None):
+        if message:
+            form.set_form_error(message)
         self.request.response.status_code = 400
 
 

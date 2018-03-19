@@ -1,7 +1,7 @@
 from rankor.application.testing import WebTestFixture
 
 
-class TestWebAdsController(WebTestFixture):
+class TestWebAuthController(WebTestFixture):
     url = '/auth'
     login_url = '/auth/login'
     logout_url = '/auth/logout'
@@ -54,7 +54,7 @@ class TestWebAdsController(WebTestFixture):
         result = fake_app.post_json(
             self.login_url,
             params=params,
-            status=200)
+            status=400)
 
         assert result.json == {
             'form': {

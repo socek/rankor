@@ -8,6 +8,5 @@ from rankor.application.model import Model
 # Model.metadata prior to any initialization routines
 
 import rankor.auth.models
-import rankor.wallet.models
 
 AlembicEnv(app, Model, 'dbsession').run()
