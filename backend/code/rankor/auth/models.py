@@ -4,20 +4,16 @@ from bcrypt import hashpw
 from sqlalchemy import Binary
 from sqlalchemy import Boolean
 from sqlalchemy import Column
-from sqlalchemy import Integer
 from sqlalchemy import String
 
 from rankor.application.model import Model
-from rankor.application.model import uuid_default
 
 
 class User(Model):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
-    uuid = Column(String(32), nullable=False, default=uuid_default, index=True)
     name = Column(String, nullable=True)
-    email = Column(String, nullable=False, unique=True)
+    email = Column(String, nullable=False, unique=True, index=True)
     is_admin = Column(Boolean, nullable=False, default=False)
     password = Column(Binary(100), nullable=True)
 

@@ -8,5 +8,8 @@ from rankor.application.model import Model
 # Model.metadata prior to any initialization routines
 
 import rankor.auth.models
+import rankor.contest.models
+import rankor.questions.models
+
 
 AlembicEnv(app, Model, 'dbsession').run()

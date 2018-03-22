@@ -1,5 +1,8 @@
 from uuid import uuid4
 
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import MetaData
 
@@ -16,8 +19,14 @@ NAMING_CONVENTION = {
 
 metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
-Model = declarative_base(metadata=metadata)
-
 
 def uuid_default():
     return uuid4().hex
+
+
+class Base(object):
+    id = Column(Integer, primary_key=True)
+    uuid = Column(String(32), nullable=False, default=uuid_default, index=True)
+
+
+Model = declarative_base(metadata=metadata, cls=Base)
