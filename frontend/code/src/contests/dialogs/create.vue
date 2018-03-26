@@ -5,32 +5,31 @@
     </b-btn>
 
     <b-modal id="createContestModal" ref="createContestModal" title="Create Contest" hide-footer>
-      <div>
-        <b-form @submit.prevent="onSubmit">
-          <b-form-invalid-feedback>
-            {{ errors._form }}
+      <form @submit.prevent="onSave">
+        <b-form-invalid-feedback  v-for="error in errors._form"
+                                  :key="error"
+                                  :force-show="true" >
+          {{ errors._form }}
+        </b-form-invalid-feedback>
+
+        <b-form-group id="nameFieldGroup"
+                            label="Name:"
+                            label-for="nameField">
+          <b-form-input id="nameField"
+                        v-model.trim="fields.name"
+                        type="text"
+                        :state="errors.name.length == 0 ? null : false"
+                        placeholder="Contest name"></b-form-input>
+          <b-form-invalid-feedback  v-for="error in errors.name"
+                                    class="modal-invalid-feedback"
+                                    :key="error">
+            {{ error }}
           </b-form-invalid-feedback>
+        </b-form-group>
 
-          <div role="group">
-              <b-form-group id="nameFieldGroup"
-                                  label="Name:"
-                                  label-for="nameField">
-                <b-form-input id="nameField"
-                              v-model.trim="fields.name"
-                              type="text"
-                              :state="errors.name.length == 0 ? null : false"
-                              placeholder="Contest name"></b-form-input>
-                <b-form-invalid-feedback id="inputLiveFeedback" v-for="error in errors.name">
-                  {{ error }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-
-              <b-btn variant="primary" @click="onSave">Save</b-btn>
-              <b-btn variant="danger" @click="hideModal">Cancel</b-btn>
-            </div>
-
-        </b-form>
-      </div>
+        <input type="submit" value="Save" class="btn btn-primary">
+        <b-btn variant="danger" @click="hideModal">Cancel</b-btn>
+      </form>
     </b-modal>
   </div>
 </template>

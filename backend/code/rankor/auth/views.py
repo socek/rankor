@@ -1,10 +1,10 @@
+from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.security import forget
 from pyramid.security import remember
-from sapp.plugins.pyramid.controller import RestfulController
 from sapp.decorators import WithContext
 
 from rankor import app
-from rankor.application.forms import FormSerializer
+from rankor.application.views import RestfulController
 from rankor.auth.drivers import UserQuery
 from rankor.auth.schemas import LoginSchema
 
@@ -12,37 +12,28 @@ GROUPS = ['authenticated']
 
 
 class LoginController(RestfulController):
-    def post(self):
-        form = FormSerializer(LoginSchema())
-        form.parse_json(self.request.json_body)
-
-        if form.validate():
-            user_id = self.authenticated_user_id(form.fields())
-            if user_id:
-                self.on_success(form, user_id)
-            else:
-                self.on_fail(form, 'Username and/or password do not match.')
-        else:
-            self.on_fail(form)
-
-        return dict(form=form.fullform)
-
+    @property
     @WithContext(app, args=['dbsession'])
-    def authenticated_user_id(self, fields, dbsession):
-        driver = UserQuery(dbsession)
-        user = driver.find_by_email(fields['email'])
+    def query(self, dbsession):
+        return UserQuery(dbsession)
+
+    def post(self):
+        fields = self.get_validated_fields(LoginSchema)
+        user_id = self.get_authenticated_user_id(fields)
+        if user_id:
+            self.on_success(user_id)
+        else:
+            raise HTTPBadRequest(
+                json={'_form': ['Username and/or password do not match.']})
+
+    def get_authenticated_user_id(self, fields):
+        user = self.query.find_by_email(fields['email'])
         if user and user.validate_password(fields['password']):
             return user.id
 
-    def on_success(self, form, user_id):
+    def on_success(self, user_id):
         headers = remember(self.request, user_id)
         self.request.response.headerlist.extend(headers)
-        form.set_form_ok()
-
-    def on_fail(self, form, message=None):
-        if message:
-            form.set_form_error(message)
-        self.request.response.status_code = 400
 
 
 class LogoutController(RestfulController):

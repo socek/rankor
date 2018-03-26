@@ -2,52 +2,80 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-4">
       <h1>Please log in</h1>
-        <b-form @submit="form.onSubmit($event, onSuccess)">
-          <b-form-invalid-feedback :force-show="true">{{form.data.error}}</b-form-invalid-feedback>
-          <b-form-group id="form_email_label"
-                        label="Email address:"
-                        label-for="form_email"
-                        description="We'll never share your email with anyone else.">
-            <b-form-input id="form_email"
-                          type="email"
-                          v-model="form.data.fields.email.value"
-                          required
-                          placeholder="Enter email">
-            </b-form-input>
-          </b-form-group>
+      <form @submit.prevent="onSubmit">
+        <b-form-invalid-feedback  :force-show="true"
+                                  v-for="error in errors._form"
+                                  :key="error">
+          {{ error }}
+        </b-form-invalid-feedback>
 
-          <b-form-group id="form_password_label"
-                        label="Password:"
-                        label-for="form_password">
-            <b-form-input id="form_password"
-                          type="password"
-                          v-model="form.data.fields.password.value"
-                          required
-                          placeholder="Enter password">
-            </b-form-input>
-          </b-form-group>
-          <b-button type="submit" variant="primary">Login</b-button>
-        </b-form>
+        <b-form-group id="emailFieldGroup"
+                      label="Email:"
+                      label-for="emailField">
+          <b-form-input id="emailField"
+                        type="text"
+                        placeholder="Email"
+                        v-model.trim="fields.email"
+                        :state="errors.email.length == 0 ? null : false">
+          </b-form-input>
+          <b-form-invalid-feedback v-for="error in errors.email" :key="error">
+            {{ error }}
+          </b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group id="passwordFieldGroup"
+                      label="Password:"
+                      label-for="passwordField">
+          <b-form-input id="passwordField"
+                        type="password"
+                        placeholder="Password"
+                        :state="errors.password.length == 0 ? null : false"
+                        v-model.trim="fields.password">
+          </b-form-input>
+          <b-form-invalid-feedback  v-for="error in errors.password"
+                                    :key="error">
+            {{ error }}
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <input type="submit" value="Login" class="btn btn-primary">
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import User from '@/models/user'
-import FormSerializer from '@/auth/serializer'
+import authResource from '@/auth/resource'
 
 export default {
-  props: ['is_authenticated'],
   data () {
     return {
-      form: new FormSerializer('/api/auth/login', ['email', 'password'])
+      fields: {
+        email: '',
+        password: ''
+      },
+      errors: {
+        _form: [],
+        email: [],
+        password: []
+      },
+      resource: authResource(this).login
     }
   },
   methods: {
-    onSuccess () {
-      User.logIn()
-      this.$router.push({name: 'Dashboard'})
-      location.reload()
+    onSubmit () {
+      this.resource.save({}, this.fields).then((response) => {
+        User.logIn()
+        this.$router.push({name: 'Dashboard'})
+        location.reload()
+      }).catch((response) => {
+        for (let item in this.errors) {
+          this.errors[item] = []
+        }
+        for (let item in response.body) {
+          this.errors[item] = response.body[item]
+        }
+      })
     }
   }
 }

@@ -1,8 +1,7 @@
 from sapp.decorators import WithContext
-from sapp.plugins.pyramid.controller import RestfulController
 
 from rankor import app
-# from rankor.application.forms import FormSerializer
+from rankor.application.views import RestfulController
 from rankor.auth.view_mixins import AuthMixin
 from rankor.contest.drivers import ContestCommand
 from rankor.contest.drivers import ContestQuery
@@ -23,7 +22,9 @@ class AdminContestView(RestfulController, AuthMixin):
     def get(self):
         contests = self.query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
-        return {'contests': [schema.dump(contest).data for contest in contests]}
+        return {
+            'contests': [schema.dump(contest).data for contest in contests]
+        }
 
     @WithContext(app, args=['dbsession'])
     def post(self, dbsession):

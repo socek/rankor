@@ -42,9 +42,7 @@
 </script>
 
 <style>
-  .invalid-feedback {
+  .modal-invalid-feedback {
     font-size: 30%;
-    text-align: left;
-    padding-left: 15px;
   }
 </style>
