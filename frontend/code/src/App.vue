@@ -23,9 +23,9 @@
 </template>
 
 <script>
-  import './assets/dashboard.css'
+  import '@/contests/dashboard.css'
 
-  import login from './components/login'
+  import login from '@/auth/login'
   import User from '@/models/user'
 
   export default {

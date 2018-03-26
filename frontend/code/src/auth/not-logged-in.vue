@@ -34,7 +34,7 @@
 
 <script>
 import User from '@/models/user'
-import FormSerializer from '@/forms/serializer'
+import FormSerializer from '@/auth/serializer'
 
 export default {
   props: ['is_authenticated'],

@@ -21,8 +21,7 @@
 </template>
 
 <script>
-  // import AjaxView from '../models/ajax'
-  import contestCreateDialog from '@/dialogs/contests/create'
+  import contestCreateDialog from '@/contests/dialogs/create'
   import contestResource from '@/contests/resource'
 
   export default {

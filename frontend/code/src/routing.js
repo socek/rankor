@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import NotLoggedIn from '@/views/not-logged-in'
-import Dashboard from '@/views/dashboard'
+
+import NotLoggedIn from '@/auth/not-logged-in'
+import Dashboard from '@/contests/dashboard'
 import User from '@/models/user'
 
 Vue.use(Router)
