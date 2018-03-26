@@ -4,9 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router/index'
 import BootstrapVue from 'bootstrap-vue'
+import VueResource from 'vue-resource'
 
 Vue.config.productionTip = true
 Vue.use(BootstrapVue)
+Vue.use(VueResource)
+
+Vue.http.options.root = '/api'
 
 /* eslint-disable no-new */
 new Vue({
@@ -15,3 +19,6 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'

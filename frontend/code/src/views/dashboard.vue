@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
-      <h1>List of wallets <walletCreateDialog @onSuccess="refresh"></walletCreateDialog></h1>
+      <h1>List of contests <contestCreateDialog @onSuccess="refresh"></contestCreateDialog></h1>
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
@@ -10,9 +10,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(wallet, index) in wallets">
+          <tr v-for="(contest, index) in contests">
             <td scope="row">{{index + 1}}</td>
-            <td>{{wallet.name}}</td>
+            <td>{{contest.name}}</td>
           </tr>
         </tbody>
       </table>
@@ -21,14 +21,15 @@
 </template>
 
 <script>
-  import AjaxView from '../models/ajax'
-  import walletCreateDialog from '@/dialogs/wallets/create'
+  // import AjaxView from '../models/ajax'
+  import contestCreateDialog from '@/dialogs/contests/create'
+  import contestResource from '@/contests/resource'
 
   export default {
     data () {
       return {
-        wallets: [],
-        showModal: false
+        contests: [],
+        resource: contestResource(this)
       }
     },
     created: function () {
@@ -36,14 +37,13 @@
     },
     methods: {
       refresh () {
-        var self = this
-        new AjaxView(function (response) {
-          self.wallets = response.data.elements
-        }).run('/api/wallets').then(self.fillWidget)
+        this.resource.get().then((response) => {
+          this.contests = response.data.contests
+        })
       }
     },
     components: {
-      walletCreateDialog
+      contestCreateDialog
     }
   }
 </script>

@@ -23,12 +23,16 @@ class AdminContestView(RestfulController, AuthMixin):
     def get(self):
         contests = self.query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
-        return {'contests': [schema.dump(contest) for contest in contests]}
+        return {'contests': [schema.dump(contest).data for contest in contests]}
 
     @WithContext(app, args=['dbsession'])
     def post(self, dbsession):
         schema = ContestSchema()
-        data = schema.load(self.request.json_body).data
+        data, errors = schema.load(self.request.json_body)
+        if errors:
+            self.request.response.status_int = 400
+            return errors
+
         data['owner_id'] = self.get_user_id()
         self.command.create(**data)
         return {}

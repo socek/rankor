@@ -1,11 +1,11 @@
 <template>
   <div>
     <b-navbar toggleable="md" type="dark">
-      <b-navbar-brand href="#">Cash Flow</b-navbar-brand>
+      <b-navbar-brand href="#">Rankor Admin Panel</b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item v-if="isAuthenticated" href="#/dashboard">Wallets</b-nav-item>
+          <b-nav-item v-if="isAuthenticated" :to="{name: 'Dashboard'}">Dashboard</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -40,3 +40,11 @@
     }
   }
 </script>
+
+<style>
+  .invalid-feedback {
+    font-size: 30%;
+    text-align: left;
+    padding-left: 15px;
+  }
+</style>
