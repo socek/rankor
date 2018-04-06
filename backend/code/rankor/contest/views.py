@@ -6,6 +6,7 @@ from rankor.auth.view_mixins import AuthMixin
 from rankor.contest.drivers import ContestCommand
 from rankor.contest.drivers import ContestQuery
 from rankor.contest.schema import ContestSchema
+from rankor.contest.schema import NewContestSchema
 
 
 class AdminContestView(RestfulController, AuthMixin):
@@ -28,7 +29,7 @@ class AdminContestView(RestfulController, AuthMixin):
 
     @WithContext(app, args=['dbsession'])
     def post(self, dbsession):
-        schema = ContestSchema()
+        schema = NewContestSchema()
         data, errors = schema.load(self.request.json_body)
         if errors:
             self.request.response.status_int = 400

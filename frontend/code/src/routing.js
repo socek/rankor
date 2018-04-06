@@ -41,6 +41,12 @@ export default new Router({
       name: 'Dashboard',
       component: Dashboard,
       beforeEnter: requireAuth
+    },
+    {
+      path: '/contests/:contest_uuid/',
+      name: 'Contest',
+      component: Dashboard,
+      beforeEnter: requireAuth
     }
   ]
 })

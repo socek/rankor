@@ -12,7 +12,7 @@
         <tbody>
           <tr v-for="(contest, index) in contests">
             <td scope="row">{{index + 1}}</td>
-            <td>{{contest.name}}</td>
+            <td><router-link :to="{name: 'Contest', params: {contest_uuid: contest.uuid}}">{{contest.name}}</router-link></td>
           </tr>
         </tbody>
       </table>
@@ -38,6 +38,7 @@
       refresh () {
         this.resource.get().then((response) => {
           this.contests = response.data.contests
+          console.log(this.contests)
         })
       }
     },
@@ -46,4 +47,3 @@
     }
   }
 </script>
-
