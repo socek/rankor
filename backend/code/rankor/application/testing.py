@@ -75,14 +75,6 @@ class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
         'password': 'mypassword',
     }
 
-    def generate_form_json(self, fields):
-        json = {'fields': {}}
-        for name, value in fields.items():
-            json['fields'][name] = {
-                'value': value,
-            }
-        return json
-
     @fixture
     def authenticated_user(self, dbsession, fake_app):
         user_data = dict(self.authenticated_user_data)
@@ -92,7 +84,7 @@ class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
         dbsession.add(user)
         dbsession.commit()
 
-        params = self.generate_form_json(dict(email=user_data['email'], password=password))
+        params = dict(email=user_data['email'], password=password)
         fake_app.post_json(self.login_url, params=params, status=200)
 
         yield user

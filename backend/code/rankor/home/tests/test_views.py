@@ -14,4 +14,4 @@ class TestHome(ControllerFixtureMixin):
         """
         This is sample test.
         """
-        assert view.get() == {'elo': 1}
+        assert view.get() == {}
