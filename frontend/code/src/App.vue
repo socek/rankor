@@ -11,6 +11,7 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <login></login>
+          <register v-if="!isAuthenticated"></register>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -26,6 +27,7 @@
   import '@/contests/dashboard.css'
 
   import login from '@/auth/login'
+  import register from '@/auth/register.vue'
   import User from '@/models/user'
 
   export default {
@@ -36,7 +38,8 @@
     },
     name: 'app',
     components: {
-      login
+      login,
+      register
     }
   }
 </script>

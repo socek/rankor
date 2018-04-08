@@ -4,7 +4,7 @@
       <h1>Please log in</h1>
       <form @submit.prevent="onSubmit">
         <b-form-invalid-feedback  :force-show="true"
-                                  v-for="error in errors._form"
+                                  v-for="error in errors._schema"
                                   :key="error">
           {{ error }}
         </b-form-invalid-feedback>
@@ -55,7 +55,7 @@ export default {
         password: ''
       },
       errors: {
-        _form: [],
+        _schema: [],
         email: [],
         password: []
       },

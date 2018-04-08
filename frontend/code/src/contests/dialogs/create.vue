@@ -6,10 +6,10 @@
 
     <b-modal id="createContestModal" ref="createContestModal" title="Create Contest" hide-footer>
       <form @submit.prevent="onSave">
-        <b-form-invalid-feedback  v-for="error in errors._form"
+        <b-form-invalid-feedback  v-for="error in errors._schema"
                                   :key="error"
                                   :force-show="true" >
-          {{ errors._form }}
+          {{ errors._schema }}
         </b-form-invalid-feedback>
 
         <b-form-group id="nameFieldGroup"
@@ -45,7 +45,7 @@
             name: ''
           },
           errors: {
-            _form: [],
+            _schema: [],
             name: []
           }
         },
@@ -58,7 +58,7 @@
           this.fields[name] = ''
           this.errors[name] = ''
         }
-        this.errors._form = ''
+        this.errors._schema = ''
       },
       showModal () {
         this.refresh()

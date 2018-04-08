@@ -11,3 +11,7 @@ def auth_routing(routing):
         'rankor.auth.views.AuthDataController',
         'auth',
         '/auth')
+    routing.add(
+        'rankor.auth.views.SignUpView',
+        'sign_up',
+        '/auth/signup')
