@@ -1,3 +1,7 @@
+from unittest.mock import patch
+
+from pytest import fixture
+
 from rankor.application.testing import WebTestFixture
 
 
@@ -5,6 +9,8 @@ class TestWebAuthController(WebTestFixture):
     url = '/auth'
     login_url = '/auth/login'
     logout_url = '/auth/logout'
+
+    # TODO: remove database from this tests
 
     def test_auth_information(self, fake_app):
         """
@@ -70,3 +76,34 @@ class TestWebAuthController(WebTestFixture):
 
         result = fake_app.get(self.url, status=200)
         assert result.json == {'is_authenticated': False, 'groups': []}
+
+
+class TestWebSignUpFormController(WebTestFixture):
+    url = '/auth/signup'
+
+    @fixture
+    def mcommand(self):
+        with patch('rankor.auth.views.UserCommand') as mock:
+            yield mock.return_value
+
+    @fixture
+    def mremember(self):
+        with patch('rankor.auth.views.remember') as mock:
+            yield mock
+
+    def test_signup_happy_path(self, fake_app, mcommand, mremember):
+        """
+        /auth/signup should create a proper formed user
+        """
+        new_user = {
+            'email': 'new@email.com',
+            'password': 'fake1',
+            'confirmPassword': 'fake1',
+        }
+        mcommand.return_value.id = 10
+        mremember.return_value = []
+
+        fake_app.post_json(self.url, params=new_user)
+
+        mcommand.create.assert_called_once_with(
+            email='new@email.com', password='fake1')

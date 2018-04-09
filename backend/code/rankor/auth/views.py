@@ -56,21 +56,16 @@ class AuthDataController(RestfulController):
 class SignUpView(RestfulController):
     @property
     @WithContext(app, args=['dbsession'])
-    def dbsession(self, dbsession):
-        return dbsession
-
-    @property
-    def command(self):
-        return UserCommand(self.dbsession)
+    def command(self, dbsession):
+        return UserCommand(dbsession)
 
     def post(self):
         fields = self.get_validated_fields(SignUpSchema)
-        with app:  # This is for managing transaction
-            try:
-                user_id = self.create_user(fields)
-            except IntegrityError:
-                raise HTTPBadRequest(
-                    json={'_schema': ['User with that email already exists']})
+        try:
+            user_id = self.create_user(fields)
+        except IntegrityError:
+            raise HTTPBadRequest(
+                json={'_schema': ['User with that email already exists']})
         self.on_success(user_id)
 
     def create_user(self, fields):

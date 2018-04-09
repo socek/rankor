@@ -6,6 +6,21 @@ from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 
 from rankor.application.app import RankorConfigurator
 from rankor.auth.models import User
+from rankor.contest.models import Contest
+
+
+class DeleteOnExit(object):
+    def __init__(self, dbsession, obj):
+        self.obj = obj
+        self.dbsession = dbsession
+
+    def __enter__(self):
+        self.dbsession.add(self.obj)
+        self.dbsession.commit()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.dbsession.delete(self.obj)
+        self.dbsession.commit()
 
 
 class RankorFixturesMixin(object):
@@ -31,6 +46,14 @@ class RankorFixturesMixin(object):
         'password': 'mypassword',
     }
 
+    contest_user_data = {
+        'name': 'contest1 from user1',
+    }
+
+    contest_second_user_data = {
+        'name': 'contest1 from user2',
+    }
+
     @fixture
     def dbsession(self, app):
         return app.dbsession
@@ -41,12 +64,9 @@ class RankorFixturesMixin(object):
         password = user_data.pop('password')
         user = User(**self.user_data)
         user.set_password(password)
-        dbsession.add(user)
-        dbsession.commit()
 
-        yield user
-
-        dbsession.delete(user)
+        with DeleteOnExit(dbsession, user):
+            yield user
 
     @fixture
     def second_user(self, dbsession):
@@ -54,12 +74,27 @@ class RankorFixturesMixin(object):
         password = user_data.pop('password')
         user = User(**self.second_user_data)
         user.set_password(password)
-        dbsession.add(user)
-        dbsession.commit()
 
-        yield user
+        with DeleteOnExit(dbsession, user):
+            yield user
 
-        dbsession.delete(user)
+    @fixture
+    def contest_from_user(self, dbsession, user):
+        contest_data = dict(self.contest_user_data)
+        contest_data['owner'] = user
+        contest = Contest(**contest_data)
+
+        with DeleteOnExit(dbsession, contest):
+            yield contest
+
+    @fixture
+    def contest_from_second_user(self, dbsession, second_user):
+        contest_data = dict(self.contest_second_user_data)
+        contest_data['owner'] = second_user
+        contest = Contest(**contest_data)
+
+        with DeleteOnExit(dbsession, contest):
+            yield contest
 
 
 class IntegrationFixture(RankorFixturesMixin, BaseIntegrationFixture):
@@ -81,13 +116,9 @@ class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
         password = user_data.pop('password')
         user = User(**user_data)
         user.set_password(password)
-        dbsession.add(user)
-        dbsession.commit()
 
-        params = dict(email=user_data['email'], password=password)
-        fake_app.post_json(self.login_url, params=params, status=200)
+        with DeleteOnExit(dbsession, user):
+            params = dict(email=user_data['email'], password=password)
+            fake_app.post_json(self.login_url, params=params, status=200)
 
-        yield user
-
-        dbsession.delete(user)
-
+            yield user
