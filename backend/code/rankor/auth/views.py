@@ -8,6 +8,7 @@ from rankor import app
 from rankor.application.views import RestfulController
 from rankor.auth.drivers import UserCommand
 from rankor.auth.drivers import UserQuery
+from rankor.auth.jwt import encode_jwt_from_user
 from rankor.auth.schemas import LoginSchema
 from rankor.auth.schemas import SignUpSchema
 
@@ -22,17 +23,18 @@ class LoginController(RestfulController):
 
     def post(self):
         fields = self.get_validated_fields(LoginSchema)
-        user_id = self.get_authenticated_user_id(fields)
-        if user_id:
-            self.on_success(user_id)
+        user = self.get_authenticated_user(fields)
+        if user:
+            self.on_success(user.id)
+            return {'jwt': encode_jwt_from_user(user)}
         else:
             raise HTTPBadRequest(
                 json={'_schema': ['Username and/or password do not match.']})
 
-    def get_authenticated_user_id(self, fields):
+    def get_authenticated_user(self, fields):
         user = self.query.find_by_email(fields['email'])
         if user and user.validate_password(fields['password']):
-            return user.id
+            return user
 
     def on_success(self, user_id):
         headers = remember(self.request, user_id)

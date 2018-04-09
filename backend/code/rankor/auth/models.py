@@ -26,3 +26,5 @@ class User(Model):
             return checkpw(password, self.password)
         else:
             return False
+
+

@@ -10,6 +10,7 @@ def default():
     alembic(settings)
     logging(settings)
     database(settings)
+    jwt(settings)
     return settings
 
 
@@ -74,3 +75,8 @@ def database(settings):
 
 def alembic(settings):
     settings['paths']['alembic:migrations'] = 'alembic'
+
+
+def jwt(settings):
+    settings['jwt:algorithm'] = 'HS256'
+    settings['jwt:secret'] = environ['JWT_SECRET']

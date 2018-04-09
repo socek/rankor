@@ -1,97 +1,63 @@
 alembic==0.9.6
-  Mako==1.0.7
-    MarkupSafe==1.0
-  python-dateutil==2.6.1
-    six==1.11.0
-  python-editor==1.0.3
-  SQLAlchemy==1.2.0b3
+amqp==2.2.2
+asn1crypto==0.24.0
+attrs==17.3.0
 bcrypt==3.1.4
-  cffi==1.11.2
-    pycparser==2.18
-  six==1.11.0
+beautifulsoup4==4.6.0
+billiard==3.5.0.3
 celery==4.1.0
-  billiard==3.5.0.3
-  kombu==4.1.0
-    amqp==2.2.2
-      vine==1.1.4
-  pytz==2017.3
+cffi==1.11.2
+coverage==4.4.2
+cryptography==2.2.2
+decorator==4.1.2
+freezegun==0.3.9
+hupper==1.0
+idna==2.6
+ipdb==0.10.3
+ipython==6.2.1
+ipython-genutils==0.2.0
+jedi==0.11.1
+kombu==4.1.0
+Mako==1.0.7
+MarkupSafe==1.0
 marshmallow==3.0.0b4
-pip==9.0.1
+parso==0.1.1
+PasteDeploy==1.5.2
+pexpect==4.3.1
+pickleshare==0.7.4
+pipdeptree==0.10.1
+plaster==1.0
+plaster-pastedeploy==0.4.2
+pluggy==0.6.0
+prompt-toolkit==1.0.15
 psycopg2==2.7.3.2
+ptyprocess==0.5.2
+py==1.5.2
+pycparser==2.18
+Pygments==2.2.0
+PyJWT==1.6.1
+pyramid==1.9.1
+pyramid-ipython==0.2
+pytest==3.3.1
+pytest-cov==2.5.1
+python-dateutil==2.6.1
+python-editor==1.0.3
+pytz==2017.3
 PyYAML==3.12
 raven==6.4.0
-wheel==0.29.0
-pyramid==1.9.1
-  hupper==1.0
-  PasteDeploy==1.5.2
-  plaster==1.0
-    setuptools==36.2.0
-  plaster-pastedeploy==0.4.2
-    PasteDeploy==1.5.2
-    plaster==1.0
-      setuptools==36.2.0
-  repoze.lru==0.7
-  setuptools==36.2.0
-  translationstring==1.3
-  venusian==1.1.0
-  WebOb==1.7.4
-  zope.deprecation==4.3.0
-    setuptools==36.2.0
-  zope.interface==4.4.3
-    setuptools==36.2.0
+repoze.lru==0.7
+simplegeneric==0.8.1
+six==1.11.0
+SQLAlchemy==1.2.0b3
+traitlets==4.3.2
+translationstring==1.3
+undecorated==0.3.0
 uWSGI==2.0.16
-freezegun==0.3.9
-  python-dateutil==2.6.1
-    six==1.11.0
-  six==1.11.0
-ipdb==0.10.3
-  ipython==6.2.1
-    decorator==4.1.2
-    jedi==0.11.1
-      parso==0.1.1
-    pexpect==4.3.1
-      ptyprocess==0.5.2
-    pickleshare==0.7.4
-    prompt-toolkit==1.0.15
-      six==1.11.0
-      wcwidth==0.1.7
-    Pygments==2.2.0
-    setuptools==36.2.0
-    simplegeneric==0.8.1
-    traitlets==4.3.2
-      decorator==4.1.2
-      ipython-genutils==0.2.0
-      six==1.11.0
-  setuptools==36.2.0
-pipdeptree==0.10.1
-pyramid-ipython==0.2
-  ipython==6.2.1
-    decorator==4.1.2
-    jedi==0.11.1
-      parso==0.1.1
-    pexpect==4.3.1
-      ptyprocess==0.5.2
-    pickleshare==0.7.4
-    prompt-toolkit==1.0.15
-      six==1.11.0
-      wcwidth==0.1.7
-    Pygments==2.2.0
-    setuptools==36.2.0
-    simplegeneric==0.8.1
-    traitlets==4.3.2
-      decorator==4.1.2
-      ipython-genutils==0.2.0
-      six==1.11.0
-pytest-cov==2.5.1
-  coverage==4.4.2
-  pytest==3.3.1
-    attrs==17.3.0
-    pluggy==0.6.0
-    py==1.5.2
-    setuptools==36.2.0
-    six==1.11.0
+venusian==1.1.0
+vine==1.1.4
+waitress==1.1.0
+wcwidth==0.1.7
+WebOb==1.7.4
 WebTest==2.0.29
-  beautifulsoup4==4.6.0
-  six==1.11.0
-  waitress==1.1.0
-  WebOb==1.7.4
+zope.deprecation==4.3.0
+zope.interface==4.4.3

@@ -3,6 +3,7 @@ from unittest.mock import patch
 from pytest import fixture
 
 from rankor.application.testing import WebTestFixture
+from rankor.auth.jwt import encode_jwt_from_user
 
 
 class TestWebAuthController(WebTestFixture):
@@ -52,7 +53,7 @@ class TestWebAuthController(WebTestFixture):
 
         result = fake_app.post_json(self.login_url, params=params, status=200)
 
-        assert result.json is None
+        assert result.json == {'jwt': encode_jwt_from_user(user)}
 
         result = fake_app.get(self.url, status=200)
         assert result.json == {

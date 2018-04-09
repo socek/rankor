@@ -107,3 +107,4 @@ ENV/
 *.sublime-*
 .awcache
 coverag
+.pytest_cache

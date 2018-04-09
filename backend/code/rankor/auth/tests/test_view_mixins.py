@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from pytest import fixture
 from pytest import mark
+from undecorated import undecorated
 
 from rankor.auth.view_mixins import AuthMixin
 
@@ -44,8 +45,9 @@ class TestAuthMixin(object):
         .get_user should return authenticated user from the database.
         """
         mquery = muser_query.return_value
+        fun = undecorated(mixin.get_user)
 
-        assert mixin.get_user(dbsession=mdb) == mquery.get_by_id.return_value
+        assert fun(mixin, dbsession=mdb) == mquery.get_by_id.return_value
 
         muser_query.assert_called_once_with(mdb)
         mquery.get_by_id.assert_called_once_with(
