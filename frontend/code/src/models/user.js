@@ -4,8 +4,9 @@ class UserInterface {
     this.key = 'user'
   }
 
-  logIn () {
+  logIn (jwt) {
     this.setUserData({
+      jwt: jwt,
       groups: ['authenticated']
     })
   }
@@ -15,7 +16,7 @@ class UserInterface {
   }
 
   isAuthenticated () {
-    return this.getUserData().groups.includes('authenticated')
+    return this.getUserData().jwt
   }
 
   setUserData (data) {
@@ -27,6 +28,7 @@ class UserInterface {
       return JSON.parse(localStorage.getItem(this.key))
     } else {
       return {
+        jwt: null,
         groups: []
       }
     }

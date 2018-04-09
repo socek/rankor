@@ -65,7 +65,7 @@ export default {
   methods: {
     onSubmit () {
       this.resource.save({}, this.fields).then((response) => {
-        User.logIn()
+        User.logIn(response.body.jwt)
         this.$router.push({name: 'Dashboard'})
         location.reload()
       }).catch((response) => {

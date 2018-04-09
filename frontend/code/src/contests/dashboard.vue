@@ -38,7 +38,6 @@
       refresh () {
         this.resource.get().then((response) => {
           this.contests = response.data.contests
-          console.log(this.contests)
         })
       }
     },

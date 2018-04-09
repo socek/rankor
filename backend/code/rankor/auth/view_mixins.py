@@ -23,4 +23,5 @@ class AuthMixin(object):
         return authenticated_userid(self.request)
 
     def is_authenticated(self):
-        return authenticated_userid(self.request) is not None
+        jwt = self.request.headers.get('JWT')
+        return jwt or authenticated_userid(self.request) is not None

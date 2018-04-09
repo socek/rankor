@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  import AjaxView from '@/models/ajax'
   import User from '@/models/user'
 
   export default {
@@ -15,19 +14,12 @@
       }
     },
     created: function () {
-      var self = this
-      new AjaxView(function (response) {
-        self.is_authenticated = response.data.is_authenticated
-        User.setUserData(response.data)
-      }).run('/api/auth').then(self.fillWidget)
+      this.is_authenticated = User.isAuthenticated()
     },
     methods: {
       logout: function (event) {
         event.preventDefault()
         User.logOut()
-        new AjaxView(this.after).run('/api/auth/logout')
-      },
-      after: function (event) {
         location.reload()
       }
     }

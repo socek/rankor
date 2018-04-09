@@ -34,7 +34,12 @@ class TestAdminContestView(ControllerFixtureMixin):
         with patch.object(view, 'get_user_id') as mock:
             yield mock
 
-    def test_get(self, view, mquery):
+    @fixture
+    def mget_user(self, view):
+        with patch.object(view, 'get_user') as mock:
+            yield mock
+
+    def test_get(self, view, mquery, mget_user):
         """
         .get should return list of all contests of logged in user.
         """
