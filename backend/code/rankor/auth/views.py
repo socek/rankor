@@ -64,16 +64,16 @@ class SignUpView(RestfulController):
     def post(self):
         fields = self.get_validated_fields(SignUpSchema)
         try:
-            user_id = self.create_user(fields)
+            user = self.create_user(fields)
+            self.on_success(user.id)
+            return {'jwt': encode_jwt_from_user(user)}
         except IntegrityError:
             raise HTTPBadRequest(
                 json={'_schema': ['User with that email already exists']})
-        self.on_success(user_id)
 
     def create_user(self, fields):
-        user = self.command.create(
+        return self.command.create(
             email=fields['email'], password=fields['password'])
-        return user.id
 
     def on_success(self, user_id):
         headers = remember(self.request, user_id)

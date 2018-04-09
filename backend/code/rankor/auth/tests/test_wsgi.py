@@ -103,8 +103,12 @@ class TestWebSignUpFormController(WebTestFixture):
         }
         mcommand.return_value.id = 10
         mremember.return_value = []
+        muser = mcommand.create.return_value
+        muser.uuid = 'xxx'
 
-        fake_app.post_json(self.url, params=new_user)
+        result = fake_app.post_json(self.url, params=new_user)
 
         mcommand.create.assert_called_once_with(
             email='new@email.com', password='fake1')
+
+        assert result.json_body == {'jwt': encode_jwt_from_user(muser)}
