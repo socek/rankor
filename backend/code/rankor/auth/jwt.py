@@ -9,6 +9,7 @@ from rankor import app
 @WithContext(app, args=['settings'])
 def encode_jwt_from_user(user, settings):
     payload = {
+        'id': user.id,
         'uuid': user.uuid,
     }
     return encode(

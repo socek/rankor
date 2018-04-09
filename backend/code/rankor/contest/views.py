@@ -16,8 +16,7 @@ class AdminContestView(RestfulController, AuthMixin):
         return ContestCommand(self.dbsession)
 
     def get(self):
-        user = self.get_user()
-        contests = self.query.list_for_owner(user.id)
+        contests = self.query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
         return {
             'contests': [schema.dump(contest).data for contest in contests]

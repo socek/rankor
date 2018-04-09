@@ -1,5 +1,5 @@
-from pyramid.security import authenticated_userid
 from sapp.decorators import WithContext
+from pyramid.httpexceptions import HTTPUnauthorized
 
 from rankor import app
 from rankor.auth.drivers import UserQuery
@@ -12,16 +12,21 @@ class AuthMixin(object):
         # TODO: think about caching this per request or context?
         user_rd = UserQuery(dbsession)
 
-        jwt = self.request.headers.get('JWT')
-        if jwt:
-            payload = decode_jwt(jwt)
-            return user_rd.get_by_uuid(payload['uuid'])
-        else:
-            return user_rd.get_by_id(self.get_user_id())
-
-    def get_user_id(self):
-        return authenticated_userid(self.request)
+        payload = self.decoded_jwt()
+        return user_rd.get_by_uuid(payload['uuid'])
 
     def is_authenticated(self):
+        return self.request.headers.get('JWT') is not None
+
+    def get_user_id(self):
+        return self.decoded_jwt()['id']
+
+    def get_user_uuid(self):
+        return self.decoded_jwt()['uuid']
+
+    def decoded_jwt(self):
         jwt = self.request.headers.get('JWT')
-        return jwt or authenticated_userid(self.request) is not None
+        if jwt:
+            return decode_jwt(jwt)
+        else:
+            raise HTTPUnauthorized()

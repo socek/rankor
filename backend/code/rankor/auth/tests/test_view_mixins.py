@@ -18,11 +18,6 @@ class TestAuthMixin(object):
         return MagicMock
 
     @fixture
-    def mauthenticated_userid(self):
-        with patch('rankor.auth.view_mixins.authenticated_userid') as mock:
-            yield mock
-
-    @fixture
     def muser_query(self):
         with patch('rankor.auth.view_mixins.UserQuery') as mock:
             yield mock

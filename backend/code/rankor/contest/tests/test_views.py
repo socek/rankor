@@ -30,11 +30,6 @@ class TestAdminContestView(ControllerFixtureMixin):
             yield mock.return_value
 
     @fixture
-    def mget_user_id(self, view):
-        with patch.object(view, 'get_user_id') as mock:
-            yield mock
-
-    @fixture
     def mget_user(self, view):
         with patch.object(view, 'get_user') as mock:
             yield mock
