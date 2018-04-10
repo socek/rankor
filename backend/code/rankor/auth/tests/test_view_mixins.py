@@ -1,8 +1,10 @@
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from unittest.mock import sentinel
 
+from pyramid.httpexceptions import HTTPUnauthorized
 from pytest import fixture
-from pytest import mark
+from pytest import raises
 from undecorated import undecorated
 
 from rankor.auth.view_mixins import AuthMixin
@@ -20,6 +22,15 @@ class TestAuthMixin(object):
     @fixture
     def muser_query(self):
         with patch('rankor.auth.view_mixins.UserQuery') as mock:
+            yield mock
+
+    @fixture
+    def mdecoded_jwt(self, mixin):
+        with patch.object(mixin, 'decoded_jwt') as mock:
+            mock.return_value = {
+                'id': sentinel.user_id,
+                'uuid': sentinel.user_uuid,
+            }
             yield mock
 
     @fixture
@@ -42,62 +53,68 @@ class TestAuthMixin(object):
             self,
             mixin,
             mdb,
-            mauthenticated_userid,
             muser_query,
-            mrequest,
             get_user,
+            mrequest,
+            mdecoded_jwt,
     ):
         """
-        .get_user should return authenticated user from the database.
+        .get_user should return authenticated user when proper jwt provided.
         """
         mquery = muser_query.return_value
 
-        assert get_user(mixin, dbsession=mdb) == mquery.get_by_id.return_value
+        assert get_user(
+            mixin, dbsession=mdb) == mquery.get_by_uuid.return_value
+        mquery.get_by_uuid.assert_called_once_with(sentinel.user_uuid)
 
-        muser_query.assert_called_once_with(mdb)
-        mquery.get_by_id.assert_called_once_with(
-            mauthenticated_userid.return_value)
-        mauthenticated_userid.assert_called_once_with(mrequest)
-
-    def test_get_user_on_proper_jwt(
+    def test_decoded_jwt_no_jwt_provided(
             self,
             mixin,
-            mdb,
-            muser_query,
             mrequest,
-            get_user,
             mdecode_jwt,
     ):
         """
-        .get_user should return authenticated user when proper jwt provided
+        .get_user should return authenticated user when proper jwt provided.
         """
-        mquery = muser_query.return_value
-        mrequest.headers['JWT'] = 'proper.jwt.token'
-        mdecode_jwt.return_value = {
-            'uuid': 'uuid1'
-        }
+        with raises(HTTPUnauthorized):
+            mixin.decoded_jwt()
 
-        assert get_user(mixin, dbsession=mdb) == mquery.get_by_uuid.return_value
-
-        muser_query.assert_called_once_with(mdb)
-        mquery.get_by_uuid.assert_called_once_with('uuid1')
-        mdecode_jwt.assert_called_once_with('proper.jwt.token')
-
-    @mark.parametrize('return_value, is_auth', [
-        [None, False],
-        [1, True],
-    ])
-    def test_is_authenticated(
+    def test_decoded_jwt_proper_jwt_provided(
             self,
             mixin,
             mrequest,
-            mauthenticated_userid,
-            return_value,
-            is_auth,
+            mdecode_jwt,
     ):
         """
-        .is_authenticated should return True only if user is authenticated.
+        .get_user should return authenticated user when proper jwt provided.
         """
-        mauthenticated_userid.return_value = return_value
+        mrequest.headers['JWT'] = 'fake-jwt'
 
-        assert mixin.is_authenticated() is is_auth
+        assert mixin.decoded_jwt() == mdecode_jwt.return_value
+
+        mdecode_jwt.assert_called_once_with('fake-jwt')
+
+    def test_is_authenticated(self, mixin, mrequest):
+        """
+        .is_authenticated should return True only if there is jwt in headers.
+        """
+        assert not mixin.is_authenticated()
+
+        mrequest.headers['JWT'] = True
+        assert mixin.is_authenticated()
+
+    def test_get_user_id(self, mixin, mdecoded_jwt):
+        """
+        .get_user_id should return id from jwt
+        """
+        mdecoded_jwt.return_value = {'id': sentinel.user_id}
+
+        assert mixin.get_user_id() == sentinel.user_id
+
+    def test_get_user_uuid(self, mixin, mdecoded_jwt):
+        """
+        .get_user_uuid should return uuid from jwt
+        """
+        mdecoded_jwt.return_value = {'uuid': sentinel.user_uuid}
+
+        assert mixin.get_user_uuid() == sentinel.user_uuid

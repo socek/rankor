@@ -33,7 +33,8 @@ class TestJwt(object):
         encode_jwt_from_user should create proper jwt which decode_jwt should
         decode properly. "payload" should contains user uuid.
         """
+        muser.id = 10
         muser.uuid = uuid4().hex
         jwt = encode(muser, settings)
         payload = decode(jwt, settings)
-        assert payload == {'uuid': muser.uuid}
+        assert payload == {'uuid': muser.uuid, 'id': 10}

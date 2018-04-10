@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from unittest.mock import sentinel
 
 from pyramid.httpexceptions import HTTPBadRequest
 from pytest import fixture
@@ -27,11 +26,6 @@ class TestSignUpView(ControllerFixtureMixin):
         with patch.object(ctrl, 'create_user') as mock:
             yield mock
 
-    @fixture
-    def mremember(self, ctrl):
-        with patch('rankor.auth.views.remember') as mock:
-            yield mock
-
     def test_post_on_integrity_error(self, ctrl, mcreate_user, mrequest):
         """
         .post should raise HTTPBadRequest when integrity error raised by the
@@ -47,12 +41,3 @@ class TestSignUpView(ControllerFixtureMixin):
         with raises(HTTPBadRequest):
             ctrl.post()
 
-    def test_on_success(self, ctrl, mremember, mrequest):
-        """
-        .on_success should extend response headers with user_id
-        """
-        ctrl.on_success(sentinel.user_id)
-
-        mrequest.response.headerlist.extend.assert_called_once_with(
-            mremember.return_value)
-        mremember.assert_called_once_with(mrequest, sentinel.user_id)

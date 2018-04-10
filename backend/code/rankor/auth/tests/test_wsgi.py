@@ -56,12 +56,7 @@ class TestWebSignUpFormController(WebTestFixture):
         with patch('rankor.auth.views.UserCommand') as mock:
             yield mock.return_value
 
-    @fixture
-    def mremember(self):
-        with patch('rankor.auth.views.remember') as mock:
-            yield mock
-
-    def test_signup_happy_path(self, fake_app, mcommand, mremember):
+    def test_signup_happy_path(self, fake_app, mcommand):
         """
         /auth/signup should create a proper formed user
         """
@@ -71,9 +66,9 @@ class TestWebSignUpFormController(WebTestFixture):
             'confirmPassword': 'fake1',
         }
         mcommand.return_value.id = 10
-        mremember.return_value = []
         muser = mcommand.create.return_value
         muser.uuid = 'xxx'
+        muser.id = 15
 
         result = fake_app.post_json(self.url, params=new_user)
 

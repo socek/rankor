@@ -22,12 +22,12 @@ class TestWebAdsController(WebTestFixture):
             }]
         }
 
-    def test_authenticated_user(self, fake_app, authenticated_user):
+    def test_authenticated_user(self, fake_app, authenticated_user, jwt):
         """
         /menu should return information about accesible menu elements for
         authenticated user
         """
-        result = fake_app.get(self.url)
+        result = fake_app.get(self.url, headers={'JWT': jwt})
         assert result.json == {
             'menu': [{
                 'elements': [{

@@ -118,7 +118,11 @@ class WebTestFixture(RankorFixturesMixin, BaseWebTestFixture):
         user.set_password(password)
 
         with DeleteOnExit(dbsession, user):
-            params = dict(email=user_data['email'], password=password)
-            fake_app.post_json(self.login_url, params=params, status=200)
-
             yield user
+
+    @fixture
+    def jwt(self, authenticated_user, fake_app):
+        user_data = dict(self.authenticated_user_data)
+        params = dict(email=user_data['email'], password=user_data['password'])
+        result = fake_app.post_json(self.login_url, params=params, status=200)
+        return result.json_body['jwt']
