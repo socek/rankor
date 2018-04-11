@@ -1,26 +1,21 @@
 <template>
   <div>
-    <b-nav-item v-if="is_authenticated" v-on:click="logout">Logout</b-nav-item>
+    <b-nav-item v-if="isAuthenticated" v-on:click="logout">Logout</b-nav-item>
   </div>
 </template>
 
 <script>
-  import User from '@/models/user'
-
   export default {
-    data () {
-      return {
-        is_authenticated: false
+    computed: {
+      isAuthenticated () {
+        return this.$store.getters.isAuthenticated
       }
     },
-    created: function () {
-      this.is_authenticated = User.isAuthenticated()
-    },
     methods: {
-      logout: function (event) {
+      logout (event) {
+        this.$store.commit('logOut')
+        this.$router.push({name: 'NotLoggedIn'})
         event.preventDefault()
-        User.logOut()
-        location.reload()
       }
     }
   }

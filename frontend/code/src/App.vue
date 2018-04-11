@@ -28,12 +28,11 @@
 
   import login from '@/auth/login'
   import register from '@/auth/register.vue'
-  import User from '@/models/user'
 
   export default {
-    data () {
-      return {
-        isAuthenticated: User.isAuthenticated()
+    computed: {
+      isAuthenticated () {
+        return this.$store.getters.isAuthenticated
       }
     },
     name: 'app',

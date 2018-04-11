@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-btn @click="showModal" variant="primary" size="small">
+    <b-btn @click="showModal" v-if="!isAuthenticated" variant="primary" size="small">
       Sign Up
     </b-btn>
 
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import User from '@/models/user'
 import authResource from '@/auth/resource'
 
 export default {
@@ -99,9 +98,8 @@ export default {
     },
     onSubmit () {
       this.resource.save({}, this.fields).then((response) => {
-        User.logIn(response.body.jwt)
+        this.$store.commit('logIn', response.body.jwt)
         this.$router.push({name: 'Dashboard'})
-        location.reload()
       }).catch((response) => {
         for (let item in this.errors) {
           this.errors[item] = []
@@ -110,6 +108,11 @@ export default {
           this.errors[item] = response.body[item]
         }
       })
+    }
+  },
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
     }
   }
 }

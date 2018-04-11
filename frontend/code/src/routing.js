@@ -3,12 +3,12 @@ import Router from 'vue-router'
 
 import NotLoggedIn from '@/auth/not-logged-in'
 import Dashboard from '@/contests/dashboard'
-import User from '@/models/user'
+import store from '@/store'
 
 Vue.use(Router)
 
 function requireAuth (to, from, next) {
-  if (!User.isAuthenticated()) {
+  if (!store.getters.isAuthenticated) {
     next({
       name: 'NotLoggedIn',
       query: { redirect: to.fullPath }
@@ -19,7 +19,7 @@ function requireAuth (to, from, next) {
 }
 
 function onlyNotLoggedIn (to, from, next) {
-  if (User.isAuthenticated()) {
+  if (store.getters.isAuthenticated) {
     next({
       name: 'Dashboard'
     })

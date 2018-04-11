@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import User from '@/models/user'
 import authResource from '@/auth/resource'
 
 export default {
@@ -65,9 +64,8 @@ export default {
   methods: {
     onSubmit () {
       this.resource.save({}, this.fields).then((response) => {
-        User.logIn(response.body.jwt)
+        this.$store.commit('logIn', response.body.jwt)
         this.$router.push({name: 'Dashboard'})
-        location.reload()
       }).catch((response) => {
         for (let item in this.errors) {
           this.errors[item] = []

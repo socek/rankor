@@ -6,7 +6,7 @@ import VueResource from 'vue-resource'
 
 import App from '@/App'
 import router from '@/routing'
-import User from '@/models/user'
+import store from '@/store'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -18,14 +18,19 @@ Vue.use(VueResource)
 Vue.http.options.root = '/api'
 
 Vue.http.interceptors.push((request, next) => {
-  request.headers.set('JWT', User.getUserData().jwt)
+  if (store.state.jwt) {
+    request.headers.set('JWT', store.state.jwt)
+  }
   next()
 })
 
+store.dispatch('tryAutoLogin')
+
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })
