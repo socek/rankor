@@ -8,12 +8,12 @@
   export default {
     computed: {
       isAuthenticated () {
-        return this.$store.getters.isAuthenticated
+        return this.$store.getters['auth/isAuthenticated']
       }
     },
     methods: {
       logout (event) {
-        this.$store.commit('logOut')
+        this.$store.commit('auth/logOut')
         this.$router.push({name: 'NotLoggedIn'})
         event.preventDefault()
       }

@@ -8,7 +8,7 @@ import store from '@/store'
 Vue.use(Router)
 
 function requireAuth (to, from, next) {
-  if (!store.getters.isAuthenticated) {
+  if (!store.getters['auth/isAuthenticated']) {
     next({
       name: 'NotLoggedIn',
       query: { redirect: to.fullPath }
@@ -19,7 +19,7 @@ function requireAuth (to, from, next) {
 }
 
 function onlyNotLoggedIn (to, from, next) {
-  if (store.getters.isAuthenticated) {
+  if (store.getters['auth/isAuthenticated']) {
     next({
       name: 'Dashboard'
     })

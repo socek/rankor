@@ -98,7 +98,7 @@ export default {
     },
     onSubmit () {
       this.resource.save({}, this.fields).then((response) => {
-        this.$store.commit('logIn', response.body.jwt)
+        this.$store.commit('auth/logIn', response.body.jwt)
         this.$router.push({name: 'Dashboard'})
       }).catch((response) => {
         for (let item in this.errors) {
@@ -112,7 +112,7 @@ export default {
   },
   computed: {
     isAuthenticated () {
-      return this.$store.getters.isAuthenticated
+      return this.$store.getters['auth/isAuthenticated']
     }
   }
 }

@@ -18,13 +18,13 @@ Vue.use(VueResource)
 Vue.http.options.root = '/api'
 
 Vue.http.interceptors.push((request, next) => {
-  if (store.state.jwt) {
-    request.headers.set('JWT', store.state.jwt)
+  if (store.state.auth.jwt) {
+    request.headers.set('JWT', store.state.auth.jwt)
   }
   next()
 })
 
-store.dispatch('tryAutoLogin')
+store.dispatch('auth/tryAutoLogin')
 
 /* eslint-disable no-new */
 export default new Vue({
