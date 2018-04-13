@@ -1,3 +1,6 @@
+from pyramid.httpexceptions import HTTPNotFound
+from sqlalchemy.orm.exc import NoResultFound
+
 from rankor.application.views import RestfulController
 from rankor.auth.view_mixins import AuthMixin
 from rankor.contest.drivers import ContestCommand
@@ -6,7 +9,26 @@ from rankor.contest.schema import ContestSchema
 from rankor.contest.schema import NewContestSchema
 
 
-class AdminContestView(RestfulController, AuthMixin):
+class ContestBaseView(RestfulController, AuthMixin):
+    @property
+    def contest_query(self):
+        return ContestQuery(self.dbsession)
+
+    @property
+    def contest_command(self):
+        return ContestCommand(self.dbsession)
+
+    def _get_contest_uuid(self):
+        return self.request.matchdict['contest_uuid']
+
+    def _get_contest(self):
+        try:
+            return self.contest_query.get_by_uuid(self._get_contest_uuid())
+        except NoResultFound:
+            raise HTTPNotFound()
+
+
+class AdminContestView(ContestBaseView):
     @property
     def query(self):
         return ContestQuery(self.dbsession)

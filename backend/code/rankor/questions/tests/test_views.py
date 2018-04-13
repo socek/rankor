@@ -26,7 +26,7 @@ class TestAdminQuestionView(ControllerFixtureMixin):
 
     @fixture
     def mcontest_query(self, mdbsession):
-        with patch('rankor.questions.views.ContestQuery') as mock:
+        with patch('rankor.contest.views.ContestQuery') as mock:
             yield mock.return_value
 
     @fixture
@@ -134,7 +134,7 @@ class TestAdminQuestionView(ControllerFixtureMixin):
         with raises(HTTPNotFound):
             view.get()
 
-    def test_post_when_form_not_valid(self, view, mrequest):
+    def test_post_when_form_not_valid(self, view, mrequest, mcontest_query):
         """
         .post should raise HTTPBadRequest when form is not valid
         """
