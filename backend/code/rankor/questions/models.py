@@ -17,8 +17,8 @@ class Question(Model):
     index = Column(Integer, default=0)
     category = Column(String, nullable=True, index=True)
 
-    owner_id = Column(Integer, ForeignKey('contests.id'), nullable=False)
-    owner = relationship("Contest", uselist=False, backref='questions')
+    contest_id = Column(Integer, ForeignKey('contests.id'), nullable=False)
+    contest = relationship("Contest", uselist=False, backref='questions')
 
 
 class Answer(Model):

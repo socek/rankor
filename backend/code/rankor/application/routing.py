@@ -4,6 +4,7 @@ from rankor.auth.routing import auth_routing
 from rankor.contest.routing import contest_routing
 from rankor.home.routing import home_routing
 from rankor.menu.routing import meny_routing
+from rankor.questions.routing import questions_routing
 
 
 class RankorRouting(Routing):
@@ -12,3 +13,4 @@ class RankorRouting(Routing):
         auth_routing(self)
         meny_routing(self)
         contest_routing(self)
+        questions_routing(self)
