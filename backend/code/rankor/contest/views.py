@@ -29,16 +29,8 @@ class ContestBaseView(RestfulController, AuthMixin):
 
 
 class AdminContestView(ContestBaseView):
-    @property
-    def query(self):
-        return ContestQuery(self.dbsession)
-
-    @property
-    def command(self):
-        return ContestCommand(self.dbsession)
-
     def get(self):
-        contests = self.query.list_for_owner(self.get_user_id())
+        contests = self.contest_query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
         return {
             'contests': [schema.dump(contest).data for contest in contests]
@@ -47,4 +39,4 @@ class AdminContestView(ContestBaseView):
     def post(self):
         fields = self.get_validated_fields(NewContestSchema)
         fields['owner_id'] = self.get_user_id()
-        self.command.create(**fields)
+        self.contest_command.create(**fields)
