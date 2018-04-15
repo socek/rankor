@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import store from '@/store'
+
 import NotLoggedIn from '@/auth/not-logged-in'
 import Dashboard from '@/contests/dashboard'
-import store from '@/store'
+import Questions from '@/questions/admin_list'
 
 Vue.use(Router)
 
@@ -37,7 +39,7 @@ export default new Router({
       beforeEnter: onlyNotLoggedIn
     },
     {
-      path: '/dashboard',
+      path: '/contests/',
       name: 'Dashboard',
       component: Dashboard,
       beforeEnter: requireAuth
@@ -46,6 +48,12 @@ export default new Router({
       path: '/contests/:contest_uuid/',
       name: 'Contest',
       component: Dashboard,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/contests/:contest_uuid/questions/',
+      name: 'Questions',
+      component: Questions,
       beforeEnter: requireAuth
     }
   ]

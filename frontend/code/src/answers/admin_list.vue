@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
-      <h1>Questions <createDialog @onSuccess="refresh"></createDialog></h1>
+      <h1>List of answers</h1>
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(question, index) in questions">
+          <tr v-for="(contest, index) in contests">
             <td scope="row">{{index + 1}}</td>
             <td>{{question.name}}</td>
           </tr>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import createDialog from '@/questions/dialogs/create'
+  import contestCreateDialog from '@/contests/dialogs/create'
   import questionResource from '@/questions/resource'
 
   export default {
@@ -31,7 +31,7 @@
         resource: questionResource(this)
       }
     },
-    created () {
+    created: function () {
       this.refresh()
     },
     methods: {
@@ -40,9 +40,6 @@
           this.questions = response.data.questions
         })
       }
-    },
-    components: {
-      createDialog
     }
   }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-btn @click="showModal" variant="primary" size="small">
-      Create Contest
+      Create
     </b-btn>
 
     <b-modal id="createContestModal" ref="createContestModal" title="Create Contest" hide-footer>
