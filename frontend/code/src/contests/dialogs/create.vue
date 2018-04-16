@@ -6,21 +6,21 @@
 
     <b-modal id="createContestModal" ref="createContestModal" title="Create Contest" hide-footer>
       <form @submit.prevent="onSave">
-        <b-form-invalid-feedback  v-for="error in errors._schema"
+        <b-form-invalid-feedback  v-for="error in form.errors._schema"
                                   :key="error"
                                   :force-show="true" >
-          {{ errors._schema }}
+          {{ error }}
         </b-form-invalid-feedback>
 
         <b-form-group id="nameFieldGroup"
                             label="Name:"
                             label-for="nameField">
           <b-form-input id="nameField"
-                        v-model.trim="fields.name"
+                        v-model.trim="form.fields.name"
                         type="text"
-                        :state="errors.name.length == 0 ? null : false"
+                        :state="form.errors.name.length == 0 ? null : false"
                         placeholder="Contest name"></b-form-input>
-          <b-form-invalid-feedback  v-for="error in errors.name"
+          <b-form-invalid-feedback  v-for="error in form.errors.name"
                                     class="modal-invalid-feedback"
                                     :key="error">
             {{ error }}
@@ -36,44 +36,24 @@
 
 <script>
   import contestResource from '@/contests/resource'
+  import baseForm from '@/forms'
 
   export default {
+    extends: baseForm,
     data () {
       return {
-        ...{
-          fields: {
-            name: ''
-          },
-          errors: {
-            _schema: [],
-            name: []
-          }
-        },
+        form: this.prepareForm({
+          name: ''
+        }),
         resource: contestResource(this)
       }
     },
     methods: {
-      refresh () {
-        for (let name in this.fields) {
-          this.fields[name] = ''
-          this.errors[name] = ''
-        }
-        this.errors._schema = ''
-      },
       showModal () {
-        this.refresh()
-        this.$refs.createContestModal.show()
+        this._showModal(this.$refs.createContestModal)
       },
       hideModal () {
-        this.$refs.createContestModal.hide()
-      },
-      onSave () {
-        this.resource.save({}, this.fields).then((response) => {
-          this.hideModal()
-          this.$emit('onSuccess')
-        }).catch((response) => {
-          this.errors = response.body
-        })
+        this._hideModal(this.$refs.createContestModal)
       }
     }
   }

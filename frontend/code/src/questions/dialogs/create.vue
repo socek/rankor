@@ -4,23 +4,23 @@
       Create
     </b-btn>
 
-    <b-modal id="createQuestionModal" ref="createQuestionModal" title="Create Question" hide-footer>
+    <b-modal id="createQuestionModal" ref="createQuestionModal" title="Create Question" hide-footer :lazy=true>
       <form @submit.prevent="onSave">
-        <b-form-invalid-feedback  v-for="error in errors._schema"
+        <b-form-invalid-feedback  v-for="error in form.errors._schema"
                                   :key="error"
                                   :force-show="true" >
-          {{ errors._schema }}
+          {{ error }}
         </b-form-invalid-feedback>
 
         <b-form-group id="nameFieldGroup"
                             label="Name:"
                             label-for="nameField">
           <b-form-input id="nameField"
-                        v-model.trim="fields.name"
+                        v-model.trim="form.fields.name"
                         type="text"
-                        :state="errors.name.length == 0 ? null : false"
-                        placeholder="Question name"></b-form-input>
-          <b-form-invalid-feedback  v-for="error in errors.name"
+                        :state="form.errors.name.length == 0 ? null : false"
+                        placeholder="name"></b-form-input>
+          <b-form-invalid-feedback  v-for="error in form.errors.name"
                                     class="modal-invalid-feedback"
                                     :key="error">
             {{ error }}
@@ -31,11 +31,11 @@
                             label="Description:"
                             label-for="descriptionField">
           <b-form-input id="descriptionField"
-                        v-model.trim="fields.description"
+                        v-model.trim="form.fields.description"
                         type="text"
-                        :state="errors.description.length == 0 ? null : false"
-                        placeholder="Question description"></b-form-input>
-          <b-form-invalid-feedback  v-for="error in errors.description"
+                        :state="form.errors.description.length == 0 ? null : false"
+                        placeholder="description"></b-form-input>
+          <b-form-invalid-feedback  v-for="error in form.errors.description"
                                     class="modal-invalid-feedback"
                                     :key="error">
             {{ error }}
@@ -46,11 +46,11 @@
                             label="Index:"
                             label-for="indexField">
           <b-form-input id="indexField"
-                        v-model="fields.index"
+                        v-model="form.fields.index"
                         type="text"
-                        :state="errors.index.length == 0 ? null : false"
-                        placeholder="Question index"></b-form-input>
-          <b-form-invalid-feedback  v-for="error in errors.index"
+                        :state="form.errors.index.length == 0 ? null : false"
+                        placeholder="index"></b-form-input>
+          <b-form-invalid-feedback  v-for="error in form.errors.index"
                                     class="modal-invalid-feedback"
                                     :key="error">
             {{ error }}
@@ -61,11 +61,11 @@
                             label="Category:"
                             label-for="categoryField">
           <b-form-input id="categoryField"
-                        v-model.trim="fields.category"
+                        v-model.trim="form.fields.category"
                         type="text"
-                        :state="errors.category.length == 0 ? null : false"
-                        placeholder="Question category"></b-form-input>
-          <b-form-invalid-feedback  v-for="error in errors.category"
+                        :state="form.errors.category.length == 0 ? null : false"
+                        placeholder="category"></b-form-input>
+          <b-form-invalid-feedback  v-for="error in form.errors.category"
                                     class="modal-invalid-feedback"
                                     :key="error">
             {{ error }}
@@ -81,50 +81,27 @@
 
 <script>
   import questionResource from '@/questions/resource'
+  import baseForm from '@/forms'
 
   export default {
+    extends: baseForm,
     data () {
       return {
-        ...{
-          fields: {
-            name: '',
-            description: '',
-            index: '1',
-            category: ''
-          },
-          errors: {
-            _schema: [],
-            name: [],
-            description: [],
-            index: [],
-            category: []
-          }
-        },
+        form: this.prepareForm({
+          name: '',
+          description: '',
+          index: 1,
+          category: ''
+        }),
         resource: questionResource(this)
       }
     },
     methods: {
-      refresh () {
-        for (let name in this.fields) {
-          this.fields[name] = ''
-          this.errors[name] = ''
-        }
-        this.errors._schema = ''
-      },
       showModal () {
-        this.refresh()
-        this.$refs.createQuestionModal.show()
+        this._showModal(this.$refs.createQuestionModal)
       },
       hideModal () {
-        this.$refs.createQuestionModal.hide()
-      },
-      onSave () {
-        this.resource.save({}, this.fields).then((response) => {
-          this.hideModal()
-          this.$emit('onSuccess')
-        }).catch((response) => {
-          this.errors = response.body
-        })
+        this._hideModal(this.$refs.createQuestionModal)
       }
     }
   }

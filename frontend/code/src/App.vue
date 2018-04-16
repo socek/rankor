@@ -42,9 +42,3 @@
     }
   }
 </script>
-
-<style>
-  .modal-invalid-feedback {
-    font-size: 30%;
-  }
-</style>
