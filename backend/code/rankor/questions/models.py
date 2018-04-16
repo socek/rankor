@@ -13,7 +13,6 @@ class Question(Model):
 
     name = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    index = Column(Integer, default=0)
     category = Column(String, nullable=True, index=True)
 
     contest_id = Column(Integer, ForeignKey('contests.id'), nullable=False)

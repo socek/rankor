@@ -30,13 +30,13 @@
         let div = this.$el.querySelector('div')
         if (div) document.body.appendChild(div)
       },
-      _showModal (modal) {
+      showModal (modal) {
         this.moveModalToTopOfTheDOM()
         this.refreshForm(true)
-        modal.show()
+        this.getFormModal().show()
       },
-      _hideModal (modal) {
-        modal.hide()
+      hideModal (modal) {
+        this.getFormModal().hide()
       },
       onSave () {
         this.resource.save({}, this.form.fields).then((response) => {

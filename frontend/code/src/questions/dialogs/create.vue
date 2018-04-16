@@ -42,21 +42,6 @@
           </b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="indexFieldGroup"
-                            label="Index:"
-                            label-for="indexField">
-          <b-form-input id="indexField"
-                        v-model="form.fields.index"
-                        type="text"
-                        :state="form.errors.index.length == 0 ? null : false"
-                        placeholder="index"></b-form-input>
-          <b-form-invalid-feedback  v-for="error in form.errors.index"
-                                    class="modal-invalid-feedback"
-                                    :key="error">
-            {{ error }}
-          </b-form-invalid-feedback>
-        </b-form-group>
-
         <b-form-group id="categoryFieldGroup"
                             label="Category:"
                             label-for="categoryField">
@@ -90,18 +75,14 @@
         form: this.prepareForm({
           name: '',
           description: '',
-          index: 1,
           category: ''
         }),
         resource: questionResource(this)
       }
     },
     methods: {
-      showModal () {
-        this._showModal(this.$refs.createQuestionModal)
-      },
-      hideModal () {
-        this._hideModal(this.$refs.createQuestionModal)
+      getFormModal () {
+        return this.$refs.createQuestionModal
       }
     }
   }

@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from sqlalchemy.orm.exc import NoResultFound
 from pyramid.httpexceptions import HTTPNotFound
 
@@ -33,10 +35,10 @@ class AdminQuestionView(QuestionBaseView):
         questions = self.question_query.list_for_contest(
             self._get_contest_uuid())
         schema = QuestionSchema()
-        return {
-            'questions':
-            [schema.dump(question).data for question in questions]
-        }
+        result = {'categories': defaultdict(list)}
+        for question in questions:
+            result['categories'][question.category].append(schema.dump(question).data)
+        return result
 
     def post(self):
         self._get_contest()

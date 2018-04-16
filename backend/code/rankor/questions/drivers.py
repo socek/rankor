@@ -9,8 +9,14 @@ class QuestionQuery(Query):
     model = Question
 
     def list_for_contest(self, contest_uuid):
-        return self.query().join(Contest).filter(
-            Contest.uuid == contest_uuid).all()
+        return (
+            self.query()
+            .join(Contest)
+            .filter(Contest.uuid == contest_uuid)
+            .order_by(self.model.category.desc())
+            .order_by(self.model.created_at)
+            .all()
+        )
 
 
 class QuestionCommand(Command):

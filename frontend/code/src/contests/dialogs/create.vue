@@ -49,11 +49,8 @@
       }
     },
     methods: {
-      showModal () {
-        this._showModal(this.$refs.createContestModal)
-      },
-      hideModal () {
-        this._hideModal(this.$refs.createContestModal)
+      getFormModal () {
+        return this.$refs.createContestModal
       }
     }
   }

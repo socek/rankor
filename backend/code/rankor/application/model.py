@@ -1,6 +1,8 @@
+from datetime import datetime
 from uuid import uuid4
 
 from sqlalchemy import Column
+from sqlalchemy import DateTime
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.ext.declarative import declarative_base
@@ -27,6 +29,9 @@ def uuid_default():
 class Base(object):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(32), nullable=False, default=uuid_default, index=True)
+
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
 
 Model = declarative_base(metadata=metadata, cls=Base)

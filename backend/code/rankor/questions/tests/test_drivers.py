@@ -11,7 +11,6 @@ class TestQuestionQuery(IntegrationFixture):
     question_user_data = {
         'name': 'name',
         'description': 'description',
-        'index': 1,
         'category': 'cat',
     }
 

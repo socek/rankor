@@ -2,20 +2,27 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
       <h1>Questions <createDialog @onSuccess="refresh"></createDialog></h1>
-      <table class="table table-striped">
-        <thead class="thead-dark">
-          <tr>
+      <div v-for="(questions, category) in categories">
+        <table class="table table-striped table-sm">
+          <tr class="title table-success">
+            <th scope="col" colspan="4"><strong>{{ category }}</strong></th>
+          </tr>
+          <tr class="table-secondary">
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Category</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(question, index) in questions">
-            <td scope="row">{{index + 1}}</td>
-            <td>{{question.name}}</td>
-          </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr v-for="(question, index) in questions">
+              <td scope="row">{{index + 1}}</td>
+              <td>{{question.name}}</td>
+              <td>{{question.description}}</td>
+              <td>{{question.category}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +34,7 @@
   export default {
     data () {
       return {
-        questions: [],
+        categories: {},
         resource: questionResource(this)
       }
     },
@@ -37,7 +44,7 @@
     methods: {
       refresh () {
         this.resource.get().then((response) => {
-          this.questions = response.data.questions
+          this.categories = response.data.categories
         })
       }
     },
@@ -46,3 +53,9 @@
     }
   }
 </script>
+
+<style>
+  tr.title th {
+    text-align: center;
+  }
+</style>

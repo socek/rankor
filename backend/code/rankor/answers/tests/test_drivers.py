@@ -11,14 +11,12 @@ class TestAnswerQuery(IntegrationFixture):
     question_user_data = {
         'name': 'name',
         'description': 'description',
-        'index': 1,
         'category': 'cat',
     }
 
     answer_user_data = {
         'name': 'name',
         'description': 'description',
-        'index': 1,
         'is_correct': False,
     }
 

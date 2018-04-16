@@ -1,3 +1,4 @@
+from unittest.mock import MagicMock
 from unittest.mock import PropertyMock
 from unittest.mock import patch
 from uuid import uuid4
@@ -56,25 +57,15 @@ class TestAdminQuestionView(ControllerFixtureMixin):
         """
         .get should return list of all questions assigned to a contest.
         """
-        mquestion_query.list_for_contest.return_value = [{
-            'name':
-            'my name',
-            'description':
-            'my description',
-            'index':
-            1,
-            'category':
-            'my cat',
-            'contest_uuid':
-            contest_uuid
-        }]
-        assert view.get() == {
-            'questions': [{
-                'name': 'my name',
-                'description': 'my description',
-                'index': 1,
-                'category': 'my cat',
-                'contest_uuid': contest_uuid
+        obj = MagicMock()
+        obj.category = 'my cat'
+        mquestion_query.list_for_contest.return_value = [obj]
+        assert dict(view.get()['categories']) == {
+            'my cat': [{
+                'name': str(obj['name']),
+                'description': str(obj['description']),
+                'category': str(obj['my cat']),
+                'contest_uuid': str(obj['contest_uuid'])
             }]
         }
 
@@ -106,7 +97,6 @@ class TestAdminQuestionView(ControllerFixtureMixin):
         mrequest.json_body = {
             'name': 'my name',
             'description': 'my description',
-            'index': 2,
             'category': 'cat'
         }
 
@@ -115,10 +105,8 @@ class TestAdminQuestionView(ControllerFixtureMixin):
         mquestion_command.create.assert_called_once_with(
             name='my name',
             description='my description',
-            index=2,
             category='cat',
-            contest_id=mcontest_query.get_by_uuid.return_value.id
-        )
+            contest_id=mcontest_query.get_by_uuid.return_value.id)
 
     def test_post_when_contest_not_found(
             self,
