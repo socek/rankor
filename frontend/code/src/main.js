@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource'
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon'
 
 import App from '@/App'
 import router from '@/routing'
@@ -23,6 +25,7 @@ Vue.http.interceptors.push((request, next) => {
   }
   next()
 })
+Vue.component('icon', Icon)
 
 store.dispatch('auth/tryAutoLogin')
 

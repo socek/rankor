@@ -7,12 +7,21 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(contest, index) in contests">
             <td scope="row">{{index + 1}}</td>
-            <td><router-link :to="{name: 'Questions', params: {contest_uuid: contest.uuid}}">{{contest.name}}</router-link></td>
+            <td>{{contest.name}}</td>
+            <td>
+              <router-link :to="{name: 'Questions', params: {contest_uuid: contest.uuid}}">
+                <icon name="list-ol"></icon>
+              </router-link>
+              <b-button size="sm" variant="link">
+                <icon name="edit"></icon>
+              </b-button>
+            </td>
           </tr>
         </tbody>
       </table>
