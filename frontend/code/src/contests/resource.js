@@ -1,3 +1,6 @@
 export default (vue) => {
-  return vue.$resource('admin/contests')
+  return {
+    contests: vue.$resource('admin/contests'),
+    contest: vue.$resource('admin/contests{/contest_uuid}')
+  }
 }

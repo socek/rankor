@@ -18,9 +18,7 @@
               <router-link :to="{name: 'Questions', params: {contest_uuid: contest.uuid}}">
                 <icon name="list-ol"></icon>
               </router-link>
-              <b-button size="sm" variant="link">
-                <icon name="edit"></icon>
-              </b-button>
+              <contestEditDialog @onSuccess="refresh" :contest_uuid="contest.uuid"></contestEditDialog>
             </td>
           </tr>
         </tbody>
@@ -31,13 +29,14 @@
 
 <script>
   import contestCreateDialog from '@/contests/dialogs/create'
+  import contestEditDialog from '@/contests/dialogs/edit'
   import contestResource from '@/contests/resource'
 
   export default {
     data () {
       return {
         contests: [],
-        resource: contestResource(this)
+        resource: contestResource(this).contests
       }
     },
     created () {
@@ -51,7 +50,8 @@
       }
     },
     components: {
-      contestCreateDialog
+      contestCreateDialog,
+      contestEditDialog
     }
   }
 </script>

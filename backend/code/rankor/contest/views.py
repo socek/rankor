@@ -28,7 +28,7 @@ class ContestBaseView(RestfulController, AuthMixin):
             raise HTTPNotFound()
 
 
-class AdminContestView(ContestBaseView):
+class AdminContestListView(ContestBaseView):
     def get(self):
         contests = self.contest_query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
@@ -40,3 +40,15 @@ class AdminContestView(ContestBaseView):
         fields = self.get_validated_fields(NewContestSchema)
         fields['owner_id'] = self.get_user_id()
         self.contest_command.create(**fields)
+
+
+class AdminContestView(ContestBaseView):
+    def get(self):
+        schema = ContestSchema()
+        contest = self._get_contest()
+        return schema.dump(contest).data
+
+    def put(self):
+        contest = self._get_contest()
+        fields = self.get_validated_fields(NewContestSchema)
+        self.contest_command.update_by_uuid(contest.uuid, fields)

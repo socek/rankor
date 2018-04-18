@@ -2,6 +2,7 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
       <h1>Questions <createDialog @onSuccess="refresh"></createDialog></h1>
+
       <div v-for="(questions, category) in categories">
         <table class="table table-striped table-sm">
           <tr class="title table-success">
@@ -11,14 +12,12 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Description</th>
-            <th scope="col">Category</th>
           </tr>
           <tbody>
             <tr v-for="(question, index) in questions">
               <td scope="row">{{index + 1}}</td>
               <td>{{question.name}}</td>
               <td>{{question.description}}</td>
-              <td>{{question.category}}</td>
             </tr>
           </tbody>
         </table>
