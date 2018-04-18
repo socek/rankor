@@ -48,7 +48,7 @@ class AdminContestView(ContestBaseView):
         contest = self._get_contest()
         return schema.dump(contest).data
 
-    def put(self):
+    def patch(self):
         contest = self._get_contest()
         fields = self.get_validated_fields(NewContestSchema)
         self.contest_command.update_by_uuid(contest.uuid, fields)

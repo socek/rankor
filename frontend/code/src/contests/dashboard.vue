@@ -36,7 +36,7 @@
     data () {
       return {
         contests: [],
-        resource: contestResource(this).contests
+        resource: contestResource(this)
       }
     },
     created () {
@@ -44,7 +44,7 @@
     },
     methods: {
       refresh () {
-        this.resource.get().then((response) => {
+        this.resource.list().then((response) => {
           this.contests = response.data.contests
         })
       }

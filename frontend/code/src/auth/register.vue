@@ -78,7 +78,7 @@ export default {
         password: [],
         confirmPassword: []
       },
-      resource: authResource(this).signUp
+      resource: authResource(this)
     }
   },
   methods: {
@@ -97,7 +97,7 @@ export default {
       this.$refs.signUpModal.hide()
     },
     onSubmit () {
-      this.resource.save({}, this.fields).then((response) => {
+      this.resource.signUp({}, this.fields).then((response) => {
         this.$store.commit('auth/logIn', response.body.jwt)
         this.$router.push({name: 'Dashboard'})
       }).catch((response) => {

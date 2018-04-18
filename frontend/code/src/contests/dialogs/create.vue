@@ -43,7 +43,7 @@
         form: this.prepareForm({
           name: ''
         }),
-        resource: contestResource(this).contests
+        resource: contestResource(this)
       }
     },
     methods: {

@@ -58,12 +58,12 @@ export default {
         email: [],
         password: []
       },
-      resource: authResource(this).login
+      resource: authResource(this)
     }
   },
   methods: {
     onSubmit () {
-      this.resource.save({}, this.fields).then((response) => {
+      this.resource.login({}, this.fields).then((response) => {
         this.$store.commit('auth/logIn', response.body.jwt)
         this.$router.push({name: 'Dashboard'})
       }).catch((response) => {

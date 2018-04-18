@@ -48,7 +48,7 @@
         form: this.prepareForm({
           name: ''
         }),
-        resource: contestResource(this).contest
+        resource: contestResource(this)
       }
     },
     methods: {
@@ -66,7 +66,6 @@
         return this.$refs.editContestModal
       },
       onSave () {
-        console.log(this.resource)
         this.resource.update({contest_uuid: this.contest_uuid}, this.form.fields).then((response) => {
           this.hideModal()
           this.$emit('onSuccess')
