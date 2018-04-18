@@ -1,3 +1,4 @@
+from unittest.mock import MagicMock
 from unittest.mock import PropertyMock
 from unittest.mock import patch
 from uuid import uuid4
@@ -13,6 +14,12 @@ from rankor.answers.views import AdminAnswerView
 
 
 class TestAdminAnswerView(ControllerFixtureMixin):
+    @fixture
+    def mrequest(self):
+        request = MagicMock()
+        request._cache = {}
+        return request
+
     @fixture
     def mdbsession(self, view):
         with patch.object(

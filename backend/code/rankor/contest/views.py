@@ -1,6 +1,7 @@
 from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
+from rankor.application.cache import cache_per_request
 from rankor.application.views import RestfulController
 from rankor.auth.view_mixins import AuthMixin
 from rankor.contest.drivers import ContestCommand
@@ -21,6 +22,7 @@ class ContestBaseView(RestfulController, AuthMixin):
     def _get_contest_uuid(self):
         return self.request.matchdict['contest_uuid']
 
+    @cache_per_request('contest')
     def _get_contest(self):
         try:
             return self.contest_query.get_by_uuid(self._get_contest_uuid())

@@ -4,18 +4,18 @@ from unittest.mock import patch
 from pytest import fixture
 from sapp.plugins.pyramid.testing import ControllerFixtureMixin
 
-from rankor.contest.views import AdminContestView
+from rankor.contest.views import AdminContestListView
 
 
-class TestAdminContestView(ControllerFixtureMixin):
+class TestAdminContestListView(ControllerFixtureMixin):
     @fixture
     def view(self, mroot_factory, mrequest):
-        return AdminContestView(mroot_factory, mrequest)
+        return AdminContestListView(mroot_factory, mrequest)
 
     @fixture
     def mdbsession(self, view):
         with patch.object(
-                AdminContestView, 'dbsession',
+                AdminContestListView, 'dbsession',
                 new_callable=PropertyMock) as mock:
             yield mock.return_value
 
