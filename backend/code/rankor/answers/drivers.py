@@ -19,3 +19,11 @@ class AnswerQuery(Query):
 
 class AnswerCommand(Command):
     model = Answer
+
+    def upsert_collection(self, question_id, collection):
+        for data in collection:
+            element = self.model(**data)
+            element.question_id = question_id
+
+            self.database.merge(element)
+        self.database.commit()

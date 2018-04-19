@@ -82,10 +82,14 @@ class TestAdminAnswerListView(ControllerFixtureMixin):
         .get should return list of all answers assigned to a contest.
         """
         manswer_query.list_for_question.return_value = [{
-            'name': 'my name',
-            'description': 'my description',
-            'is_correct': True,
-            'question_uuid': 'uuid',
+            'name':
+            'my name',
+            'description':
+            'my description',
+            'is_correct':
+            True,
+            'question_uuid':
+            'uuid',
         }]
         assert view.get() == {
             'answers': [{
@@ -141,19 +145,21 @@ class TestAdminAnswerListView(ControllerFixtureMixin):
         """
         .post should create new answer assigned to the contest.
         """
-        mrequest.json_body = {
+        mrequest.json_body = [{
             'name': 'my name',
             'description': 'my description',
             'is_correct': True,
-        }
+        }]
 
         view.post()
 
-        manswer_command.create.assert_called_once_with(
-            name='my name',
-            description='my description',
-            is_correct=True,
-            question_id=mquestion_query.get_by_uuid.return_value.id)
+        manswer_command.upsert_collection.assert_called_once_with(
+            mquestion_query.get_by_uuid.return_value.id, [
+                dict(
+                    name='my name',
+                    description='my description',
+                    is_correct=True)
+            ])
 
     def test_post_when_contest_not_found(
             self,
