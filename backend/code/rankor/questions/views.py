@@ -50,7 +50,7 @@ class AdminQuestionListView(QuestionBaseView):
     def post(self):
         self.validate()
 
-        fields = self.get_validated_fields(NewQuestionSchema)
+        fields = self.get_validated_fields(NewQuestionSchema())
         fields['contest_id'] = self._get_contest().id
         self.question_command.create(**fields)
 
@@ -67,5 +67,5 @@ class AdminQuestionView(QuestionBaseView):
         self.validate()
 
         question = self._get_question()
-        fields = self.get_validated_fields(NewQuestionSchema)
+        fields = self.get_validated_fields(NewQuestionSchema())
         self.question_command.update_by_uuid(question.uuid, fields)

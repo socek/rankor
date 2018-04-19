@@ -39,7 +39,7 @@ class AdminContestListView(ContestBaseView):
         }
 
     def post(self):
-        fields = self.get_validated_fields(NewContestSchema)
+        fields = self.get_validated_fields(NewContestSchema())
         fields['owner_id'] = self.get_user_id()
         self.contest_command.create(**fields)
 
@@ -51,5 +51,5 @@ class AdminContestView(ContestBaseView):
 
     def patch(self):
         contest = self._get_contest()
-        fields = self.get_validated_fields(NewContestSchema)
+        fields = self.get_validated_fields(NewContestSchema())
         self.contest_command.update_by_uuid(contest.uuid, fields)

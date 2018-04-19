@@ -1,7 +1,6 @@
 from rankor.answers.drivers import AnswerCommand
 from rankor.answers.drivers import AnswerQuery
 from rankor.answers.schema import AnswerSchema
-from rankor.answers.schema import NewAnswerSchema
 from rankor.questions.views import QuestionBaseView
 
 
@@ -27,8 +26,8 @@ class AdminAnswerListView(AnswerBaseView):
 
     def post(self):
         self._get_contest()
-        self._get_question()
+        question = self._get_question()
 
-        fields = self.get_validated_fields(NewAnswerSchema)
-        fields['question_id'] = self._get_question().id
+        fields = self.get_validated_fields(AnswerSchema())
+        fields['question_id'] = question.id
         self.answer_command.create(**fields)

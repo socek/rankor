@@ -84,7 +84,6 @@ class TestAdminAnswerListView(ControllerFixtureMixin):
         manswer_query.list_for_question.return_value = [{
             'name': 'my name',
             'description': 'my description',
-            'index': 1,
             'is_correct': True,
             'question_uuid': 'uuid',
         }]
@@ -92,7 +91,6 @@ class TestAdminAnswerListView(ControllerFixtureMixin):
             'answers': [{
                 'name': 'my name',
                 'description': 'my description',
-                'index': 1,
                 'is_correct': True,
                 'question_uuid': 'uuid',
             }]
@@ -146,7 +144,6 @@ class TestAdminAnswerListView(ControllerFixtureMixin):
         mrequest.json_body = {
             'name': 'my name',
             'description': 'my description',
-            'index': 2,
             'is_correct': True,
         }
 
@@ -155,7 +152,6 @@ class TestAdminAnswerListView(ControllerFixtureMixin):
         manswer_command.create.assert_called_once_with(
             name='my name',
             description='my description',
-            index=2,
             is_correct=True,
             question_id=mquestion_query.get_by_uuid.return_value.id)
 

@@ -20,7 +20,7 @@ class LoginController(RestfulController):
         return UserQuery(dbsession)
 
     def post(self):
-        fields = self.get_validated_fields(LoginSchema)
+        fields = self.get_validated_fields(LoginSchema())
         user = self.get_authenticated_user(fields)
         if user:
             return {'jwt': encode_jwt_from_user(user)}
@@ -41,7 +41,7 @@ class SignUpView(RestfulController):
         return UserCommand(dbsession)
 
     def post(self):
-        fields = self.get_validated_fields(SignUpSchema)
+        fields = self.get_validated_fields(SignUpSchema())
         try:
             user = self.create_user(fields)
             return {'jwt': encode_jwt_from_user(user)}

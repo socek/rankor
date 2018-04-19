@@ -18,32 +18,32 @@ class TestRestfulController(ControllerFixtureMixin):
         return RestfulController(mroot_factory, mrequest)
 
     @fixture
-    def mschema_cls(self):
+    def mschema(self):
         return MagicMock()
 
-    def test_get_validated_fields_no_error(self, view, mschema_cls):
+    def test_get_validated_fields_no_error(self, view, mschema):
         """
         .get_validated_fields should return validated fields when schema is
         validated good
         """
-        mschema_cls.return_value.load.return_value = sentinel.fields
-        assert view.get_validated_fields(mschema_cls) == sentinel.fields
+        mschema.load.return_value = sentinel.fields
+        assert view.get_validated_fields(mschema) == sentinel.fields
 
-    def test_get_validated_fields_with_error(self, view, mschema_cls):
+    def test_get_validated_fields_with_error(self, view, mschema):
         """
         .get_validated_fields should raise HTTPBadRequest with errors as return
         data
         """
-        mschema_cls.return_value.load.side_effect = ValidationError('msg')
+        mschema.load.side_effect = ValidationError('msg')
         with raises(HTTPBadRequest):
-            view.get_validated_fields(mschema_cls)
+            view.get_validated_fields(mschema)
 
-    def test_get_validated_fields_with_malformed_json(self, view, mschema_cls):
+    def test_get_validated_fields_with_malformed_json(self, view, mschema):
         """
         .get_validated_fields should raise HTTPNotAcceptable, when provided json
         is malformed
         """
-        mschema_cls.return_value.load.side_effect = JSONDecodeError(
+        mschema.load.side_effect = JSONDecodeError(
             None, '', 0)
         with raises(HTTPNotAcceptable):
-            view.get_validated_fields(mschema_cls)
+            view.get_validated_fields(mschema)
