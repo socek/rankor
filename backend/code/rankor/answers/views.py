@@ -15,7 +15,7 @@ class AnswerBaseView(QuestionBaseView):
         return AnswerCommand(self.dbsession)
 
 
-class AdminAnswerView(AnswerBaseView):
+class AdminAnswerListView(AnswerBaseView):
     def get(self):
         self._get_contest()
         self._get_question()

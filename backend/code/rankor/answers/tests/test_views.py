@@ -10,10 +10,10 @@ from pytest import raises
 from sapp.plugins.pyramid.testing import ControllerFixtureMixin
 from sqlalchemy.orm.exc import NoResultFound
 
-from rankor.answers.views import AdminAnswerView
+from rankor.answers.views import AdminAnswerListView
 
 
-class TestAdminAnswerView(ControllerFixtureMixin):
+class TestAdminAnswerListView(ControllerFixtureMixin):
     @fixture
     def mrequest(self):
         request = MagicMock()
@@ -23,13 +23,13 @@ class TestAdminAnswerView(ControllerFixtureMixin):
     @fixture
     def mdbsession(self, view):
         with patch.object(
-                AdminAnswerView, 'dbsession',
+                AdminAnswerListView, 'dbsession',
                 new_callable=PropertyMock) as mock:
             yield mock.return_value
 
     @fixture
     def view(self, mroot_factory, mrequest):
-        return AdminAnswerView(mroot_factory, mrequest)
+        return AdminAnswerListView(mroot_factory, mrequest)
 
     @fixture
     def mcontest_query(self, mdbsession):
