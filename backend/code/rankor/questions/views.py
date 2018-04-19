@@ -44,7 +44,7 @@ class AdminQuestionListView(QuestionBaseView):
         result = {'categories': defaultdict(list)}
         for question in questions:
             result['categories'][question.category].append(
-                schema.dump(question).data)
+                schema.dump(question))
         return result
 
     def post(self):
@@ -61,7 +61,7 @@ class AdminQuestionView(QuestionBaseView):
 
         schema = QuestionSchema()
         question = self._get_question()
-        return schema.dump(question).data
+        return schema.dump(question)
 
     def patch(self):
         self.validate()

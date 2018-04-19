@@ -2,6 +2,7 @@ from json.decoder import JSONDecodeError
 from unittest.mock import MagicMock
 from unittest.mock import sentinel
 
+from marshmallow.exceptions import ValidationError
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotAcceptable
 from pytest import fixture
@@ -25,7 +26,7 @@ class TestRestfulController(ControllerFixtureMixin):
         .get_validated_fields should return validated fields when schema is
         validated good
         """
-        mschema_cls.return_value.load.return_value = [sentinel.fields, None]
+        mschema_cls.return_value.load.return_value = sentinel.fields
         assert view.get_validated_fields(mschema_cls) == sentinel.fields
 
     def test_get_validated_fields_with_error(self, view, mschema_cls):
@@ -33,12 +34,7 @@ class TestRestfulController(ControllerFixtureMixin):
         .get_validated_fields should raise HTTPBadRequest with errors as return
         data
         """
-        mschema_cls.return_value.load.return_value = [
-            sentinel.fields,
-            {
-                'errors': True,
-            },
-        ]
+        mschema_cls.return_value.load.side_effect = ValidationError('msg')
         with raises(HTTPBadRequest):
             view.get_validated_fields(mschema_cls)
 

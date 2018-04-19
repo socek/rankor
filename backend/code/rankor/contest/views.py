@@ -35,7 +35,7 @@ class AdminContestListView(ContestBaseView):
         contests = self.contest_query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
         return {
-            'contests': [schema.dump(contest).data for contest in contests]
+            'contests': [schema.dump(contest) for contest in contests]
         }
 
     def post(self):
@@ -48,7 +48,7 @@ class AdminContestView(ContestBaseView):
     def get(self):
         schema = ContestSchema()
         contest = self._get_contest()
-        return schema.dump(contest).data
+        return schema.dump(contest)
 
     def patch(self):
         contest = self._get_contest()

@@ -1,5 +1,6 @@
 from json.decoder import JSONDecodeError
 
+from marshmallow.exceptions import ValidationError
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotAcceptable
 from sapp.decorators import WithContext
@@ -15,13 +16,9 @@ class RestfulController(BaseRestfulController):
         return dbsession  # pragma: no cover
 
     def get_validated_fields(self, schema_cls):
-        schema = schema_cls()
         try:
-            fields, errors = schema.load(self.request.json_body)
+            return schema_cls().load(self.request.json_body)
         except JSONDecodeError:
             raise HTTPNotAcceptable()
-
-        if errors:
-            raise HTTPBadRequest(json=errors)
-
-        return fields
+        except ValidationError as error:
+            raise HTTPBadRequest(json=error.messages)

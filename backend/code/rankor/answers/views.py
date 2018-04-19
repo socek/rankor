@@ -23,7 +23,7 @@ class AdminAnswerView(AnswerBaseView):
         answers = self.answer_query.list_for_question(
             self._get_question_uuid())
         schema = AnswerSchema()
-        return {'answers': [schema.dump(answer).data for answer in answers]}
+        return {'answers': [schema.dump(answer) for answer in answers]}
 
     def post(self):
         self._get_contest()
