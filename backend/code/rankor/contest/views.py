@@ -46,9 +46,8 @@ class AdminContestListView(ContestBaseView):
 
 class AdminContestView(ContestBaseView):
     def get(self):
-        schema = ContestSchema()
         contest = self._get_contest()
-        return schema.dump(contest)
+        return ContestSchema().dump(contest)
 
     def patch(self):
         contest = self._get_contest()
