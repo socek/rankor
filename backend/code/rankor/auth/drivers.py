@@ -8,7 +8,7 @@ class UserQuery(Query):
     model = User
 
     def _get_by_email(self, email):
-        return self.query().filter(self.model.email == email)
+        return self._query().filter(self.model.email == email)
 
     def find_by_email(self, email):
         return self._get_by_email(email).first()

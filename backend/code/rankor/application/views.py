@@ -4,12 +4,12 @@ from marshmallow.exceptions import ValidationError
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotAcceptable
 from sapp.decorators import WithContext
-from sapp.plugins.pyramid.controller import RestfulController as BaseRestfulController
+from sapp.plugins.pyramid.views import RestfulView as BaseRestfulView
 
 from rankor import app
 
 
-class RestfulController(BaseRestfulController):
+class RestfulController(BaseRestfulView):
     @property
     @WithContext(app, args=['dbsession'])
     def dbsession(self, dbsession):

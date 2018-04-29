@@ -10,7 +10,7 @@ class AnswerQuery(Query):
 
     def list_for_question(self, question_uuid):
         return (
-            self.query()
+            self._query()
             .join(Question)
             .filter(Question.uuid == question_uuid)
             .all()

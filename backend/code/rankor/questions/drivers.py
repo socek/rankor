@@ -10,7 +10,7 @@ class QuestionQuery(Query):
 
     def list_for_contest(self, contest_uuid):
         return (
-            self.query()
+            self._query()
             .join(Contest)
             .filter(Contest.uuid == contest_uuid)
             .order_by(self.model.category.desc())

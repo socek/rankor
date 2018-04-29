@@ -7,14 +7,14 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotFound
 from pytest import fixture
 from pytest import raises
-from sapp.plugins.pyramid.testing import ControllerFixtureMixin
+from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from rankor.questions.views import AdminQuestionListView
 from rankor.questions.views import AdminQuestionView
 
 
-class Fixtures(ControllerFixtureMixin):
+class Fixtures(ViewFixtureMixin):
     @fixture
     def mrequest(self):
         request = MagicMock()

@@ -1,10 +1,10 @@
-from sapp.plugins.sqlalchemy.driver import ReadDriver as BaseQuery
-from sapp.plugins.sqlalchemy.driver import WriteDriver as BaseCommand
+from sapp.plugins.sqlalchemy.driver import Query as BaseQuery
+from sapp.plugins.sqlalchemy.driver import Command as BaseCommand
 
 
 class Query(BaseQuery):
     def _get_by_uuid(self, uuid):
-        return self.query().filter(self.model.uuid == uuid)
+        return self._query().filter(self.model.uuid == uuid)
 
     def get_by_uuid(self, uuid):
         return self._get_by_uuid(uuid).one()

@@ -8,5 +8,5 @@ cd $SRCDIR
 pip install $1
 ER=$?
 if [ "$ER" == "0" ] ; then
-    pip freeze | grep -v sapp | grep -v rankor > requirements.txt
+    pip freeze | grep -v rankor > requirements.txt
 fi

@@ -9,7 +9,7 @@ class ContestQuery(Query):
 
     def list_for_owner(self, owner_id):
         return (
-            self.query()
+            self._query()
             .filter(self.model.owner_id == owner_id)
             .order_by(self.model.created_at)
             .all()

@@ -1,5 +1,5 @@
 # flake8: noqa
-from sapp.plugins.sqlalchemy.env import AlembicEnv
+from sapp.plugins.sqlalchemy.alembic import AlembicScript
 
 from rankor import app
 from rankor.application.model import Model
@@ -13,4 +13,4 @@ import rankor.contest.models
 import rankor.questions.models
 
 
-AlembicEnv(app, Model, 'dbsession').run()
+AlembicScript(app, Model, 'dbsession').run()

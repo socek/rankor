@@ -1,7 +1,7 @@
-from sapp.plugins.pyramid.controller import RestfulController
+from sapp.plugins.pyramid.views import RestfulView
 
 
-class Home(RestfulController):
+class Home(RestfulView):
     def get(self):
         return {}
 

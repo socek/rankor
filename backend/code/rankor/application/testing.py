@@ -1,7 +1,7 @@
 from pytest import fixture
 
 from sapp.plugins.pyramid.testing import BaseWebTestFixture
-from sapp.plugins.sqlalchemy.migration import RecreateDatabases
+from sapp.plugins.sqlalchemy.recreate import RecreateDatabases
 from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 
 from rankor.application.app import RankorConfigurator

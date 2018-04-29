@@ -3,13 +3,13 @@ from unittest.mock import patch
 from uuid import uuid4
 
 from pytest import fixture
-from sapp.plugins.pyramid.testing import ControllerFixtureMixin
+from sapp.plugins.pyramid.testing import ViewFixtureMixin
 
 from rankor.contest.views import AdminContestListView
 from rankor.contest.views import AdminContestView
 
 
-class Fixtures(ControllerFixtureMixin):
+class Fixtures(ViewFixtureMixin):
     @fixture
     def mquery(self, mdbsession):
         with patch('rankor.contest.views.ContestQuery', autospec=True) as mock:

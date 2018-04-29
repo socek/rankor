@@ -13,11 +13,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pyramid', 'SQLAlchemy', 'psycopg2', 'PyYAML', 'alembic', 'raven',
-        'celery', 'marshmallow',
-        'sapp==0.1'
-    ],
-    dependency_links=[
-        'git://github.com/socek/qapla/@pluginable#egg=sapp-0.1'
+        'celery', 'marshmallow', 'sapp'
     ],
     tests_require=['coverage', 'freezegun', 'pytest', 'pytest-cov', 'WebTest'],
     long_description=__doc__,

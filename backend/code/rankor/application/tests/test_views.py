@@ -7,12 +7,12 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotAcceptable
 from pytest import fixture
 from pytest import raises
-from sapp.plugins.pyramid.testing import ControllerFixtureMixin
+from sapp.plugins.pyramid.testing import ViewFixtureMixin
 
 from rankor.application.views import RestfulController
 
 
-class TestRestfulController(ControllerFixtureMixin):
+class TestRestfulController(ViewFixtureMixin):
     @fixture
     def view(self, mroot_factory, mrequest):
         return RestfulController(mroot_factory, mrequest)
