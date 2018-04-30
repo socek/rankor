@@ -12,12 +12,14 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Description</th>
+            <th scope="col">Actions</th>
           </tr>
           <tbody>
             <tr v-for="(question, index) in questions">
               <td scope="row">{{index + 1}}</td>
               <td>{{question.name}}</td>
               <td>{{question.description}}</td>
+              <td>|</td>
             </tr>
           </tbody>
         </table>
