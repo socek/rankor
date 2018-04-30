@@ -19,7 +19,9 @@
               <td scope="row">{{index + 1}}</td>
               <td>{{question.name}}</td>
               <td>{{question.description}}</td>
-              <td>|</td>
+              <td>
+                <editDialog :question_uuid="question.uuid" @onSuccess="refresh"></editDialog>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -30,6 +32,7 @@
 
 <script>
   import createDialog from '@/questions/dialogs/create'
+  import editDialog from '@/questions/dialogs/edit'
   import questionResource from '@/questions/resource'
 
   export default {
@@ -50,7 +53,8 @@
       }
     },
     components: {
-      createDialog
+      createDialog,
+      editDialog
     }
   }
 </script>

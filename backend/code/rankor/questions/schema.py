@@ -16,6 +16,7 @@ class NewQuestionSchema(Schema):
 
 
 class QuestionSchema(Schema):
+    uuid = String()
     name = String(
         required=True,
         allow_none=False,

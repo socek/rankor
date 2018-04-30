@@ -21,3 +21,14 @@ class QuestionQuery(Query):
 
 class QuestionCommand(Command):
     model = Question
+
+    @property
+    def query(self):
+        return QuestionQuery(self.database)
+
+    def update_by_uuid(self, uuid, update):
+        update_raw = {}
+        for key, value in update.items():
+            update_raw[getattr(self.model, key)] = value
+        self.query._get_by_uuid(uuid).update(update_raw)
+        self.database.commit()
