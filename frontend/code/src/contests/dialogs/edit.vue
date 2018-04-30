@@ -53,11 +53,10 @@
       fetchContent () {
         return this.resource.get({contest_uuid: this.contest_uuid})
       },
-      onSave () {
-        this.resource.update({contest_uuid: this.contest_uuid}, this.form.fields).then((response) => {
-          this.$refs.dialog.hideModal()
-          this.$emit('onSuccess')
-        }).catch(this.onError)
+      saveCall () {
+        return this.resource.update(
+          {contest_uuid: this.contest_uuid},
+          this.form.fields)
       }
     },
     components: {

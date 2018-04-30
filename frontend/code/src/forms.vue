@@ -26,8 +26,11 @@
         }
         this.form.errors._schema = []
       },
+      saveCall () {
+        return this.resource.save({}, this.form.fields)
+      },
       onSave () {
-        this.resource.save({}, this.form.fields).then((response) => {
+        this.saveCall().then((response) => {
           this.$refs.dialog.hideModal()
           this.$emit('onSuccess')
         }).catch(this.onError)
