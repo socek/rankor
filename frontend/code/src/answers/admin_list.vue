@@ -7,7 +7,6 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Description</th>
             <th scope="col">State</th>
             <th scope="col">Actions</th>
           </tr>
@@ -16,7 +15,6 @@
           <tr v-for="(answer, index) in answers">
             <td scope="row">{{index + 1}}</td>
             <td>{{answer.name}}</td>
-            <td>{{answer.description}}</td>
             <td>
               <icon name="check" style="color: green;" v-if="answer.is_correct"></icon>
               <icon name="times" style="color: red;" v-else></icon>

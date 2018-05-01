@@ -94,7 +94,6 @@ class TestAdminAnswerListView(ViewFixtureMixin):
         assert view.get() == {
             'answers': [{
                 'name': 'my name',
-                'description': 'my description',
                 'is_correct': True,
                 'question_uuid': 'uuid',
             }]
@@ -145,21 +144,18 @@ class TestAdminAnswerListView(ViewFixtureMixin):
         """
         .post should create new answer assigned to the contest.
         """
-        mrequest.json_body = [{
+        mrequest.json_body = {
             'name': 'my name',
-            'description': 'my description',
             'is_correct': True,
-        }]
+        }
 
         view.post()
 
-        manswer_command.upsert_collection.assert_called_once_with(
-            mquestion_query.get_by_uuid.return_value.id, [
-                dict(
-                    name='my name',
-                    description='my description',
-                    is_correct=True)
-            ])
+        manswer_command.create.assert_called_once_with(
+            name='my name',
+            is_correct=True,
+            question_id=mquestion_query.get_by_uuid.return_value.id
+        )
 
     def test_post_when_contest_not_found(
             self,

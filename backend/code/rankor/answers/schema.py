@@ -15,7 +15,6 @@ class AnswerSchema(Schema):
             Length(min=4, error="Name must have at lest {min} characters.")
         ],
     )
-    description = String()
     is_correct = Boolean(required=True)
     question_uuid = String(
         allow_none=False,

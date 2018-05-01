@@ -17,7 +17,6 @@ class Fixtures(IntegrationFixture):
 
     answer_user_data = {
         'name': 'name',
-        'description': 'description',
         'is_correct': False,
     }
 
@@ -92,14 +91,12 @@ class TestAnswerCommand(Fixtures):
     ):
         answer_one_data = dict(
             name=answer_one.name,
-            description=answer_one.description,
             is_correct=True,
             id=answer_one.id,
             uuid=answer_one.uuid)
 
         answer_two_data = dict(
             name='second',
-            description='second desc',
             is_correct=False,
         )
 

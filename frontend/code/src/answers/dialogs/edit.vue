@@ -28,21 +28,6 @@
         </b-form-invalid-feedback>
       </b-form-group>
 
-      <b-form-group
-                    label="Description:"
-                    label-for="descriptionField">
-        <b-form-input id="descriptionField"
-                      v-model.trim="form.fields.description"
-                      type="text"
-                      :state="form.errors.description.length == 0 ? null : false"
-                      placeholder="description"></b-form-input>
-        <b-form-invalid-feedback  v-for="error in form.errors.description"
-                                  class="modal-invalid-feedback"
-                                  :key="error">
-          {{ error }}
-        </b-form-invalid-feedback>
-      </b-form-group>
-
       <b-form-group>
         <b-form-checkbox
                          v-model="form.fields.is_correct"
