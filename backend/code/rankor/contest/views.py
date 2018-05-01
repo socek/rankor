@@ -7,7 +7,6 @@ from rankor.auth.view_mixins import AuthMixin
 from rankor.contest.drivers import ContestCommand
 from rankor.contest.drivers import ContestQuery
 from rankor.contest.schema import ContestSchema
-from rankor.contest.schema import NewContestSchema
 
 
 class ContestBaseView(RestfulController, AuthMixin):
@@ -34,12 +33,10 @@ class AdminContestListView(ContestBaseView):
     def get(self):
         contests = self.contest_query.list_for_owner(self.get_user_id())
         schema = ContestSchema()
-        return {
-            'contests': [schema.dump(contest) for contest in contests]
-        }
+        return {'contests': [schema.dump(contest) for contest in contests]}
 
     def post(self):
-        fields = self.get_validated_fields(NewContestSchema())
+        fields = self.get_validated_fields(ContestSchema())
         fields['owner_id'] = self.get_user_id()
         self.contest_command.create(**fields)
 
@@ -51,5 +48,5 @@ class AdminContestView(ContestBaseView):
 
     def patch(self):
         contest = self._get_contest()
-        fields = self.get_validated_fields(NewContestSchema())
+        fields = self.get_validated_fields(ContestSchema())
         self.contest_command.update_by_uuid(contest.uuid, fields)

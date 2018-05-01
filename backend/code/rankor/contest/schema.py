@@ -4,7 +4,9 @@ from marshmallow.fields import String
 from marshmallow.validate import Length
 
 
-class NewContestSchema(Schema):
+class ContestSchema(Schema):
+    owner_id = Integer()
+    uuid = String()
     name = String(
         required=True,
         allow_none=False,
@@ -12,8 +14,3 @@ class NewContestSchema(Schema):
             Length(min=4, error="Name must have at lest {min} characters.")
         ],
     )
-
-
-class ContestSchema(NewContestSchema):
-    owner_id = Integer()
-    uuid = String()

@@ -15,17 +15,8 @@ class NewQuestionSchema(Schema):
     category = String()
 
 
-class QuestionSchema(Schema):
+class QuestionSchema(NewQuestionSchema):
     uuid = String()
-    name = String(
-        required=True,
-        allow_none=False,
-        validate=[
-            Length(min=4, error="Name must have at lest {min} characters.")
-        ],
-    )
-    description = String()
-    category = String()
     contest_uuid = String(
         required=True,
         allow_none=False,
