@@ -9,6 +9,7 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">State</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -20,6 +21,9 @@
               <icon name="check" style="color: green;" v-if="answer.is_correct"></icon>
               <icon name="times" style="color: red;" v-else></icon>
             </td>
+            <td>
+              <editDialog :answer_uuid="answer.uuid" @onSuccess="refresh"></editDialog>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -30,6 +34,7 @@
 <script>
   import answerResource from '@/answers/resource'
   import createDialog from '@/answers/dialogs/create'
+  import editDialog from '@/answers/dialogs/edit'
 
   export default {
     data () {
@@ -51,7 +56,8 @@
       }
     },
     components: {
-      createDialog
+      createDialog,
+      editDialog
     }
   }
 </script>
