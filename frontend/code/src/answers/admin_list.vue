@@ -1,18 +1,25 @@
 <template>
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
-      <h1>List of answers</h1>
+      <h1>Answers <createDialog @onSuccess="refresh"></createDialog></h1>
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">State</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(answer, index) in answers">
             <td scope="row">{{index + 1}}</td>
-            <td>{{question.name}}</td>
+            <td>{{answer.name}}</td>
+            <td>{{answer.description}}</td>
+            <td>
+              <icon name="check" style="color: green;" v-if="answer.is_correct"></icon>
+              <icon name="times" style="color: red;" v-else></icon>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -22,6 +29,7 @@
 
 <script>
   import answerResource from '@/answers/resource'
+  import createDialog from '@/answers/dialogs/create'
 
   export default {
     data () {
@@ -41,6 +49,9 @@
           this.answers = response.data.answers
         })
       }
+    },
+    components: {
+      createDialog
     }
   }
 </script>

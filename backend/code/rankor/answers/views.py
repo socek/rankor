@@ -1,5 +1,3 @@
-from pyramid.httpexceptions import HTTPBadRequest
-
 from rankor.answers.drivers import AnswerCommand
 from rankor.answers.drivers import AnswerQuery
 from rankor.answers.schema import AnswerSchema
@@ -30,8 +28,11 @@ class AdminAnswerListView(AnswerBaseView):
         self._get_contest()
         question = self._get_question()
 
-        collection = self.get_validated_fields(AnswerSchema(many=True))
-        if not collection:
-            raise HTTPBadRequest(json={'_schema': 'No objects to save.'})
+        fields = self.get_validated_fields(AnswerSchema())
+        fields['question_id'] = question.id
 
-        self.answer_command.upsert_collection(question.id, collection)
+        answer = self.answer_command.create(**fields)
+
+        return {
+            'answer_uuid': answer.uuid,
+        }
