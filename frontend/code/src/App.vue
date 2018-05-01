@@ -5,7 +5,7 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item v-if="isAuthenticated" :to="{name: 'Dashboard'}">Dashboard</b-nav-item>
+          <b-nav-item v-if="isAuthenticated" :to="{name: 'Contests'}">Contests</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import '@/contests/dashboard.css'
+  import '@/contests/admin_list.css'
 
   import login from '@/auth/login'
   import register from '@/auth/register.vue'

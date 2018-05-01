@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import store from '@/store'
 
 import NotLoggedIn from '@/auth/not-logged-in'
-import Dashboard from '@/contests/dashboard'
+import Contests from '@/contests/admin_list'
 import Questions from '@/questions/admin_list'
 
 Vue.use(Router)
@@ -23,7 +23,7 @@ function requireAuth (to, from, next) {
 function onlyNotLoggedIn (to, from, next) {
   if (store.getters['auth/isAuthenticated']) {
     next({
-      name: 'Dashboard'
+      name: 'Contests'
     })
   } else {
     next()
@@ -40,14 +40,8 @@ export default new Router({
     },
     {
       path: '/contests/',
-      name: 'Dashboard',
-      component: Dashboard,
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/contests/:contest_uuid/',
-      name: 'Contest',
-      component: Dashboard,
+      name: 'Contests',
+      component: Contests,
       beforeEnter: requireAuth
     },
     {
