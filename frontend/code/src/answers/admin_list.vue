@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(contest, index) in contests">
+          <tr v-for="(answer, index) in answers">
             <td scope="row">{{index + 1}}</td>
             <td>{{question.name}}</td>
           </tr>
@@ -21,14 +21,15 @@
 </template>
 
 <script>
-  import contestCreateDialog from '@/contests/dialogs/create'
-  import questionResource from '@/questions/resource'
+  import answerResource from '@/answers/resource'
 
   export default {
     data () {
       return {
-        questions: [],
-        resource: questionResource(this)
+        answers: [],
+        resource: answerResource(this),
+        contest_uuid: this.$route.params.contest_uuid,
+        question_uuid: this.$route.params.question_uuid
       }
     },
     created: function () {
@@ -37,7 +38,7 @@
     methods: {
       refresh () {
         this.resource.get().then((response) => {
-          this.questions = response.data.questions
+          this.answers = response.data.answers
         })
       }
     }
