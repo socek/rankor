@@ -89,6 +89,7 @@ class TestAdminQuestionView(Fixtures):
         mquestion_query.get_by_uuid.return_value = obj
 
         assert view.get() == {
+            'uuid': str(obj['uuid']),
             'name': str(obj['name']),
             'description': str(obj['description']),
             'category': str(obj['my cat']),
@@ -196,6 +197,7 @@ class TestAdminQuestionListView(Fixtures):
         mquestion_query.list_for_contest.return_value = [obj]
         assert dict(view.get()['categories']) == {
             'my cat': [{
+                'uuid': str(obj['uuid']),
                 'name': str(obj['name']),
                 'description': str(obj['description']),
                 'category': str(obj['my cat']),

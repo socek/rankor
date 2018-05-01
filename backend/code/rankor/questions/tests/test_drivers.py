@@ -3,20 +3,17 @@ from pytest import fixture
 from rankor.application.testing import DeleteOnExit
 from rankor.application.testing import IntegrationFixture
 from rankor.contest.models import Contest
+from rankor.questions.drivers import QuestionCommand
 from rankor.questions.drivers import QuestionQuery
 from rankor.questions.models import Question
 
 
-class TestQuestionQuery(IntegrationFixture):
+class Fixtures(IntegrationFixture):
     question_user_data = {
         'name': 'name',
         'description': 'description',
         'category': 'cat',
     }
-
-    @fixture
-    def driver(self, app):
-        return QuestionQuery(app.dbsession)
 
     @fixture
     def contest_one(self, dbsession, user):
@@ -54,6 +51,12 @@ class TestQuestionQuery(IntegrationFixture):
         with DeleteOnExit(dbsession, question):
             yield question
 
+
+class TestQuestionQuery(Fixtures):
+    @fixture
+    def driver(self, app):
+        return QuestionQuery(app.dbsession)
+
     def test_list_for_contest(
             self,
             driver,
@@ -67,3 +70,18 @@ class TestQuestionQuery(IntegrationFixture):
         """
         result = driver.list_for_contest(contest_one.uuid)
         assert [obj.uuid for obj in result] == [question_one.uuid]
+
+
+class TestQuestionCommand(Fixtures):
+    @fixture
+    def driver(self, app):
+        return QuestionCommand(app.dbsession)
+
+    def test_update_by_uuid(self, driver, question_one, dbsession):
+        """
+        .update_by_uuid should update object by uuid
+        """
+        driver.update_by_uuid(question_one.uuid, {'name': 'new fine name'})
+
+        dbsession.refresh(question_one)
+        assert question_one.name == 'new fine name'
