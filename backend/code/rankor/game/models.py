@@ -12,5 +12,7 @@ class Game(Model):
 
     name = Column(String, nullable=False)
     contest_id = Column(Integer, ForeignKey('contests.id'), nullable=False)
+    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     contest = relationship("Contest", uselist=False)
+    owner = relationship("User", uselist=False)

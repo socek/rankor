@@ -8,8 +8,12 @@ class GameQuery(Query):
     model = Game
 
     def list_for_owner(self, owner_id):
-        return (self._query().filter(self.model.owner_id == owner_id).order_by(
-            self.model.created_at).all())
+        return (
+            self._query()
+            .filter(self.model.owner_id == owner_id)
+            .order_by(self.model.created_at)
+            .all()
+        )
 
 
 class GameCommand(Command):

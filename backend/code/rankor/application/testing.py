@@ -7,6 +7,7 @@ from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 from rankor.application.app import RankorConfigurator
 from rankor.auth.models import User
 from rankor.contest.models import Contest
+from rankor.game.models import Game
 
 
 class DeleteOnExit(object):
@@ -54,6 +55,14 @@ class RankorFixturesMixin(object):
         'name': 'contest1 from user2',
     }
 
+    game_user_data = {
+        'name': 'first game',
+    }
+
+    game_second_user_data = {
+        'name': 'second game',
+    }
+
     @fixture
     def dbsession(self, app):
         return app.dbsession
@@ -95,6 +104,26 @@ class RankorFixturesMixin(object):
 
         with DeleteOnExit(dbsession, contest):
             yield contest
+
+    @fixture
+    def game_from_user(self, dbsession, user, contest_from_user):
+        game_data = dict(self.game_user_data)
+        game_data['owner'] = user
+        game_data['contest'] = contest_from_user
+        game = Game(**game_data)
+
+        with DeleteOnExit(dbsession, game):
+            yield game
+
+    @fixture
+    def game_from_second_user(self, dbsession, second_user, contest_from_user):
+        game_data = dict(self.game_second_user_data)
+        game_data['owner'] = second_user
+        game_data['contest'] = contest_from_user
+        game = Game(**game_data)
+
+        with DeleteOnExit(dbsession, game):
+            yield game
 
 
 class IntegrationFixture(RankorFixturesMixin, BaseIntegrationFixture):
