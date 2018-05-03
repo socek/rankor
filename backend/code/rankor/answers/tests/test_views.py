@@ -11,25 +11,18 @@ from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from rankor.answers.views import AdminAnswerListView
+from rankor.answers.views import AdminAnswerView
+from rankor.application.testing import DictLike
 
 
-class TestAdminAnswerListView(ViewFixtureMixin):
+class Fixtures(ViewFixtureMixin):
+    _view_cls = None
+
     @fixture
     def mrequest(self):
         request = MagicMock()
         request._cache = {}
         return request
-
-    @fixture
-    def mdbsession(self, view):
-        with patch.object(
-                AdminAnswerListView, 'dbsession',
-                new_callable=PropertyMock) as mock:
-            yield mock.return_value
-
-    @fixture
-    def view(self, mroot_factory, mrequest):
-        return AdminAnswerListView(mroot_factory, mrequest)
 
     @fixture
     def mcontest_query(self, mdbsession):
@@ -67,6 +60,39 @@ class TestAdminAnswerListView(ViewFixtureMixin):
         question_uuid = uuid4().hex
         matchdict['question_uuid'] = question_uuid
         return question_uuid
+
+    @fixture
+    def answer_uuid(self, matchdict):
+        answer_uuid = uuid4().hex
+        matchdict['answer_uuid'] = answer_uuid
+        return answer_uuid
+
+    @fixture
+    def manswer(self, answer_uuid, manswer_query, question_uuid):
+        manswer = DictLike({
+            'id': 5,
+            'uuid': answer_uuid,
+            'name': 'this is an answer',
+            'is_correct': True,
+            'question_uuid': question_uuid
+        })
+        manswer_query.get_by_uuid.return_value = manswer
+        return manswer
+
+    @fixture
+    def view(self, mroot_factory, mrequest):
+        return self._view_cls(mroot_factory, mrequest)
+
+    @fixture
+    def mdbsession(self, view):
+        with patch.object(
+                self._view_cls, 'dbsession',
+                new_callable=PropertyMock) as mock:
+            yield mock.return_value
+
+
+class TestAdminAnswerListView(Fixtures):
+    _view_cls = AdminAnswerListView
 
     def test_get_happy_path(
             self,
@@ -154,8 +180,7 @@ class TestAdminAnswerListView(ViewFixtureMixin):
         manswer_command.create.assert_called_once_with(
             name='my name',
             is_correct=True,
-            question_id=mquestion_query.get_by_uuid.return_value.id
-        )
+            question_id=mquestion_query.get_by_uuid.return_value.id)
 
     def test_post_when_contest_not_found(
             self,
@@ -195,3 +220,101 @@ class TestAdminAnswerListView(ViewFixtureMixin):
         """
         with raises(HTTPBadRequest):
             view.post()
+
+
+class TestAdminAnswerView(Fixtures):
+    _view_cls = AdminAnswerView
+
+    @fixture
+    def mvalidate(self, view):
+        with patch.object(view, 'validate') as mock:
+            yield mock
+
+    def test_get(
+            self,
+            view,
+            manswer,
+            answer_uuid,
+            contest_uuid,
+            mvalidate,
+    ):
+        """
+        .get should return data of the needed answer object.
+        """
+        assert view.get() == {
+            'id': manswer['id'],
+            'uuid': manswer['uuid'],
+            'name': manswer['name'],
+            'is_correct': manswer['is_correct'],
+            'question_uuid': manswer['question_uuid']
+        }
+
+        mvalidate.assert_called_once_with()
+
+    def test_patch(
+            self,
+            view,
+            manswer,
+            answer_uuid,
+            contest_uuid,
+            mvalidate,
+            mrequest,
+            manswer_command,
+    ):
+        """
+        .patch should update object by uuids
+        """
+        fields = {
+            'name': 'my new name',
+            'is_correct': False,
+        }
+        mrequest.json_body = fields
+
+        view.patch()
+
+        manswer_command.update_by_uuid(answer_uuid, fields)
+
+    def test_get_on_404(
+            self,
+            view,
+            manswer,
+            answer_uuid,
+            contest_uuid,
+            mvalidate,
+            manswer_query,
+    ):
+        """
+        .get should raise Http 404 when answer has not been found
+        """
+        manswer_query.get_by_uuid.side_effect = NoResultFound()
+
+        with raises(HTTPNotFound):
+            assert view.get()
+
+        mvalidate.assert_called_once_with()
+
+    def test_patch_on_404(
+            self,
+            view,
+            manswer,
+            answer_uuid,
+            contest_uuid,
+            mvalidate,
+            mrequest,
+            manswer_command,
+            manswer_query,
+    ):
+        """
+        .patch should raise Http 404 when answer has not been found
+        """
+        fields = {
+            'name': 'my new name',
+            'is_correct': False,
+        }
+        mrequest.json_body = fields
+        manswer_query.get_by_uuid.side_effect = NoResultFound()
+
+        with raises(HTTPNotFound):
+            view.patch()
+
+        assert not manswer_command.update_by_uuid.called

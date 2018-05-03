@@ -89,6 +89,9 @@ class TestAnswerCommand(Fixtures):
             answer_one,
             dbsession,
     ):
+        """
+        .upsert_collection should update the whole collection of objects
+        """
         answer_one_data = dict(
             name=answer_one.name,
             is_correct=True,
@@ -113,10 +116,16 @@ class TestAnswerCommand(Fixtures):
 
             assert names == set(['name', 'second'])
         finally:
-            (
-                dbsession.query(Answer)
-                .filter(Answer.question_id == question_one.id)
-                .filter(Answer.name == 'second')
-                .delete()
-            )
+            (dbsession.query(Answer)
+             .filter(Answer.question_id == question_one.id)
+             .filter(Answer.name == 'second').delete())
             dbsession.commit()
+
+    def test_update_by_uuid(self, command, answer_one, dbsession):
+        """
+        .update_by_uuid should update object
+        """
+        command.update_by_uuid(answer_one.uuid, {'name': 'updated'})
+
+        dbsession.refresh(answer_one)
+        assert answer_one.name == 'updated'
