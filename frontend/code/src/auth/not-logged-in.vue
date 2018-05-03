@@ -65,7 +65,7 @@ export default {
     onSubmit () {
       this.resource.login({}, this.fields).then((response) => {
         this.$store.commit('auth/logIn', response.body.jwt)
-        this.$router.push({name: 'Dashboard'})
+        this.$router.push({name: 'Contests'})
       }).catch((response) => {
         for (let item in this.errors) {
           this.errors[item] = []

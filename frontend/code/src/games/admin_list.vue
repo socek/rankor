@@ -15,6 +15,9 @@
             <td scope="row">{{index + 1}}</td>
             <td>{{game.name}}</td>
             <td>
+              <router-link :to="{name: 'HostView', params: {game_uuid: game.uuid}}">
+                <icon name="play"></icon>
+              </router-link>
               <gameEditDialog @onSuccess="refresh" :game_uuid="game.uuid"></gameEditDialog>
             </td>
           </tr>

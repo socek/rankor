@@ -8,6 +8,7 @@ import Contests from '@/contests/admin_list'
 import Questions from '@/questions/admin_list'
 import Answers from '@/answers/admin_list.vue'
 import Games from '@/games/admin_list'
+import HostView from '@/host/dashboard'
 
 Vue.use(Router)
 
@@ -62,6 +63,12 @@ export default new Router({
       path: '/games/',
       name: 'Games',
       component: Games,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/host/:game_uuid',
+      name: 'HostView',
+      component: HostView,
       beforeEnter: requireAuth
     }
   ]
