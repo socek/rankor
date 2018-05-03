@@ -30,3 +30,6 @@ class RestfulView(BaseRestfulView):
         self.validate()
         method = self.methods[self.request.method]
         return method()
+
+    def _object_validation(self, message):
+        return HTTPBadRequest(json=[message])
