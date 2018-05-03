@@ -5,6 +5,7 @@ from marshmallow.validate import Length
 
 
 class GameSchema(Schema):
+    uuid = String()
     contest_uuid = String()
     owner_id = Integer()
     name = String(

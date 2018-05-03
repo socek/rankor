@@ -7,6 +7,7 @@ import NotLoggedIn from '@/auth/not-logged-in'
 import Contests from '@/contests/admin_list'
 import Questions from '@/questions/admin_list'
 import Answers from '@/answers/admin_list.vue'
+import Games from '@/games/admin_list'
 
 Vue.use(Router)
 
@@ -55,6 +56,12 @@ export default new Router({
       path: '/contests/:contest_uuid/questions/:question_uuid',
       name: 'Answers',
       component: Answers,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/games/',
+      name: 'Games',
+      component: Games,
       beforeEnter: requireAuth
     }
   ]

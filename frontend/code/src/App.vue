@@ -6,6 +6,7 @@
 
         <b-navbar-nav>
           <b-nav-item v-if="isAuthenticated" :to="{name: 'Contests'}">Contests</b-nav-item>
+          <b-nav-item v-if="isAuthenticated" :to="{name: 'Games'}">Games</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

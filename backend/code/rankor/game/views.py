@@ -33,7 +33,6 @@ class GameBaseView(AuthenticatedView):
             raise HTTPNotFound()
 
     def _contest_uuid_to_id(self, contest_uuid):
-
         try:
             contest = self.contest_query.get_by_uuid(contest_uuid)
         except NoResultFound:
@@ -67,6 +66,4 @@ class AdminGameView(GameBaseView):
     def patch(self):
         game = self._get_game()
         fields = self.get_validated_fields(GameSchema())
-        fields['contest_id'] = (self._contest_uuid_to_id(
-            fields.pop('contest_uuid')))
         self.game_command.update_by_uuid(game.uuid, fields)

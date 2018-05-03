@@ -108,3 +108,4 @@ ENV/
 .awcache
 coverag
 .pytest_cache
+todo.txt
