@@ -1,47 +1,22 @@
 <template>
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
-      <h1>Questions</h1>
-      <h2>Game: {{game.name}}</h2>
-      <table class="table table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(question, index) in questions">
-            <td scope="row">{{index + 1}}</td>
-            <td>{{question.name}}</td>
-            <td>
-              <icon name="check" style="color: green" v-if="question.status == 'correct'"></icon>
-              <icon name="times" style="color: red;" v-if="question.status == 'incorrect'"></icon>
-              <icon name="hourglass" v-if="question.status == 'not started'"></icon>
-            </td>
-            <td>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <h1>Game: {{game.name}}</h1>
+      <questionsComponent></questionsComponent>
     </div>
   </div>
 </template>
 
 <script>
-  import hostResource from '@/host/resource'
   import gameResource from '@/games/resource'
+  import questionsComponent from '@/host/components/questions'
 
   export default {
     data () {
       return {
-        questions: [],
         game: {
           name: ''
         },
-        resource: hostResource(this),
         gameResource: gameResource(this)
       }
     },
@@ -54,10 +29,10 @@
         this.gameResource.get(params).then(response => {
           this.game = response.data
         })
-        this.resource.list_questions(params).then((response) => {
-          this.questions = response.data
-        })
       }
+    },
+    components: {
+      questionsComponent
     }
   }
 </script>
