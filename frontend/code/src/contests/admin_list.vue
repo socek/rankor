@@ -19,6 +19,7 @@
                 <icon name="list-ol"></icon>
               </router-link>
               <contestEditDialog @onSuccess="refresh" :contest_uuid="contest.uuid"></contestEditDialog>
+              <gameStart @onSuccess="refresh" :contest_uuid="contest.uuid"></gameStart>
             </td>
           </tr>
         </tbody>
@@ -31,6 +32,7 @@
   import contestCreateDialog from '@/contests/dialogs/create'
   import contestEditDialog from '@/contests/dialogs/edit'
   import contestResource from '@/contests/resource'
+  import gameStart from '@/games/dialogs/start'
 
   export default {
     data () {
@@ -51,7 +53,8 @@
     },
     components: {
       contestCreateDialog,
-      contestEditDialog
+      contestEditDialog,
+      gameStart
     }
   }
 </script>
