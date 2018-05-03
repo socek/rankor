@@ -1,5 +1,5 @@
-from rankor.application.drivers import Query
 from rankor.application.drivers import Command
+from rankor.application.drivers import Query
 
 from rankor.contest.models import Contest
 
@@ -18,14 +18,5 @@ class ContestQuery(Query):
 
 class ContestCommand(Command):
     model = Contest
+    _query = ContestQuery
 
-    @property
-    def query(self):
-        return ContestQuery(self.database)
-
-    def update_by_uuid(self, uuid, update):
-        update_raw = {}
-        for key, value in update.items():
-            update_raw[getattr(self.model, key)] = value
-        self.query._get_by_uuid(uuid).update(update_raw)
-        self.database.commit()
