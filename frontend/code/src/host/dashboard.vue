@@ -2,6 +2,7 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
       <h1>Game: {{game.name}}</h1>
+      <teamComponent></teamComponent>
       <questionsComponent></questionsComponent>
     </div>
   </div>
@@ -10,6 +11,7 @@
 <script>
   import gameResource from '@/games/resource'
   import questionsComponent from '@/host/components/questions'
+  import teamComponent from '@/host/components/teams'
 
   export default {
     data () {
@@ -32,7 +34,8 @@
       }
     },
     components: {
-      questionsComponent
+      questionsComponent,
+      teamComponent
     }
   }
 </script>

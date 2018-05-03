@@ -6,6 +6,8 @@ from rankor.auth.view_mixins import AuthenticatedView
 from rankor.game.drivers import GameQuery
 from rankor.host.schema import QuestionSchema
 from rankor.questions.drivers import QuestionQuery
+from rankor.team.drivers import TeamQuery
+from rankor.team.schema import TeamSchema
 
 
 class HostBaseView(AuthenticatedView):
@@ -37,4 +39,16 @@ class HostQuestionListView(HostBaseView):
         uuid = self._get_game_uuid()
         elements = self.question_query.list_for_game(uuid)
         result = QuestionSchema(many=True).dump(elements)
+        return result
+
+
+class HostTeamListView(HostBaseView):
+    @property
+    def team_query(self):
+        return TeamQuery(self.dbsession)
+
+    def get(self):
+        uuid = self._get_game_uuid()
+        elements = self.team_query.list_for_game(uuid)
+        result = TeamSchema(many=True).dump(elements)
         return result
