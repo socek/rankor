@@ -3,7 +3,7 @@ from sapp.decorators import WithContext
 from sqlalchemy.exc import IntegrityError
 
 from rankor import app
-from rankor.application.views import RestfulController
+from rankor.application.views import RestfulView
 from rankor.auth.drivers import UserCommand
 from rankor.auth.drivers import UserQuery
 from rankor.auth.jwt import encode_jwt_from_user
@@ -13,7 +13,7 @@ from rankor.auth.schemas import SignUpSchema
 GROUPS = ['authenticated']
 
 
-class LoginController(RestfulController):
+class LoginView(RestfulView):
     @property
     @WithContext(app, args=['dbsession'])
     def query(self, dbsession):
@@ -34,7 +34,7 @@ class LoginController(RestfulController):
             return user
 
 
-class SignUpView(RestfulController):
+class SignUpView(RestfulView):
     @property
     @WithContext(app, args=['dbsession'])
     def command(self, dbsession):

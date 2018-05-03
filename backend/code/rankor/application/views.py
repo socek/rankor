@@ -9,7 +9,7 @@ from sapp.plugins.pyramid.views import RestfulView as BaseRestfulView
 from rankor import app
 
 
-class RestfulController(BaseRestfulView):
+class RestfulView(BaseRestfulView):
     @property
     @WithContext(app, args=['dbsession'])
     def dbsession(self, dbsession):
@@ -22,3 +22,11 @@ class RestfulController(BaseRestfulView):
             raise HTTPNotAcceptable()
         except ValidationError as error:
             raise HTTPBadRequest(json=error.messages)
+
+    def validate(self):
+        pass
+
+    def __call__(self):
+        self.validate()
+        method = self.methods[self.request.method]
+        return method()

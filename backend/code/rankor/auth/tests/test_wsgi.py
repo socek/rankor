@@ -6,7 +6,7 @@ from rankor.application.testing import WebTestFixture
 from rankor.auth.jwt import encode_jwt_from_user
 
 
-class TestWebAuthController(WebTestFixture):
+class TestWebAuthView(WebTestFixture):
     url = '/auth'
     login_url = '/auth/login'
 
@@ -48,7 +48,7 @@ class TestWebAuthController(WebTestFixture):
         assert result.json == {'jwt': encode_jwt_from_user(user)}
 
 
-class TestWebSignUpFormController(WebTestFixture):
+class TestWebSignUpFormView(WebTestFixture):
     url = '/auth/signup'
 
     @fixture

@@ -31,13 +31,12 @@ class QuestionBaseView(ContestBaseView):
             raise HTTPNotFound()
 
     def validate(self):
+        super().validate()
         self._get_contest()
 
 
 class AdminQuestionListView(QuestionBaseView):
     def get(self):
-        self.validate()
-
         questions = self.question_query.list_for_contest(
             self._get_contest_uuid())
         schema = QuestionSchema()
@@ -48,8 +47,6 @@ class AdminQuestionListView(QuestionBaseView):
         return result
 
     def post(self):
-        self.validate()
-
         fields = self.get_validated_fields(NewQuestionSchema())
         fields['contest_id'] = self._get_contest().id
         self.question_command.create(**fields)
@@ -57,15 +54,11 @@ class AdminQuestionListView(QuestionBaseView):
 
 class AdminQuestionView(QuestionBaseView):
     def get(self):
-        self.validate()
-
         schema = QuestionSchema()
         question = self._get_question()
         return schema.dump(question)
 
     def patch(self):
-        self.validate()
-
         question = self._get_question()
         fields = self.get_validated_fields(NewQuestionSchema())
         self.question_command.update_by_uuid(question.uuid, fields)

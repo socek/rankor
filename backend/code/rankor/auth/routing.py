@@ -1,6 +1,6 @@
 def auth_routing(routing):
     routing.add(
-        'rankor.auth.views.LoginController',
+        'rankor.auth.views.LoginView',
         'login',
         '/auth/login')
     routing.add(

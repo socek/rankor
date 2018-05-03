@@ -1,5 +1,3 @@
-from unittest.mock import MagicMock
-from unittest.mock import PropertyMock
 from unittest.mock import patch
 from uuid import uuid4
 
@@ -7,23 +5,15 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotFound
 from pytest import fixture
 from pytest import raises
-from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from rankor.answers.views import AdminAnswerListView
 from rankor.answers.views import AdminAnswerView
 from rankor.application.testing import DictLike
+from rankor.application.testing import ViewFixture
 
 
-class Fixtures(ViewFixtureMixin):
-    _view_cls = None
-
-    @fixture
-    def mrequest(self):
-        request = MagicMock()
-        request._cache = {}
-        return request
-
+class Fixtures(ViewFixture):
     @fixture
     def mcontest_query(self, mdbsession):
         with patch('rankor.contest.views.ContestQuery') as mock:
@@ -43,11 +33,6 @@ class Fixtures(ViewFixtureMixin):
     def manswer_command(self, mdbsession):
         with patch('rankor.answers.views.AnswerCommand') as mock:
             yield mock.return_value
-
-    @fixture
-    def matchdict(self, mrequest):
-        mrequest.matchdict = {}
-        return mrequest.matchdict
 
     @fixture
     def contest_uuid(self, matchdict):
@@ -79,20 +64,9 @@ class Fixtures(ViewFixtureMixin):
         manswer_query.get_by_uuid.return_value = manswer
         return manswer
 
-    @fixture
-    def view(self, mroot_factory, mrequest):
-        return self._view_cls(mroot_factory, mrequest)
-
-    @fixture
-    def mdbsession(self, view):
-        with patch.object(
-                self._view_cls, 'dbsession',
-                new_callable=PropertyMock) as mock:
-            yield mock.return_value
-
 
 class TestAdminAnswerListView(Fixtures):
-    _view_cls = AdminAnswerListView
+    _view = AdminAnswerListView
 
     def test_get_happy_path(
             self,
@@ -133,13 +107,16 @@ class TestAdminAnswerListView(Fixtures):
             mquestion_query,
             contest_uuid,
             question_uuid,
+            mget_user,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'get'
+
         mcontest_query.get_by_uuid.side_effect = NoResultFound
         with raises(HTTPNotFound):
-            view.get()
+            view()
 
     def test_get_when_question_not_found(
             self,
@@ -149,13 +126,16 @@ class TestAdminAnswerListView(Fixtures):
             mquestion_query,
             contest_uuid,
             question_uuid,
+            mget_user,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'get'
         mquestion_query.get_by_uuid.side_effect = NoResultFound
+
         with raises(HTTPNotFound):
-            view.get()
+            view()
 
     def test_post(
             self,
@@ -190,13 +170,16 @@ class TestAdminAnswerListView(Fixtures):
             contest_uuid,
             question_uuid,
             mquestion_query,
+            mget_user,
     ):
         """
         .post should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'get'
         mcontest_query.get_by_uuid.side_effect = NoResultFound
+
         with raises(HTTPNotFound):
-            view.get()
+            view()
 
     def test_post_when_question_not_found(
             self,
@@ -206,13 +189,16 @@ class TestAdminAnswerListView(Fixtures):
             contest_uuid,
             question_uuid,
             mquestion_query,
+            mget_user,
     ):
         """
         .post should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'get'
         mquestion_query.get_by_uuid.side_effect = NoResultFound
+
         with raises(HTTPNotFound):
-            view.get()
+            view()
 
     def test_post_when_form_not_valid(self, view, mrequest, mcontest_query):
         """
@@ -223,12 +209,7 @@ class TestAdminAnswerListView(Fixtures):
 
 
 class TestAdminAnswerView(Fixtures):
-    _view_cls = AdminAnswerView
-
-    @fixture
-    def mvalidate(self, view):
-        with patch.object(view, 'validate') as mock:
-            yield mock
+    _view = AdminAnswerView
 
     def test_get(
             self,
@@ -236,7 +217,6 @@ class TestAdminAnswerView(Fixtures):
             manswer,
             answer_uuid,
             contest_uuid,
-            mvalidate,
     ):
         """
         .get should return data of the needed answer object.
@@ -249,15 +229,12 @@ class TestAdminAnswerView(Fixtures):
             'question_uuid': manswer['question_uuid']
         }
 
-        mvalidate.assert_called_once_with()
-
     def test_patch(
             self,
             view,
             manswer,
             answer_uuid,
             contest_uuid,
-            mvalidate,
             mrequest,
             manswer_command,
     ):
@@ -280,7 +257,6 @@ class TestAdminAnswerView(Fixtures):
             manswer,
             answer_uuid,
             contest_uuid,
-            mvalidate,
             manswer_query,
     ):
         """
@@ -291,15 +267,12 @@ class TestAdminAnswerView(Fixtures):
         with raises(HTTPNotFound):
             assert view.get()
 
-        mvalidate.assert_called_once_with()
-
     def test_patch_on_404(
             self,
             view,
             manswer,
             answer_uuid,
             contest_uuid,
-            mvalidate,
             mrequest,
             manswer_command,
             manswer_query,

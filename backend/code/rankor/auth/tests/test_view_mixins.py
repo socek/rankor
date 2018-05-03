@@ -5,9 +5,12 @@ from unittest.mock import sentinel
 from pyramid.httpexceptions import HTTPUnauthorized
 from pytest import fixture
 from pytest import raises
+from sqlalchemy.orm.exc import NoResultFound
 from undecorated import undecorated
 
+from rankor.application.testing import ViewFixture
 from rankor.auth.view_mixins import AuthMixin
+from rankor.auth.view_mixins import AuthenticatedView
 
 
 class TestAuthMixin(object):
@@ -118,3 +121,22 @@ class TestAuthMixin(object):
         mdecoded_jwt.return_value = {'uuid': sentinel.user_uuid}
 
         assert mixin.get_user_uuid() == sentinel.user_uuid
+
+
+class TestAuthenticatedView(ViewFixture):
+    _view = AuthenticatedView
+
+    def test_validate_when_user_found(self, view, mget_user):
+        """
+        .validate should do nothing, when the user is found
+        """
+        assert view.validate() is None
+
+    def test_validate_when_user_not_found(self, view, mget_user):
+        """
+        .validate should raise HTTPUnauthorized when the user is not found
+        """
+        mget_user.side_effect = NoResultFound()
+
+        with raises(HTTPUnauthorized):
+            view.validate()

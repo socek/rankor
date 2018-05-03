@@ -2,14 +2,13 @@ from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from rankor.application.cache import cache_per_request
-from rankor.application.views import RestfulController
-from rankor.auth.view_mixins import AuthMixin
+from rankor.auth.view_mixins import AuthenticatedView
 from rankor.contest.drivers import ContestCommand
 from rankor.contest.drivers import ContestQuery
 from rankor.contest.schema import ContestSchema
 
 
-class ContestBaseView(RestfulController, AuthMixin):
+class ContestBaseView(AuthenticatedView):
     @property
     def contest_query(self):
         return ContestQuery(self.dbsession)

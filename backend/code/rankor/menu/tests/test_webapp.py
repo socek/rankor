@@ -1,7 +1,7 @@
 from rankor.application.testing import WebTestFixture
 
 
-class TestWebAdsController(WebTestFixture):
+class TestWebAdsView(WebTestFixture):
     url = '/menu'
 
     def test_normal(self, fake_app):

@@ -1,5 +1,4 @@
 from unittest.mock import MagicMock
-from unittest.mock import PropertyMock
 from unittest.mock import patch
 from uuid import uuid4
 
@@ -7,25 +6,14 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotFound
 from pytest import fixture
 from pytest import raises
-from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sqlalchemy.orm.exc import NoResultFound
 
+from rankor.application.testing import ViewFixture
 from rankor.questions.views import AdminQuestionListView
 from rankor.questions.views import AdminQuestionView
 
 
-class Fixtures(ViewFixtureMixin):
-    @fixture
-    def mrequest(self):
-        request = MagicMock()
-        request._cache = {}
-        return request
-
-    @fixture
-    def matchdict(self, mrequest):
-        mrequest.matchdict = {}
-        return mrequest.matchdict
-
+class Fixtures(ViewFixture):
     @fixture
     def mcontest_query(self, mdbsession):
         with patch('rankor.contest.views.ContestQuery') as mock:
@@ -42,11 +30,6 @@ class Fixtures(ViewFixtureMixin):
             yield mock.return_value
 
     @fixture
-    def mvalidate(self, view):
-        with patch.object(view, 'validate', autospec=True) as mock:
-            yield mock
-
-    @fixture
     def contest_uuid(self, matchdict):
         contest_uuid = uuid4().hex
         matchdict['contest_uuid'] = contest_uuid
@@ -60,16 +43,7 @@ class Fixtures(ViewFixtureMixin):
 
 
 class TestAdminQuestionView(Fixtures):
-    @fixture
-    def view(self, mroot_factory, mrequest):
-        return AdminQuestionView(mroot_factory, mrequest)
-
-    @fixture
-    def mdbsession(self, view):
-        with patch.object(
-                AdminQuestionView, 'dbsession',
-                new_callable=PropertyMock) as mock:
-            yield mock.return_value
+    _view = AdminQuestionView
 
     def test_get_happy_path(
             self,
@@ -79,7 +53,6 @@ class TestAdminQuestionView(Fixtures):
             mcontest_query,
             contest_uuid,
             question_uuid,
-            mvalidate,
     ):
         """
         .get should return list of all questions assigned to a contest.
@@ -95,7 +68,6 @@ class TestAdminQuestionView(Fixtures):
             'category': str(obj['my cat']),
             'contest_uuid': str(obj['contest_uuid'])
         }
-        mvalidate.assert_called_once_with()
 
     def test_get_when_contest_not_found(
             self,
@@ -103,13 +75,17 @@ class TestAdminQuestionView(Fixtures):
             mrequest,
             mcontest_query,
             contest_uuid,
+            mget_user,
+            question_uuid,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'get'
         mcontest_query.get_by_uuid.side_effect = NoResultFound
+
         with raises(HTTPNotFound):
-            view.get()
+            view()
 
     def test_patch(
             self,
@@ -118,7 +94,6 @@ class TestAdminQuestionView(Fixtures):
             mquestion_command,
             mcontest_query,
             contest_uuid,
-            mvalidate,
             mquestion_query,
     ):
         """
@@ -137,7 +112,6 @@ class TestAdminQuestionView(Fixtures):
 
         mquestion_command.update_by_uuid.assert_called_once_with(
             uuid, mrequest.json_body)
-        mvalidate.assert_called_once_with()
 
     def test_patch_when_contest_not_found(
             self,
@@ -145,41 +119,32 @@ class TestAdminQuestionView(Fixtures):
             mrequest,
             mcontest_query,
             contest_uuid,
+            mget_user,
     ):
         """
         .patch should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'patch'
         mcontest_query.get_by_uuid.side_effect = NoResultFound
 
         with raises(HTTPNotFound):
-            view.patch()
+            view()
 
     def test_patch_when_form_not_valid(
             self,
             view,
             mrequest,
             mcontest_query,
-            mvalidate,
     ):
         """
         .patch should raise HTTPBadRequest when form is not valid
         """
         with raises(HTTPBadRequest):
             view.patch()
-        mvalidate.assert_called_once_with()
 
 
 class TestAdminQuestionListView(Fixtures):
-    @fixture
-    def view(self, mroot_factory, mrequest):
-        return AdminQuestionListView(mroot_factory, mrequest)
-
-    @fixture
-    def mdbsession(self, view):
-        with patch.object(
-                AdminQuestionListView, 'dbsession',
-                new_callable=PropertyMock) as mock:
-            yield mock.return_value
+    _view = AdminQuestionListView
 
     def test_get_happy_path(
             self,
@@ -211,13 +176,15 @@ class TestAdminQuestionListView(Fixtures):
             mrequest,
             mcontest_query,
             contest_uuid,
+            mget_user,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'get'
         mcontest_query.get_by_uuid.side_effect = NoResultFound
         with raises(HTTPNotFound):
-            view.get()
+            view()
 
     def test_post(
             self,
@@ -250,19 +217,24 @@ class TestAdminQuestionListView(Fixtures):
             mrequest,
             mcontest_query,
             contest_uuid,
+            mget_user,
     ):
         """
         .post should raise HTTPNotFound when contest not found
         """
+        mrequest.method = 'POST'
         mcontest_query.get_by_uuid.side_effect = NoResultFound
         with raises(HTTPNotFound):
-            view.post()
+            view()
 
-    def test_post_when_form_not_valid(self, view, mrequest, mcontest_query,
-                                      mvalidate):
+    def test_post_when_form_not_valid(
+            self,
+            view,
+            mrequest,
+            mcontest_query,
+    ):
         """
         .post should raise HTTPBadRequest when form is not valid
         """
         with raises(HTTPBadRequest):
             view.post()
-        mvalidate.assert_called_once_with()

@@ -9,13 +9,13 @@ from pytest import fixture
 from pytest import raises
 from sapp.plugins.pyramid.testing import ViewFixtureMixin
 
-from rankor.application.views import RestfulController
+from rankor.application.views import RestfulView
 
 
-class TestRestfulController(ViewFixtureMixin):
+class TestRestfulView(ViewFixtureMixin):
     @fixture
     def view(self, mroot_factory, mrequest):
-        return RestfulController(mroot_factory, mrequest)
+        return RestfulView(mroot_factory, mrequest)
 
     @fixture
     def mschema(self):

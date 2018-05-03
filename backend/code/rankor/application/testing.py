@@ -1,6 +1,10 @@
-from pytest import fixture
+from unittest.mock import MagicMock
+from unittest.mock import PropertyMock
+from unittest.mock import patch
 
+from pytest import fixture
 from sapp.plugins.pyramid.testing import BaseWebTestFixture
+from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sapp.plugins.sqlalchemy.recreate import RecreateDatabases
 from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
 
@@ -166,3 +170,33 @@ class DictLike(object):
 
     def __getitem__(self, name):
         return getattr(self, name)
+
+
+class ViewFixture(ViewFixtureMixin):
+    _view = None
+
+    @fixture
+    def view(self, mroot_factory, mrequest):
+        return self._view(mroot_factory, mrequest)
+
+    @fixture
+    def mrequest(self):
+        request = MagicMock()
+        request._cache = {}
+        return request
+
+    @fixture
+    def matchdict(self, mrequest):
+        mrequest.matchdict = {}
+        return mrequest.matchdict
+
+    @fixture
+    def mdbsession(self, view):
+        with patch.object(
+                self._view, 'dbsession', new_callable=PropertyMock) as mock:
+            yield mock.return_value
+
+    @fixture
+    def mget_user(self, view):
+        with patch.object(view, 'get_user', autospec=True) as mock:
+            yield mock

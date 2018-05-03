@@ -6,27 +6,27 @@ from pytest import raises
 from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sqlalchemy.exc import IntegrityError
 
-from rankor.auth.views import LoginController
+from rankor.auth.views import LoginView
 from rankor.auth.views import SignUpView
 
 
-class TestLoginController(ViewFixtureMixin):
+class TestLoginView(ViewFixtureMixin):
     @fixture
-    def ctrl(self, mroot_factory, mrequest):
-        return LoginController(mroot_factory, mrequest)
+    def view(self, mroot_factory, mrequest):
+        return LoginView(mroot_factory, mrequest)
 
 
 class TestSignUpView(ViewFixtureMixin):
     @fixture
-    def ctrl(self, mroot_factory, mrequest):
+    def view(self, mroot_factory, mrequest):
         return SignUpView(mroot_factory, mrequest)
 
     @fixture
-    def mcreate_user(self, ctrl):
-        with patch.object(ctrl, 'create_user') as mock:
+    def mcreate_user(self, view):
+        with patch.object(view, 'create_user') as mock:
             yield mock
 
-    def test_post_on_integrity_error(self, ctrl, mcreate_user, mrequest):
+    def test_post_on_integrity_error(self, view, mcreate_user, mrequest):
         """
         .post should raise HTTPBadRequest when integrity error raised by the
         database (this means, user with the same name already exists)
@@ -39,5 +39,5 @@ class TestSignUpView(ViewFixtureMixin):
         }
 
         with raises(HTTPBadRequest):
-            ctrl.post()
+            view.post()
 

@@ -28,22 +28,18 @@ class AnswerBaseView(QuestionBaseView):
             raise HTTPNotFound()
 
     def validate(self):
-        self._get_contest()
+        super().validate()
         self._get_question()
 
 
 class AdminAnswerListView(AnswerBaseView):
     def get(self):
-        self.validate()
-
         answers = self.answer_query.list_for_question(
             self._get_question_uuid())
         schema = AnswerSchema()
         return {'answers': [schema.dump(answer) for answer in answers]}
 
     def post(self):
-        self.validate()
-
         question = self._get_question()
 
         fields = self.get_validated_fields(AnswerSchema())
@@ -58,15 +54,11 @@ class AdminAnswerListView(AnswerBaseView):
 
 class AdminAnswerView(AnswerBaseView):
     def get(self):
-        self.validate()
-
         schema = AnswerSchema()
         answer = self._get_answer()
         return schema.dump(answer)
 
     def patch(self):
-        self.validate()
-
         answer = self._get_answer()
         fields = self.get_validated_fields(AnswerSchema())
         self.answer_command.update_by_uuid(answer.uuid, fields)
