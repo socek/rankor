@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h2>Teams</h2>
+    <h2>Teams <createDialog :game_uuid="game_uuid" @onSuccess="refresh"></createDialog></h2>
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
@@ -23,12 +23,14 @@
 
 <script>
   import teamResource from '@/team/resource'
+  import createDialog from '@/team/dialogs/create'
 
   export default {
     data () {
       return {
         teams: [],
-        resource: teamResource(this)
+        resource: teamResource(this),
+        game_uuid: this.$route.params.game_uuid
       }
     },
     created () {
@@ -37,12 +39,15 @@
     methods: {
       refresh () {
         let params = {
-          game_uuid: this.$route.params.game_uuid
+          game_uuid: this.game_uuid
         }
         this.resource.list(params).then((response) => {
           this.teams = response.data
         })
       }
+    },
+    components: {
+      createDialog
     }
   }
 </script>

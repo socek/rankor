@@ -66,7 +66,7 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/host/:game_uuid',
+      path: '/games/:game_uuid',
       name: 'HostView',
       component: HostView,
       beforeEnter: requireAuth

@@ -1,6 +1,6 @@
 <template>
   <dialogform
-    title="Create Contest"
+    title="Create Team"
     :form="form"
     @onSave="onSave"
     @onRefresh="refreshForm"
@@ -25,23 +25,31 @@
           {{ error }}
         </b-form-invalid-feedback>
       </b-form-group>
+      <input type="hidden"
     </template>
   </dialogform>
 </template>
 
 <script>
-  import contestResource from '@/contests/resource'
+  import teamResource from '@/team/resource'
   import baseForm from '@/forms'
   import dialogform from '@/common/dialogForm'
 
   export default {
+    props: ['game_uuid'],
     extends: baseForm,
     data () {
       return {
         form: this.prepareForm({
-          name: ''
+          name: '',
+          game_uuid: this.game_uuid
         }),
-        resource: contestResource(this)
+        resource: teamResource(this)
+      }
+    },
+    methods: {
+      saveCall () {
+        return this.resource.save({game_uuid: this.game_uuid}, this.form.fields)
       }
     },
     components: {
