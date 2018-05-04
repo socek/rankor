@@ -3,7 +3,8 @@ from marshmallow import pre_dump
 from marshmallow.fields import String
 
 
-class QuestionSchema(Schema):
+class FullQuestionSchema(Schema):
+    uuid = String()
     name = String()
     status = String()
 
@@ -11,6 +12,7 @@ class QuestionSchema(Schema):
     def convert(self, data):
         (question, is_correct) = data
         return {
+            'uuid': question.uuid,
             'name': question.name,
             'status': self._get_status(is_correct),
         }

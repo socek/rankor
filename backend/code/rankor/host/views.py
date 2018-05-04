@@ -4,8 +4,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from rankor.application.cache import cache_per_request
 from rankor.auth.view_mixins import AuthenticatedView
 from rankor.game.drivers import GameQuery
-from rankor.host.schema import QuestionSchema
+from rankor.host.schema import FullQuestionSchema
 from rankor.questions.drivers import QuestionQuery
+from rankor.questions.schema import QuestionSchema
 from rankor.team.drivers import TeamCommand
 from rankor.team.drivers import TeamQuery
 from rankor.team.schema import TeamSchema
@@ -39,8 +40,23 @@ class HostQuestionListView(HostBaseView):
     def get(self):
         uuid = self._get_game_uuid()
         elements = self.question_query.list_for_game(uuid)
-        result = QuestionSchema(many=True).dump(elements)
+        result = FullQuestionSchema(many=True).dump(elements)
         return result
+
+
+class HostQuestionView(HostBaseView):
+    def _get_question_uuid(self):
+        return self.request.matchdict['question_uuid']
+
+    @cache_per_request('question')
+    def _get_question(self):
+        try:
+            return self.question_query.get_by_uuid(self._get_question_uuid())
+        except NoResultFound:
+            raise HTTPNotFound()
+
+    def get(self):
+        return QuestionSchema().dump(self._get_question())
 
 
 class HostTeamListView(HostBaseView):

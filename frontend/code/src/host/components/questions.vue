@@ -20,6 +20,9 @@
             <icon name="hourglass" v-if="question.status == 'not started'"></icon>
           </td>
           <td>
+            <router-link :to="route_to_question(question)">
+              <icon name="gavel"></icon>
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -41,6 +44,15 @@
       this.refresh()
     },
     methods: {
+      route_to_question (question) {
+        return {
+          name: 'HostQuestionView',
+          params: {
+            game_uuid: this.$route.params.game_uuid,
+            question_uuid: question.uuid
+          }
+        }
+      },
       refresh () {
         let params = {game_uuid: this.$route.params.game_uuid}
         this.resource.list_questions(params).then((response) => {

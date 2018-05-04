@@ -9,6 +9,7 @@ import Questions from '@/questions/admin_list'
 import Answers from '@/answers/admin_list.vue'
 import Games from '@/games/admin_list'
 import HostView from '@/host/dashboard'
+import HostQuestionView from '@/host/question'
 
 Vue.use(Router)
 
@@ -69,6 +70,12 @@ export default new Router({
       path: '/games/:game_uuid',
       name: 'HostView',
       component: HostView,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/games/:game_uuid/question/:question_uuid',
+      name: 'HostQuestionView',
+      component: HostQuestionView,
       beforeEnter: requireAuth
     }
   ]
