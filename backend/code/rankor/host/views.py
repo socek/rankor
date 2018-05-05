@@ -1,9 +1,13 @@
 from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
+from rankor.answers.drivers import AnswerQuery
+from rankor.answers.schema import AnswerSchema
 from rankor.application.cache import cache_per_request
 from rankor.auth.view_mixins import AuthenticatedView
 from rankor.game.drivers import GameQuery
+from rankor.game_answer.drivers import GameAnswerCommand
+from rankor.host.schema import AnswerPostSchema
 from rankor.host.schema import FullQuestionSchema
 from rankor.questions.drivers import QuestionQuery
 from rankor.questions.schema import QuestionSchema
@@ -85,3 +89,37 @@ class HostTeamListView(HostBaseView):
         return {
             'team_uuid': team.uuid,
         }
+
+
+class HostAnswerListView(HostQuestionView):
+    @property
+    def team_query(self):
+        return TeamQuery(self.dbsession)
+
+    @property
+    def answer_query(self):
+        return AnswerQuery(self.dbsession)
+
+    @property
+    def game_answer_command(self):
+        return GameAnswerCommand(self.dbsession)
+
+    def get(self):
+        answers = self.answer_query.list_for_question(
+            self._get_question_uuid())
+        schema = AnswerSchema()
+        return {'answers': [schema.dump(answer) for answer in answers]}
+
+    def post(self):
+        fields = self.get_validated_fields(AnswerPostSchema())
+        print(fields, self.request.json)
+        game = self._get_game()
+        question = self._get_question()
+        team = self.team_query.get_by_uuid(fields['team_uuid'])
+        answer = self.answer_query.get_by_uuid(fields['answer_uuid'])
+        self.game_answer_command.upsert(
+            game.id,
+            question.id,
+            team.id,
+            answer.id,
+        )

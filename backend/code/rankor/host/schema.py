@@ -24,3 +24,8 @@ class FullQuestionSchema(Schema):
             return 'correct'
         else:
             return 'incorrect'
+
+
+class AnswerPostSchema(Schema):
+    team_uuid = String(required=True)
+    answer_uuid = String(required=True)

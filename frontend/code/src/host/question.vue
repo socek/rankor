@@ -16,14 +16,14 @@
       <ul>
         <li v-for="(answerObject, index) in answers">
           <input :id="'answer_' + index" type="radio" :value="answerObject.value" v-model="answer">
-          <label :for="'answer_' + index"">
+          <label :for="'answer_' + index" :class="{correct: answerObject.is_correct}">
             {{ answerObject.text }}
           </label>
         </li>
       </ul>
     </div>
 
-    <b-btn variant="primary">
+    <b-btn variant="primary" @click="onSave">
       Verify
     </b-btn>
 
@@ -41,15 +41,8 @@
         description: '',
         team: null,
         answer: null,
-        teams: [
-          { value: null, text: 'Please select a team' },
-          { value: 'a', text: 'First Team' },
-          { value: 'b', text: 'Second Team' }
-        ],
-        answers: [
-          { text: 'Toggle this custom radio', value: 'first' },
-          { text: 'Or toggle this other custom radio', value: 'second' }
-        ],
+        teams: [],
+        answers: [],
 
         game_uuid: this.$route.params.game_uuid,
         question_uuid: this.$route.params.question_uuid,
@@ -87,15 +80,42 @@
           this.category = question.category
         })
 
-        // get question with answers
-
-        // let params = {
-        //   game_uuid: this.game_uuid
-        // }
-        // this.resource.list(params).then((response) => {
-        //   this.questions = response.data
-        // })
+        this.hostResource.list_answers(params).then(response => {
+          this.answers = []
+          response.data.answers.forEach(answer => {
+            this.answers.push({
+              value: answer.uuid,
+              text: answer.name,
+              is_correct: answer.is_correct
+            })
+          })
+        })
+      },
+      onSave () {
+        let params = {
+          game_uuid: this.game_uuid,
+          question_uuid: this.question_uuid
+        }
+        let form = {
+          team_uuid: this.team,
+          answer_uuid: this.answer
+        }
+        this.hostResource.save_answer(params, form).then(response => {
+          this.$router.push({
+            name: 'HostView',
+            params: {
+              game_uuid: this.$route.params.game_uuid
+            }
+          })
+        })
       }
     }
   }
 </script>
+
+<style>
+  .correct {
+    background-color: #7FFF00;
+    padding: 3px;
+  }
+</style>

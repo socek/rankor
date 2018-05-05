@@ -8,6 +8,10 @@ def host_routing(routing):
         'host_question',
         '/host/{game_uuid}/questions/{question_uuid}')
     routing.add(
+        'rankor.host.views.HostAnswerListView',
+        'host_answers',
+        '/host/{game_uuid}/questions/{question_uuid}/answers')
+    routing.add(
         'rankor.host.views.HostTeamListView',
         'host_teams',
         '/host/{game_uuid}/teams')
