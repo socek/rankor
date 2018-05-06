@@ -1,31 +1,52 @@
 <template>
   <span>
     <h1>Question</h1>
-
-    <h2>Team</h2>
-    <b-form-select v-model="team" :options="teams" class="mb-3" />
-
     <h2>Name</h2>
     <p>{{ name }}</p>
 
     <h2>Description</h2>
     <p>{{ description }}</p>
 
-    <h2>Answers</h2>
-    <div>
-      <ul>
-        <li v-for="(answerObject, index) in answers">
-          <input :id="'answer_' + index" type="radio" :value="answerObject.value" v-model="answer">
-          <label :for="'answer_' + index" :class="{correct: answerObject.is_correct}">
-            {{ answerObject.text }}
-          </label>
-        </li>
-      </ul>
-    </div>
+    <form @submit.prevent="onSave">
+      <b-form-invalid-feedback  v-for="error in form.errors._schema"
+                                :key="error"
+                                :force-show="true" >
+        {{ error }}
+      </b-form-invalid-feedback>
 
-    <b-btn variant="primary" @click="onSave">
-      Verify
-    </b-btn>
+      <b-form-group
+                    label="Team:"
+                    label-for="teamField">
+        <b-form-select id="teamField"
+                        v-model="form.fields.team_uuid"
+                        :options="teams"
+                        :state="form.errors.team_uuid.length == 0 ? null : false"
+                        class="mb-3" />
+        </b-form-input>
+        <b-form-invalid-feedback v-for="error in form.errors.team_uuid" :key="error">
+          {{ error }}
+        </b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-form-group
+                    label="Answers:"
+                    label-for="answerField">
+        <b-form-invalid-feedback v-for="error in form.errors.answer_uuid" :key="error" :force-show="true">
+          {{ error }}
+        </b-form-invalid-feedback>
+
+        <ul>
+          <li v-for="(answer, index) in answers">
+            <input :id="'answer_' + index" type="radio" :value="answer.value" v-model="form.fields.answer_uuid">
+            <label :for="'answer_' + index" :class="{correct: answer.is_correct}">
+              {{ answer.text }}
+            </label>
+          </li>
+        </ul>
+      </b-form-group>
+
+      <input type="submit" value="Verify" class="btn btn-primary">
+    </form>
 
   </span>
 </template>
@@ -33,14 +54,18 @@
 <script>
   import teamResource from '@/team/resource'
   import hostResource from '@/host/resource'
+  import baseForm from '@/forms'
 
   export default {
+    extends: baseForm,
     data () {
       return {
         name: '',
         description: '',
-        team: null,
-        answer: null,
+        form: this.prepareForm({
+          team_uuid: null,
+          answer_uuid: null
+        }),
         teams: [],
         answers: [],
 
@@ -56,6 +81,8 @@
     },
     methods: {
       refresh () {
+        this.refreshForm()
+
         let params = {
           game_uuid: this.game_uuid
         }
@@ -89,25 +116,25 @@
               is_correct: answer.is_correct
             })
           })
+          this.form.fields = response.data.answer
         })
       },
-      onSave () {
+      saveCall () {
         let params = {
           game_uuid: this.game_uuid,
           question_uuid: this.question_uuid
         }
-        let form = {
-          team_uuid: this.team,
-          answer_uuid: this.answer
-        }
-        this.hostResource.save_answer(params, form).then(response => {
+        return this.hostResource.save_answer(params, this.form.fields)
+      },
+      onSave () {
+        this.saveCall().then((response) => {
           this.$router.push({
             name: 'HostView',
             params: {
               game_uuid: this.$route.params.game_uuid
             }
           })
-        })
+        }).catch(this.onError)
       }
     }
   }

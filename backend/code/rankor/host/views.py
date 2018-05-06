@@ -7,6 +7,7 @@ from rankor.application.cache import cache_per_request
 from rankor.auth.view_mixins import AuthenticatedView
 from rankor.game.drivers import GameQuery
 from rankor.game_answer.drivers import GameAnswerCommand
+from rankor.game_answer.drivers import GameAnswerQuery
 from rankor.host.schema import AnswerPostSchema
 from rankor.host.schema import FullQuestionSchema
 from rankor.questions.drivers import QuestionQuery
@@ -104,15 +105,33 @@ class HostAnswerListView(HostQuestionView):
     def game_answer_command(self):
         return GameAnswerCommand(self.dbsession)
 
+    @property
+    def game_answer_query(self):
+        return GameAnswerQuery(self.dbsession)
+
     def get(self):
+        game = self._get_game()
+        question = self._get_question()
+
         answers = self.answer_query.list_for_question(
             self._get_question_uuid())
         schema = AnswerSchema()
-        return {'answers': [schema.dump(answer) for answer in answers]}
+        result = {'answers': [schema.dump(answer) for answer in answers]}
+        try:
+            game_answer = self.game_answer_query.get_by_game_and_question(
+                game.id,
+                question.id,
+            )
+            result['answer'] = {
+                'team_uuid': game_answer.team.uuid,
+                'answer_uuid': game_answer.answer.uuid
+            }
+        except NoResultFound:
+            result['answer'] = {'team_uuid': None, 'answer_uuid': None}
+        return result
 
     def post(self):
         fields = self.get_validated_fields(AnswerPostSchema())
-        print(fields, self.request.json)
         game = self._get_game()
         question = self._get_question()
         team = self.team_query.get_by_uuid(fields['team_uuid'])

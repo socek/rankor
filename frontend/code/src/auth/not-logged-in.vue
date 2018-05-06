@@ -9,7 +9,7 @@
           {{ error }}
         </b-form-invalid-feedback>
 
-        <b-form-group id="emailFieldGroup"
+        <b-form-group
                       label="Email:"
                       label-for="emailField">
           <b-form-input id="emailField"
