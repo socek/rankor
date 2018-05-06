@@ -64,7 +64,6 @@ class GameView(RestfulView):
 
         value = self._get_value()
         while value['timestamp'] <= timestamp:
-            print('Waiting...')
             sleep(0.1)
             value = self._get_value()
         return value
