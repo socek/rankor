@@ -27,7 +27,7 @@ class QuestionQuery(Query):
         status (success, fail, not started).
         """
         return (
-            self.database.query(self.model, Answer.is_correct)
+            self.database.query(self.model, Answer.is_correct, GameAnswer)
             .join(Contest)
             .join(Game)
             .outerjoin(GameAnswer, GameAnswer.question_id == self.model.id)

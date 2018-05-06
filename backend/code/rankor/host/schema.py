@@ -7,14 +7,17 @@ class FullQuestionSchema(Schema):
     uuid = String()
     name = String()
     status = String()
+    team = String()
 
     @pre_dump()
     def convert(self, data):
-        (question, is_correct) = data
+        (question, is_correct, ga) = data
+
         return {
             'uuid': question.uuid,
             'name': question.name,
             'status': self._get_status(is_correct),
+            'team': self._get_team(ga)
         }
 
     def _get_status(self, is_correct):
@@ -24,6 +27,10 @@ class FullQuestionSchema(Schema):
             return 'correct'
         else:
             return 'incorrect'
+
+    def _get_team(self, ga):
+        if ga and ga.team:
+            return ga.team.name
 
 
 class AnswerPostSchema(Schema):

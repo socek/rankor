@@ -7,6 +7,7 @@
           <th scope="col">#</th>
           <th scope="col">Name</th>
           <th scope="col">Status</th>
+          <th scope="col">Team</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -19,6 +20,7 @@
             <icon name="times" style="color: red;" v-if="question.status == 'incorrect'"></icon>
             <icon name="hourglass" v-if="question.status == 'not started'"></icon>
           </td>
+          <td>{{question.team}}</td>
           <td>
             <router-link :to="route_to_question(question)">
               <icon name="gavel"></icon>
