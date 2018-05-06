@@ -11,6 +11,7 @@ def default():
     logging(settings)
     database(settings)
     jwt(settings)
+    redis(settings)
     return settings
 
 
@@ -80,3 +81,9 @@ def alembic(settings):
 def jwt(settings):
     settings['jwt:algorithm'] = 'HS256'
     settings['jwt:secret'] = environ['JWT_SECRET']
+
+
+def redis(settings):
+    settings['redis:host'] = 'redis'
+    settings['redis:port'] = 6379
+    settings['redis:db'] = 0

@@ -4,6 +4,7 @@ from sapp.plugins.pyramid.plugins import RoutingPlugin
 from sapp.plugins.settings import SettingsPlugin
 from sapp.plugins.sqlalchemy.plugin import DatabasePlugin
 
+from rankor.application.redisplugin import RedisPlugin
 from rankor.application.routing import RankorRouting
 
 
@@ -13,3 +14,4 @@ class RankorConfigurator(ConfiguratorWithPyramid):
         self.add_plugin(LoggingPlugin())
         self.add_plugin(DatabasePlugin('dbsession'))
         self.add_plugin(RoutingPlugin(RankorRouting))
+        self.add_plugin(RedisPlugin())
