@@ -33,7 +33,7 @@ def logging(settings):
             },
         },
         'loggers': {
-            '': {
+            'root': {
                 'level': 'DEBUG',
                 'handlers': ['console'],
             },
@@ -47,23 +47,14 @@ def logging(settings):
                 'handlers': ['console'],
                 'qualname': 'alembic',
             },
-            'ccads': {
+            'rankor': {
                 'level': 'DEBUG',
                 'handlers': ['console'],
-                'qualname': 'ccads',
-            },
-            'waitress': {
-                'level': 'ERROR',
-                'handlers': ['console'],
+                'qualname': 'rankor',
             },
             'celery': {
                 'handlers': ['console'],
                 'level': 'ERROR',
-            },
-            'parso.python.diff': {
-                'handlers': [],
-                'level': 'DEBUG',
-                'propagate': False
             }
         }
     }

@@ -10,8 +10,16 @@ services:
       - ./nginx:/etc/nginx
 
   backend:
+    image: backend
     build: backend
     env_file: .env
+    volumes:
+      - ./backend/code:/code
+
+  websockets:
+    image: backend
+    env_file: .env
+    command: /code/scripts/start_webcokets
     volumes:
       - ./backend/code:/code
 
