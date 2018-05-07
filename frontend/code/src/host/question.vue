@@ -78,6 +78,12 @@
     },
     created () {
       this.refresh()
+      let params = {
+        question_uuid: this.$route.params.question_uuid,
+        game_uuid: this.$route.params.game_uuid,
+        view: 'question'
+      }
+      this.hostResource.change_view(params, params)
     },
     methods: {
       refresh () {

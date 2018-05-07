@@ -1,7 +1,4 @@
-from json import dumps
-from json import loads
 from time import sleep
-from time import time
 
 from pyramid.httpexceptions import HTTPNotFound
 from sapp.decorators import WithContext
@@ -11,6 +8,7 @@ from rankor import app
 from rankor.application.cache import cache_per_request
 from rankor.application.views import RestfulView
 from rankor.game.drivers import GameQuery
+from rankor.game_screen.models import GameScreen
 from rankor.game_screen.schemas import GameViewSchema
 
 
@@ -38,24 +36,6 @@ class GameView(RestfulView):
         super().validate()
         self._get_game()
 
-    def _get_game_key(self):
-        return self.request.matchdict['game_uuid'] + ':game_view'
-
-    def _get_value(self):
-        key = self._get_game_key()
-        value = self.redis.get(key)
-        if value:
-            return loads(value)
-        else:
-            self._set_value(view=None)
-            return self.redis.get(key)
-
-    def _set_value(self, **kwargs):
-        key = self._get_game_key()
-        data = dict(timestamp=time())
-        data.update(kwargs)
-        return self.redis.set(key, dumps(data))
-
     def get(self):
         try:
             timestamp = float(self.request.GET.get('timestamp'))
@@ -70,4 +50,4 @@ class GameView(RestfulView):
 
     def post(self):
         fields = self.get_validated_fields(GameViewSchema())
-        self._set_value(**fields)
+        GameScreen(self.redis, self._get_game_uuid()).set_value(**fields)

@@ -9,19 +9,20 @@
         This is highscore
       </div>
 
-      <div v-if="showView('question')">
-        This is question
-      </div>
+      <question v-if="showView('question')" :question_uuid="question_uuid"></question>
     </div>
   </div>
 </template>
 
 <script>
+  import question from '@/game_screen/question'
+
   export default {
     data () {
       return {
         view: 'connecting',
-        connected: false
+        connected: false,
+        question_uuid: null
       }
     },
     methods: {
@@ -37,8 +38,12 @@
       this.$options.sockets.onmessage = (event) => {
         let data = JSON.parse(event.data)
         this.view = data.view
+        this.question_uuid = data.question_uuid
       }
       this.$connect()
+    },
+    components: {
+      question
     }
   }
 </script>
