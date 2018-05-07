@@ -47,6 +47,8 @@ class Client(object):
     async def run_loop(self):
         timestamp = time()
         value = self._get_value()
+        await self.websocket.send(dumps(value))
+
         while True:
             while value['timestamp'] <= timestamp:
                 await sleep(0.1)

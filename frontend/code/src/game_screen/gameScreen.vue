@@ -20,22 +20,13 @@
   export default {
     data () {
       return {
-        view: 'highscore',
+        view: 'connecting',
         connected: false
       }
     },
     methods: {
       showView (name) {
-        if (name === 'connecting') {
-          return !this.connected
-        } else {
-          return this.view === name
-        }
-        // if (!this.connected) {
-        //   return name === 'connecting'
-        // } else {
-        //   return this.view === name
-        // }
+        return this.view === name
       }
     },
     created () {
