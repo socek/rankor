@@ -10,6 +10,7 @@ import Answers from '@/answers/admin_list.vue'
 import Games from '@/games/admin_list'
 import HostView from '@/host/dashboard'
 import HostQuestionView from '@/host/question'
+import GameScreen from '@/game_screen/gameScreen'
 
 Vue.use(Router)
 
@@ -77,6 +78,11 @@ export default new Router({
       name: 'HostQuestionView',
       component: HostQuestionView,
       beforeEnter: requireAuth
+    },
+    {
+      path: '/games/:game_uuid/screen',
+      name: 'GameScreen',
+      component: GameScreen
     }
   ]
 })

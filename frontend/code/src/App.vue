@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable="md" type="dark">
+    <b-navbar toggleable="md" type="dark" v-if="isNavbar">
       <b-navbar-brand href="#">Rankor Admin Panel</b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
 
@@ -34,6 +34,9 @@
     computed: {
       isAuthenticated () {
         return this.$store.getters['auth/isAuthenticated']
+      },
+      isNavbar () {
+        return this.$route.name !== 'GameScreen'
       }
     },
     name: 'app',

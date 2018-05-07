@@ -5,6 +5,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
+import VueNativeSock from 'vue-native-websocket'
 
 import App from '@/App'
 import router from '@/routing'
@@ -26,6 +27,10 @@ Vue.http.interceptors.push((request, next) => {
   next()
 })
 Vue.component('icon', Icon)
+
+Vue.use(VueNativeSock, 'ws://' + window.location.hostname + '/wsapp', {
+  connectManually: true
+})
 
 store.dispatch('auth/tryAutoLogin')
 
