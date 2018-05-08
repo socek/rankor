@@ -50,4 +50,6 @@ class GameView(RestfulView):
 
     def post(self):
         fields = self.get_validated_fields(GameViewSchema())
-        GameScreen(self.redis, self._get_game_uuid()).set_value(**fields)
+        view = fields.pop('view')
+        GameScreen(self.redis, self._get_game_uuid()).set_value(
+            view=view, view_data=fields)

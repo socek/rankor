@@ -9,7 +9,13 @@
         This is highscore
       </div>
 
-      <question v-if="showView('question')" :question_uuid="question_uuid"></question>
+      <question
+                v-if="showView('question')"
+                :question_uuid="question_uuid"
+                :timestamp="timestamp"
+                :team_name="team_name"
+                :answer_uuid="answer_uuid"
+      ></question>
     </div>
   </div>
 </template>
@@ -22,7 +28,8 @@
       return {
         view: 'connecting',
         connected: false,
-        question_uuid: null
+        question_uuid: null,
+        timestamp: null
       }
     },
     methods: {
@@ -38,7 +45,10 @@
       this.$options.sockets.onmessage = (event) => {
         let data = JSON.parse(event.data)
         this.view = data.view
-        this.question_uuid = data.question_uuid
+        this.question_uuid = data.view_data.question_uuid
+        this.team_name = data.view_data.team_name
+        this.answer_uuid = data.view_data.answer_uuid
+        this.timestamp = data.timestamp
       }
       this.$connect()
     },

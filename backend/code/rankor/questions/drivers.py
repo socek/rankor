@@ -6,6 +6,7 @@ from rankor.contest.models import Contest
 from rankor.game.models import Game
 from rankor.game_answer.models import GameAnswer
 from rankor.questions.models import Question
+from rankor.team.models import Team
 
 
 class QuestionQuery(Query):
@@ -36,6 +37,26 @@ class QuestionQuery(Query):
             .order_by(self.model.category.desc())
             .order_by(self.model.created_at)
             .all()
+        )
+
+    def get_for_answer(self, uuid, game_uuid):
+        return (
+            self.database.query(
+                self.model.id.label('id'),
+                self.model.uuid.label('uuid'),
+                self.model.category.label('category'),
+                self.model.description.label('description'),
+                Contest.uuid.label('contest_uuid'),
+                Team.name.label('team')
+            )
+            .join(Contest)
+            .join(Game)
+            .outerjoin(GameAnswer, GameAnswer.question_id == self.model.id)
+            .outerjoin(Answer, GameAnswer.answer_id == Answer.id)
+            .outerjoin(Team, GameAnswer.team_id == Team.id)
+            .filter(Game.uuid == game_uuid)
+            .filter(self.model.uuid == uuid)
+            .one()
         )
 
 

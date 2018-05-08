@@ -1,14 +1,13 @@
 <template>
   <span>
     <h1>Pytanie:</h1>
-    <h2>{{ team }}</h2>
-    <h3>{{ category }}</h3>
+    <h2>Drużyna: {{ team }}</h2>
+    <h3>Kategoria: {{ category }}</h3>
     <p>{{ description }}</p>
 
     <ul>
-      <li v-for="(answer, index) in answers">
-          {{ index }}: {{ answer.text }}
-        </label>
+      <li v-for="(answer, index) in answers" >
+        {{ index + 1 }}: <span :class='{selected: answer.value === answer_uuid, answer: true}'>{{ answer.text }}</span>
       </li>
     </ul>
   </span>
@@ -18,10 +17,10 @@
   import hostResource from '@/host/resource'
 
   export default {
-    props: ['question_uuid'],
+    props: ['question_uuid', 'timestamp', 'team_name', 'answer_uuid'],
     data () {
       return {
-        team: null,
+        team: this.team_name,
         description: null,
         category: null,
         answers: [],
@@ -33,7 +32,7 @@
     },
     methods: {
       refresh () {
-        this.team = null
+        this.team = this.team_name
         this.description = null
         this.answers = []
       },
@@ -48,12 +47,40 @@
           this.description = question.description
           this.category = question.category
         })
+
+        this.hostResource.list_answers(params).then(response => {
+          this.answers = []
+          response.data.answers.forEach(answer => {
+            this.answers.push({
+              text: answer.name,
+              value: answer.uuid
+            })
+          })
+        })
       }
     },
     watch: {
-      question_uuid (val) {
+      timestamp (val) {
         this.fillQuestion()
       }
     }
   }
 </script>
+
+<style>
+  .selected {
+    background-color: yellow;
+    /*color: white;*/
+  }
+  .answer {
+    padding: 5px;
+  }
+  .success {
+    background-color: green;
+    color: white;
+  }
+  .fail {
+    background-color: red;
+    color: white;
+  }
+</style>

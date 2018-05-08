@@ -21,3 +21,5 @@ class QuestionSchema(NewQuestionSchema):
         required=True,
         allow_none=False,
     )
+    team = String()
+    category = String()

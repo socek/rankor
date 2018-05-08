@@ -1,6 +1,8 @@
 from pyramid.httpexceptions import HTTPNotFound
+from sapp.decorators import WithContext
 from sqlalchemy.orm.exc import NoResultFound
 
+from rankor import app
 from rankor.answers.drivers import AnswerQuery
 from rankor.answers.schema import AnswerSchema
 from rankor.application.cache import cache_per_request
@@ -8,8 +10,10 @@ from rankor.auth.view_mixins import AuthenticatedView
 from rankor.game.drivers import GameQuery
 from rankor.game_answer.drivers import GameAnswerCommand
 from rankor.game_answer.drivers import GameAnswerQuery
+from rankor.game_screen.models import GameScreen
 from rankor.host.schema import AnswerPostSchema
 from rankor.host.schema import FullQuestionSchema
+from rankor.host.schema import SelectSchema
 from rankor.questions.drivers import QuestionQuery
 from rankor.questions.schema import QuestionSchema
 from rankor.team.drivers import TeamCommand
@@ -56,7 +60,9 @@ class HostQuestionView(HostBaseView):
     @cache_per_request('question')
     def _get_question(self):
         try:
-            return self.question_query.get_by_uuid(self._get_question_uuid())
+            return self.question_query.get_for_answer(
+                self._get_question_uuid(),
+                self._get_game_uuid())
         except NoResultFound:
             raise HTTPNotFound()
 
@@ -142,3 +148,14 @@ class HostAnswerListView(HostQuestionView):
             team.id,
             answer.id,
         )
+
+
+class HostSelectView(HostQuestionView):
+    @WithContext(app, args=['redis'])
+    def game_screen(self, redis):
+        return GameScreen(redis, self._get_game_uuid())
+
+    def post(self):
+        fields = self.get_validated_fields(SelectSchema())
+        self.game_screen().set_value(view='question', view_data=fields)
+        return {}
