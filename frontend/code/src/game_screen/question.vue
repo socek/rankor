@@ -4,10 +4,9 @@
     <h2>Drużyna: {{ team }}</h2>
     <h3>Kategoria: {{ category }}</h3>
     <p>{{ description }}</p>
-
     <ul>
       <li v-for="(answer, index) in answers" >
-        {{ index + 1 }}: <span :class='{selected: answer.value === answer_uuid, answer: true}'>{{ answer.text }}</span>
+        {{ index + 1 }}: <span :class='{selected: answer.value === answer_uuid, answer: true, success: answer.value === answer_uuid && is_correct === true, fail: answer.value === answer_uuid && is_correct === false}'>{{ answer.text }}</span>
       </li>
     </ul>
   </span>
@@ -17,7 +16,7 @@
   import hostResource from '@/host/resource'
 
   export default {
-    props: ['question_uuid', 'timestamp', 'team_name', 'answer_uuid'],
+    props: ['question_uuid', 'timestamp', 'team_name', 'answer_uuid', 'is_correct'],
     data () {
       return {
         team: this.team_name,

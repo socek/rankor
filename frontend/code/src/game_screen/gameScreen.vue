@@ -15,6 +15,7 @@
                 :timestamp="timestamp"
                 :team_name="team_name"
                 :answer_uuid="answer_uuid"
+                :is_correct="is_correct"
       ></question>
     </div>
   </div>
@@ -48,6 +49,7 @@
         this.question_uuid = data.view_data.question_uuid
         this.team_name = data.view_data.team_name
         this.answer_uuid = data.view_data.answer_uuid
+        this.is_correct = data.view_data.is_correct
         this.timestamp = data.timestamp
       }
       this.$connect()

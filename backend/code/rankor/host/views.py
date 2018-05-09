@@ -61,8 +61,7 @@ class HostQuestionView(HostBaseView):
     def _get_question(self):
         try:
             return self.question_query.get_for_answer(
-                self._get_question_uuid(),
-                self._get_game_uuid())
+                self._get_question_uuid(), self._get_game_uuid())
         except NoResultFound:
             raise HTTPNotFound()
 
@@ -115,6 +114,10 @@ class HostAnswerListView(HostQuestionView):
     def game_answer_query(self):
         return GameAnswerQuery(self.dbsession)
 
+    @WithContext(app, args=['redis'])
+    def game_screen(self, redis):
+        return GameScreen(redis, self._get_game_uuid())
+
     def get(self):
         game = self._get_game()
         question = self._get_question()
@@ -148,6 +151,14 @@ class HostAnswerListView(HostQuestionView):
             team.id,
             answer.id,
         )
+        self.game_screen().set_value(
+            view='question',
+            view_data={
+                'team_name': team.name,
+                'question_uuid': question.uuid,
+                'answer_uuid': answer.uuid,
+                'is_correct': answer.is_correct
+            })
 
 
 class HostSelectView(HostQuestionView):
