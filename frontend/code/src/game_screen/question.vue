@@ -27,7 +27,11 @@
       }
     },
     created () {
+      console.log('created')
       this.fillQuestion()
+    },
+    updated () {
+      console.log('updated')
     },
     methods: {
       refresh () {

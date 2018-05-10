@@ -5,9 +5,8 @@
         Connecting...
       </div>
 
-      <div v-if="showView('highscore')">
-        This is highscore
-      </div>
+      <highscore v-if="showView('highscore')">
+      </highscore>
 
       <question
                 v-if="showView('question')"
@@ -23,6 +22,7 @@
 
 <script>
   import question from '@/game_screen/question'
+  import highscore from '@/game_screen/highscore'
 
   export default {
     data () {
@@ -55,7 +55,9 @@
       this.$connect()
     },
     components: {
-      question
+      question,
+      highscore
     }
   }
 </script>
+
