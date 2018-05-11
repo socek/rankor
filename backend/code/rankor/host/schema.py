@@ -36,9 +36,3 @@ class FullQuestionSchema(Schema):
 class AnswerPostSchema(Schema):
     team_uuid = String()
     answer_uuid = String()
-
-
-class SelectSchema(Schema):
-    team_uuid = String()
-    team_name = String()
-    question_uuid = String()

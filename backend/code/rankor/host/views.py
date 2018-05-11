@@ -13,7 +13,6 @@ from rankor.game_answer.drivers import GameAnswerQuery
 from rankor.game_screen.models import GameScreen
 from rankor.host.schema import AnswerPostSchema
 from rankor.host.schema import FullQuestionSchema
-from rankor.host.schema import SelectSchema
 from rankor.questions.drivers import QuestionQuery
 from rankor.questions.schema import QuestionSchema
 from rankor.team.drivers import TeamCommand
@@ -30,46 +29,6 @@ class HostBaseView(AuthenticatedView):
     def question_query(self):
         return QuestionQuery(self.dbsession)
 
-    def _get_game_uuid(self):
-        return self.request.matchdict['game_uuid']
-
-    @cache_per_request('game')
-    def _get_game(self):
-        try:
-            return self.game_query.get_by_uuid(self._get_game_uuid())
-        except NoResultFound:
-            raise HTTPNotFound()
-
-    def validate(self):
-        super().validate()
-        self._get_game()
-
-
-class HostQuestionListView(HostBaseView):
-    def get(self):
-        uuid = self._get_game_uuid()
-        elements = self.question_query.list_for_game(uuid)
-        result = FullQuestionSchema(many=True).dump(elements)
-        return result
-
-
-class HostQuestionView(HostBaseView):
-    def _get_question_uuid(self):
-        return self.request.matchdict['question_uuid']
-
-    @cache_per_request('question')
-    def _get_question(self):
-        try:
-            return self.question_query.get_for_answer(
-                self._get_question_uuid(), self._get_game_uuid())
-        except NoResultFound:
-            raise HTTPNotFound()
-
-    def get(self):
-        return QuestionSchema().dump(self._get_question())
-
-
-class HostTeamListView(HostBaseView):
     @property
     def team_query(self):
         return TeamQuery(self.dbsession)
@@ -77,30 +36,6 @@ class HostTeamListView(HostBaseView):
     @property
     def team_command(self):
         return TeamCommand(self.dbsession)
-
-    def get(self):
-        uuid = self._get_game_uuid()
-        elements = self.team_query.list_for_game(uuid)
-        result = TeamSchema(many=True).dump(elements)
-        return result
-
-    def post(self):
-        game = self._get_game()
-
-        fields = self.get_validated_fields(TeamSchema())
-        fields['game_id'] = game.id
-
-        team = self.team_command.create(**fields)
-
-        return {
-            'team_uuid': team.uuid,
-        }
-
-
-class HostAnswerListView(HostQuestionView):
-    @property
-    def team_query(self):
-        return TeamQuery(self.dbsession)
 
     @property
     def answer_query(self):
@@ -118,26 +53,84 @@ class HostAnswerListView(HostQuestionView):
     def game_screen(self, redis):
         return GameScreen(redis, self._get_game_uuid())
 
-    def get(self):
-        game = self._get_game()
-        question = self._get_question()
+    def _get_game_uuid(self):
+        return self.request.matchdict['game_uuid']
 
+    @cache_per_request('game')
+    def _get_game(self):
+        try:
+            return self.game_query.get_by_uuid(self._get_game_uuid())
+        except NoResultFound:
+            raise HTTPNotFound()
+
+    def validate(self):
+        super().validate()
+        self._get_game()
+
+
+class HostQuestionBaseView(HostBaseView):
+    def _get_question_uuid(self):
+        return self.request.matchdict['question_uuid']
+
+    @cache_per_request('question')
+    def _get_question(self):
+        try:
+            return self.question_query.get_for_answer(
+                self._get_question_uuid(), self._get_game_uuid())
+        except NoResultFound:
+            raise HTTPNotFound()
+
+    def validate(self):
+        super().validate()
+        self._get_question()
+
+
+class HostQuestionListView(HostBaseView):
+    def get(self):
+        uuid = self._get_game_uuid()
+        elements = self.question_query.list_for_game(uuid)
+        result = FullQuestionSchema(many=True).dump(elements)
+        return result
+
+
+class HostQuestionView(HostQuestionBaseView):
+    def get(self):
+        return {
+            'question': self._get_question_result(),
+            'teams': self._get_teams_result(),
+            'answers': self._get_answers_result(),
+            'answer': self._get_current_answer_result(),
+        }
+
+    def _get_question_result(self):
+        return QuestionSchema().dump(self._get_question())
+
+    def _get_teams_result(self):
+        uuid = self._get_game_uuid()
+        elements = self.team_query.list_for_game(uuid)
+        return TeamSchema(many=True).dump(elements)
+
+    def _get_answers_result(self):
         answers = self.answer_query.list_for_question(
             self._get_question_uuid())
         schema = AnswerSchema()
-        result = {'answers': [schema.dump(answer) for answer in answers]}
+        return [schema.dump(answer) for answer in answers]
+
+    def _get_current_answer_result(self):
+        game = self._get_game()
+        question = self._get_question()
+
         try:
             game_answer = self.game_answer_query.get_by_game_and_question(
                 game.id,
                 question.id,
             )
-            result['answer'] = {
+            return {
                 'team_uuid': game_answer.team.uuid,
                 'answer_uuid': game_answer.answer.uuid
             }
         except NoResultFound:
-            result['answer'] = {'team_uuid': None, 'answer_uuid': None}
-        return result
+            return {'team_uuid': None, 'answer_uuid': None}
 
     def post(self):
         fields = self.get_validated_fields(AnswerPostSchema())
@@ -161,12 +154,21 @@ class HostAnswerListView(HostQuestionView):
             })
 
 
-class HostSelectView(HostQuestionView):
-    @WithContext(app, args=['redis'])
-    def game_screen(self, redis):
-        return GameScreen(redis, self._get_game_uuid())
+class HostTeamListView(HostBaseView):
+    def get(self):
+        uuid = self._get_game_uuid()
+        elements = self.team_query.list_for_game(uuid)
+        result = TeamSchema(many=True).dump(elements)
+        return result
 
     def post(self):
-        fields = self.get_validated_fields(SelectSchema())
-        self.game_screen().set_value(view='question', view_data=fields)
-        return {}
+        game = self._get_game()
+
+        fields = self.get_validated_fields(TeamSchema())
+        fields['game_id'] = game.id
+
+        team = self.team_command.create(**fields)
+
+        return {
+            'team_uuid': team.uuid,
+        }

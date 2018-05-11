@@ -53,7 +53,6 @@
 </template>
 
 <script>
-  import teamResource from '@/team/resource'
   import hostResource from '@/host/resource'
   import baseForm from '@/forms'
 
@@ -73,7 +72,6 @@
         game_uuid: this.$route.params.game_uuid,
         question_uuid: this.$route.params.question_uuid,
 
-        teamResource: teamResource(this),
         hostResource: hostResource(this)
       }
     },
@@ -114,26 +112,24 @@
         this.refreshForm()
 
         let params = {
-          game_uuid: this.game_uuid
+          game_uuid: this.game_uuid,
+          question_uuid: this.question_uuid
         }
-        this.teamResource.list(params).then(response => {
+
+        this.hostResource.get_question(params).then(response => {
+          const question = response.data.question
+          this.name = question.name
+          this.description = question.description
+          this.category = question.category
+
           this.teams = [{ value: null, text: 'Please select a team' }]
-          response.data.forEach(team => {
+          response.data.teams.forEach(team => {
             this.teams.push({
               value: team.uuid,
               text: team.name
             })
           })
-        })
 
-        this.hostResource.get_question(this.params()).then(response => {
-          let question = response.data
-          this.name = question.name
-          this.description = question.description
-          this.category = question.category
-        })
-
-        this.hostResource.list_answers(this.params()).then(response => {
           this.answers = []
           response.data.answers.forEach(answer => {
             this.answers.push({

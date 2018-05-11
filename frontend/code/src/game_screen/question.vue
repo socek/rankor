@@ -27,11 +27,7 @@
       }
     },
     created () {
-      console.log('created')
       this.fillQuestion()
-    },
-    updated () {
-      console.log('updated')
     },
     methods: {
       refresh () {
@@ -45,18 +41,18 @@
           game_uuid: this.$route.params.game_uuid,
           question_uuid: this.question_uuid
         }
+
         this.hostResource.get_question(params).then(response => {
-          let question = response.data
+          const question = response.data.question
+          this.name = question.name
           this.description = question.description
           this.category = question.category
-        })
 
-        this.hostResource.list_answers(params).then(response => {
           this.answers = []
           response.data.answers.forEach(answer => {
             this.answers.push({
-              text: answer.name,
-              value: answer.uuid
+              value: answer.uuid,
+              text: answer.name
             })
           })
         })
