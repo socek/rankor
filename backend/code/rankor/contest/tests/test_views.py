@@ -50,7 +50,7 @@ class TestAdminContestListView(Fixtures):
         contest = {
             'name': 'one',
             'owner_id': 5,
-            'uuid': 'three',
+            'id': 'three',
         }
         mquery.list_for_owner.return_value = [contest]
 
@@ -82,7 +82,7 @@ class TestAdminContestView(Fixtures):
 
     def test_get(self, view, mget_contest):
         """
-        .get should return data from contest got by uuid
+        .get should return data from contest got by id
         """
         mget_contest.return_value = {
             'name': 'contest name'
@@ -94,18 +94,18 @@ class TestAdminContestView(Fixtures):
 
     def test_patch(self, view, mrequest, mget_contest, mcommand):
         """
-        .patch should update object by uuid
+        .patch should update object by id
         """
-        uuid = uuid4().hex
-        mget_contest.return_value.uuid = uuid
+        id = uuid4().hex
+        mget_contest.return_value.id = id
         mrequest.json_body = {
             'name': 'new name',
         }
 
         view.patch()
 
-        mcommand.update_by_uuid.assert_called_once_with(
-            uuid,
+        mcommand.update_by_id.assert_called_once_with(
+            id,
             {
                 'name': 'new name'
             })

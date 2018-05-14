@@ -18,7 +18,7 @@
       return {
         hostResource: hostResource(this),
         params: {
-          game_uuid: this.$route.params.game_uuid
+          game_id: this.$route.params.game_id
         }
       }
     },

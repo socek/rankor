@@ -17,13 +17,13 @@ class ContestBaseView(AuthenticatedView):
     def contest_command(self):
         return ContestCommand(self.dbsession)
 
-    def _get_contest_uuid(self):
-        return self.request.matchdict['contest_uuid']
+    def _get_contest_id(self):
+        return self.request.matchdict['contest_id']
 
     @cache_per_request('contest')
     def _get_contest(self):
         try:
-            return self.contest_query.get_by_uuid(self._get_contest_uuid())
+            return self.contest_query.get_by_id(self._get_contest_id())
         except NoResultFound:
             raise HTTPNotFound()
 
@@ -48,4 +48,4 @@ class AdminContestView(ContestBaseView):
     def patch(self):
         contest = self._get_contest()
         fields = self.get_validated_fields(ContestSchema())
-        self.contest_command.update_by_uuid(contest.uuid, fields)
+        self.contest_command.update_by_id(contest.id, fields)

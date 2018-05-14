@@ -46,7 +46,7 @@
   import dialogform from '@/common/dialogForm'
 
   export default {
-    props: ['answer_uuid'],
+    props: ['answer_id'],
     extends: baseForm,
     data () {
       return {
@@ -61,13 +61,13 @@
     methods: {
       fetchContent () {
         return this.resource.get({
-          contest_uuid: this.$route.params.contest_uuid,
-          question_uuid: this.$route.params.question_uuid,
-          answer_uuid: this.answer_uuid})
+          contest_id: this.$route.params.contest_id,
+          question_id: this.$route.params.question_id,
+          answer_id: this.answer_id})
       },
       saveCall () {
         return this.resource.update(
-          {answer_uuid: this.answer_uuid},
+          {answer_id: this.answer_id},
           this.form.fields)
       }
     },

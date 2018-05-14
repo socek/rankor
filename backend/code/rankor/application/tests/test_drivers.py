@@ -15,17 +15,17 @@ class TestQuery(IntegrationFixture):
         """
         return UserQuery(app.dbsession)
 
-    def test_get_by_uuid_when_not_exists(self, driver):
+    def test_get_by_id_when_not_exists(self, driver):
         """
-        .get_by_uuid should reaise NoResultFound when object with provided uuid
+        .get_by_id should reaise NoResultFound when object with provided id
         does not exists
         """
         with raises(NoResultFound):
-            driver.get_by_uuid('not-an-uuid')
+            driver.get_by_id('not-an-id')
 
-    def test_get_by_uuid_when_exists(self, driver, user):
+    def test_get_by_id_when_exists(self, driver, user):
         """
-        .get_by_uuid should return proper object, if object with provided uuid
+        .get_by_id should return proper object, if object with provided id
         exists.
         """
-        assert driver.get_by_uuid(user.uuid).id == user.id
+        assert driver.get_by_id(user.id).id == user.id

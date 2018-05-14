@@ -6,7 +6,7 @@
     <p>{{ description }}</p>
     <ul>
       <li v-for="(answer, index) in answers" >
-        {{ index + 1 }}: <span :class='{selected: answer.value === answer_uuid, answer: true, success: answer.value === answer_uuid && is_correct === true, fail: answer.value === answer_uuid && is_correct === false}'>{{ answer.text }}</span>
+        {{ index + 1 }}: <span :class='{selected: answer.value === answer_id, answer: true, success: answer.value === answer_id && is_correct === true, fail: answer.value === answer_id && is_correct === false}'>{{ answer.text }}</span>
       </li>
     </ul>
   </span>
@@ -16,7 +16,7 @@
   import hostResource from '@/host/resource'
 
   export default {
-    props: ['question_uuid', 'timestamp', 'team_name', 'answer_uuid', 'is_correct'],
+    props: ['question_id', 'timestamp', 'team_name', 'answer_id', 'is_correct'],
     data () {
       return {
         team: this.team_name,
@@ -38,8 +38,8 @@
       fillQuestion () {
         this.refresh()
         let params = {
-          game_uuid: this.$route.params.game_uuid,
-          question_uuid: this.question_uuid
+          game_id: this.$route.params.game_id,
+          question_id: this.question_id
         }
 
         this.hostResource.get_question(params).then(response => {
@@ -51,7 +51,7 @@
           this.answers = []
           response.data.answers.forEach(answer => {
             this.answers.push({
-              value: answer.uuid,
+              value: answer.id,
               text: answer.name
             })
           })

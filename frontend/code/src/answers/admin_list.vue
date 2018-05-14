@@ -20,7 +20,7 @@
               <icon name="times" style="color: red;" v-else></icon>
             </td>
             <td>
-              <editDialog :answer_uuid="answer.uuid" @onSuccess="refresh"></editDialog>
+              <editDialog :answer_id="answer.id" @onSuccess="refresh"></editDialog>
             </td>
           </tr>
         </tbody>
@@ -39,8 +39,8 @@
       return {
         answers: [],
         resource: answerResource(this),
-        contest_uuid: this.$route.params.contest_uuid,
-        question_uuid: this.$route.params.question_uuid
+        contest_id: this.$route.params.contest_id,
+        question_id: this.$route.params.question_id
       }
     },
     created: function () {

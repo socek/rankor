@@ -20,10 +20,10 @@
               <td>{{question.name}}</td>
               <td>{{question.description}}</td>
               <td>
-                <router-link :to="{name: 'Answers', params: {contest_uuid: contest_uuid, question_uuid: question.uuid}}">
+                <router-link :to="{name: 'Answers', params: {contest_id: contest_id, question_id: question.id}}">
                   <icon name="list-ol"></icon>
                 </router-link>
-                <editDialog :question_uuid="question.uuid" @onSuccess="refresh"></editDialog>
+                <editDialog :question_id="question.id" @onSuccess="refresh"></editDialog>
               </td>
             </tr>
           </tbody>
@@ -43,7 +43,7 @@
       return {
         categories: {},
         resource: questionResource(this),
-        contest_uuid: this.$route.params.contest_uuid
+        contest_id: this.$route.params.contest_id
       }
     },
     created () {

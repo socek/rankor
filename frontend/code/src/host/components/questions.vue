@@ -50,13 +50,13 @@
         return {
           name: 'HostQuestionView',
           params: {
-            game_uuid: this.$route.params.game_uuid,
-            question_uuid: question.uuid
+            game_id: this.$route.params.game_id,
+            question_id: question.id
           }
         }
       },
       refresh () {
-        let params = {game_uuid: this.$route.params.game_uuid}
+        let params = {game_id: this.$route.params.game_id}
         this.resource.list_questions(params).then((response) => {
           this.questions = response.data
         })

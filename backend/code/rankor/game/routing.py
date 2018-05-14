@@ -6,4 +6,4 @@ def game_routing(routing):
     routing.add(
         'rankor.game.views.AdminGameView',
         'admin_game',
-        '/admin/games/{game_uuid}')
+        '/admin/games/{game_id}')

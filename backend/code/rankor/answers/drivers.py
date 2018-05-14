@@ -8,11 +8,11 @@ from rankor.questions.models import Question
 class AnswerQuery(Query):
     model = Answer
 
-    def list_for_question(self, question_uuid):
+    def list_for_question(self, question_id):
         return (
             self._query()
             .join(Question)
-            .filter(Question.uuid == question_uuid)
+            .filter(Question.id == question_id)
             .order_by(self.model.created_at)
             .all()
         )

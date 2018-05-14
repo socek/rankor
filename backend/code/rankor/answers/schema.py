@@ -1,13 +1,11 @@
 from marshmallow import Schema
 from marshmallow.fields import Boolean
-from marshmallow.fields import Integer
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
 
 class AnswerSchema(Schema):
-    id = Integer()
-    uuid = String()
+    id = String()
     name = String(
         required=True,
         allow_none=False,
@@ -16,6 +14,6 @@ class AnswerSchema(Schema):
         ],
     )
     is_correct = Boolean(required=True)
-    question_uuid = String(
+    question_id = String(
         allow_none=False,
     )

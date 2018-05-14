@@ -4,12 +4,12 @@ from time import time
 
 
 class GameScreen(object):
-    def __init__(self, redis, game_uuid):
-        self.game_uuid = game_uuid
+    def __init__(self, redis, game_id):
+        self.game_id = game_id
         self.redis = redis
 
     def _get_game_key(self):
-        return self.game_uuid + ':game_view'
+        return self.game_id + ':game_view'
 
     def set_value(self, **kwargs):
         key = self._get_game_key()

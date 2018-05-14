@@ -38,7 +38,7 @@
   import dialogform from '@/common/dialogForm'
 
   export default {
-    props: ['game_uuid'],
+    props: ['game_id'],
     extends: baseForm,
     data () {
       return {
@@ -51,11 +51,11 @@
     },
     methods: {
       fetchContent () {
-        return this.resource.get({game_uuid: this.game_uuid})
+        return this.resource.get({game_id: this.game_id})
       },
       saveCall () {
         return this.resource.update(
-          {game_uuid: this.game_uuid},
+          {game_id: this.game_id},
           this.form.fields)
       }
     },

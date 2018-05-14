@@ -31,7 +31,7 @@
     },
     methods: {
       refresh () {
-        this.resource.get_highscore({game_uuid: this.$route.params.game_uuid}).then(response => {
+        this.resource.get_highscore({game_id: this.$route.params.game_id}).then(response => {
           this.teams = response.body
         })
       }

@@ -29,7 +29,7 @@
     },
     methods: {
       refresh () {
-        let params = {game_uuid: this.$route.params.game_uuid}
+        let params = {game_id: this.$route.params.game_id}
         this.gameResource.get(params).then(response => {
           this.game = response.data
         })

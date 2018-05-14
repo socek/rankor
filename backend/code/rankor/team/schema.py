@@ -5,7 +5,7 @@ from marshmallow.validate import Length
 
 
 class TeamSchema(Schema):
-    uuid = String()
+    id = String()
     name = String(
         required=True,
         allow_none=False,

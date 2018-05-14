@@ -26,7 +26,7 @@
           {{ error }}
         </b-form-invalid-feedback>
       </b-form-group>
-      <input type="hidden" v.model.trim="form.fields.contest_uuid">
+      <input type="hidden" v.model.trim="form.fields.contest_id">
     </template>
   </dialogform>
 </template>
@@ -37,13 +37,13 @@
   import dialogform from '@/common/dialogForm'
 
   export default {
-    props: ['contest_uuid'],
+    props: ['contest_id'],
     extends: baseForm,
     data () {
       return {
         form: this.prepareForm({
           name: '',
-          contest_uuid: this.contest_uuid
+          contest_id: this.contest_id
         }),
         resource: gameResource(this)
       }

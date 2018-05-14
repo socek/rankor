@@ -70,7 +70,7 @@
   import baseForm from '@/forms'
 
   export default {
-    props: ['question_uuid'],
+    props: ['question_id'],
     extends: baseForm,
     data () {
       return {
@@ -85,12 +85,12 @@
     methods: {
       fetchContent () {
         return this.resource.get({
-          contest_uuid: this.$route.params.contest_uuid,
-          question_uuid: this.question_uuid})
+          contest_id: this.$route.params.contest_id,
+          question_id: this.question_id})
       },
       saveCall () {
         return this.resource.update(
-          {question_uuid: this.question_uuid},
+          {question_id: this.question_id},
           this.form.fields)
       }
     },

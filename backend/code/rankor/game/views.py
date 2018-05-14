@@ -22,19 +22,19 @@ class GameBaseView(AuthenticatedView):
     def contest_query(self):
         return ContestQuery(self.dbsession)
 
-    def _get_game_uuid(self):
-        return self.request.matchdict['game_uuid']
+    def _get_game_id(self):
+        return self.request.matchdict['game_id']
 
     @cache_per_request('game')
     def _get_game(self):
         try:
-            return self.game_query.get_by_uuid(self._get_game_uuid())
+            return self.game_query.get_by_id(self._get_game_id())
         except NoResultFound:
             raise HTTPNotFound()
 
-    def _contest_uuid_to_id(self, contest_uuid):
+    def _contest_id_to_id(self, contest_id):
         try:
-            contest = self.contest_query.get_by_uuid(contest_uuid)
+            contest = self.contest_query.get_by_id(contest_id)
         except NoResultFound:
             raise self._object_validation('Contest does not exists!')
 
@@ -53,8 +53,8 @@ class AdminGameListView(GameBaseView):
     def post(self):
         fields = self.get_validated_fields(GameSchema())
         fields['owner_id'] = self.get_user_id()
-        fields['contest_id'] = (self._contest_uuid_to_id(
-            fields.pop('contest_uuid')))
+        fields['contest_id'] = (self._contest_id_to_id(
+            fields.pop('contest_id')).hex)
         self.game_command.create(**fields)
 
 
@@ -66,4 +66,4 @@ class AdminGameView(GameBaseView):
     def patch(self):
         game = self._get_game()
         fields = self.get_validated_fields(GameSchema())
-        self.game_command.update_by_uuid(game.uuid, fields)
+        self.game_command.update_by_id(game.id, fields)

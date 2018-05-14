@@ -35,33 +35,33 @@ class Fixtures(ViewFixture):
             yield mock.return_value
 
     @fixture
-    def contest_uuid(self, matchdict):
-        contest_uuid = uuid4().hex
-        matchdict['contest_uuid'] = contest_uuid
-        return contest_uuid
+    def contest_id(self, matchdict):
+        contest_id = uuid4().hex
+        matchdict['contest_id'] = contest_id
+        return contest_id
 
     @fixture
-    def question_uuid(self, matchdict):
-        question_uuid = uuid4().hex
-        matchdict['question_uuid'] = question_uuid
-        return question_uuid
+    def question_id(self, matchdict):
+        question_id = uuid4().hex
+        matchdict['question_id'] = question_id
+        return question_id
 
     @fixture
-    def answer_uuid(self, matchdict):
-        answer_uuid = uuid4().hex
-        matchdict['answer_uuid'] = answer_uuid
-        return answer_uuid
+    def answer_id(self, matchdict):
+        answer_id = uuid4().hex
+        matchdict['answer_id'] = answer_id
+        return answer_id
 
     @fixture
-    def manswer(self, answer_uuid, manswer_query, question_uuid):
+    def manswer(self, answer_id, manswer_query, question_id):
         manswer = DictLike({
             'id': 5,
-            'uuid': answer_uuid,
+            'id': answer_id,
             'name': 'this is an answer',
             'is_correct': True,
-            'question_uuid': question_uuid
+            'question_id': question_id
         })
-        manswer_query.get_by_uuid.return_value = manswer
+        manswer_query.get_by_id.return_value = manswer
         return manswer
 
 
@@ -75,8 +75,8 @@ class TestAdminAnswerListView(Fixtures):
             manswer_query,
             mcontest_query,
             mquestion_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
     ):
         """
         .get should return list of all answers assigned to a contest.
@@ -88,14 +88,14 @@ class TestAdminAnswerListView(Fixtures):
             'my description',
             'is_correct':
             True,
-            'question_uuid':
-            'uuid',
+            'question_id':
+            'id',
         }]
         assert view.get() == {
             'answers': [{
                 'name': 'my name',
                 'is_correct': True,
-                'question_uuid': 'uuid',
+                'question_id': 'id',
             }]
         }
 
@@ -105,8 +105,8 @@ class TestAdminAnswerListView(Fixtures):
             mrequest,
             mcontest_query,
             mquestion_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
             mget_user,
     ):
         """
@@ -114,7 +114,7 @@ class TestAdminAnswerListView(Fixtures):
         """
         mrequest.method = 'get'
 
-        mcontest_query.get_by_uuid.side_effect = NoResultFound
+        mcontest_query.get_by_id.side_effect = NoResultFound
         with raises(HTTPNotFound):
             view()
 
@@ -124,15 +124,15 @@ class TestAdminAnswerListView(Fixtures):
             mrequest,
             mcontest_query,
             mquestion_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
             mget_user,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'get'
-        mquestion_query.get_by_uuid.side_effect = NoResultFound
+        mquestion_query.get_by_id.side_effect = NoResultFound
 
         with raises(HTTPNotFound):
             view()
@@ -144,8 +144,8 @@ class TestAdminAnswerListView(Fixtures):
             manswer_command,
             mcontest_query,
             mquestion_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
     ):
         """
         .post should create new answer assigned to the contest.
@@ -160,15 +160,15 @@ class TestAdminAnswerListView(Fixtures):
         manswer_command.create.assert_called_once_with(
             name='my name',
             is_correct=True,
-            question_id=mquestion_query.get_by_uuid.return_value.id)
+            question_id=mquestion_query.get_by_id.return_value.id)
 
     def test_post_when_contest_not_found(
             self,
             view,
             mrequest,
             mcontest_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
             mquestion_query,
             mget_user,
     ):
@@ -176,7 +176,7 @@ class TestAdminAnswerListView(Fixtures):
         .post should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'get'
-        mcontest_query.get_by_uuid.side_effect = NoResultFound
+        mcontest_query.get_by_id.side_effect = NoResultFound
 
         with raises(HTTPNotFound):
             view()
@@ -186,8 +186,8 @@ class TestAdminAnswerListView(Fixtures):
             view,
             mrequest,
             mcontest_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
             mquestion_query,
             mget_user,
     ):
@@ -195,7 +195,7 @@ class TestAdminAnswerListView(Fixtures):
         .post should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'get'
-        mquestion_query.get_by_uuid.side_effect = NoResultFound
+        mquestion_query.get_by_id.side_effect = NoResultFound
 
         with raises(HTTPNotFound):
             view()
@@ -215,31 +215,31 @@ class TestAdminAnswerView(Fixtures):
             self,
             view,
             manswer,
-            answer_uuid,
-            contest_uuid,
+            answer_id,
+            contest_id,
     ):
         """
         .get should return data of the needed answer object.
         """
         assert view.get() == {
             'id': manswer['id'],
-            'uuid': manswer['uuid'],
+            'id': manswer['id'],
             'name': manswer['name'],
             'is_correct': manswer['is_correct'],
-            'question_uuid': manswer['question_uuid']
+            'question_id': manswer['question_id']
         }
 
     def test_patch(
             self,
             view,
             manswer,
-            answer_uuid,
-            contest_uuid,
+            answer_id,
+            contest_id,
             mrequest,
             manswer_command,
     ):
         """
-        .patch should update object by uuids
+        .patch should update object by ids
         """
         fields = {
             'name': 'my new name',
@@ -249,20 +249,20 @@ class TestAdminAnswerView(Fixtures):
 
         view.patch()
 
-        manswer_command.update_by_uuid(answer_uuid, fields)
+        manswer_command.update_by_id(answer_id, fields)
 
     def test_get_on_404(
             self,
             view,
             manswer,
-            answer_uuid,
-            contest_uuid,
+            answer_id,
+            contest_id,
             manswer_query,
     ):
         """
         .get should raise Http 404 when answer has not been found
         """
-        manswer_query.get_by_uuid.side_effect = NoResultFound()
+        manswer_query.get_by_id.side_effect = NoResultFound()
 
         with raises(HTTPNotFound):
             assert view.get()
@@ -271,8 +271,8 @@ class TestAdminAnswerView(Fixtures):
             self,
             view,
             manswer,
-            answer_uuid,
-            contest_uuid,
+            answer_id,
+            contest_id,
             mrequest,
             manswer_command,
             manswer_query,
@@ -285,9 +285,9 @@ class TestAdminAnswerView(Fixtures):
             'is_correct': False,
         }
         mrequest.json_body = fields
-        manswer_query.get_by_uuid.side_effect = NoResultFound()
+        manswer_query.get_by_id.side_effect = NoResultFound()
 
         with raises(HTTPNotFound):
             view.patch()
 
-        assert not manswer_command.update_by_uuid.called
+        assert not manswer_command.update_by_id.called

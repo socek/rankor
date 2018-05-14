@@ -15,10 +15,10 @@
             <td scope="row">{{index + 1}}</td>
             <td>{{game.name}}</td>
             <td>
-              <router-link :to="{name: 'HostView', params: {game_uuid: game.uuid}}">
+              <router-link :to="{name: 'HostView', params: {game_id: game.id}}">
                 <icon name="play"></icon>
               </router-link>
-              <gameEditDialog @onSuccess="refresh" :game_uuid="game.uuid"></gameEditDialog>
+              <gameEditDialog @onSuccess="refresh" :game_id="game.id"></gameEditDialog>
             </td>
           </tr>
         </tbody>

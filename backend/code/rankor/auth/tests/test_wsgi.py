@@ -67,8 +67,7 @@ class TestWebSignUpFormView(WebTestFixture):
         }
         mcommand.return_value.id = 10
         muser = mcommand.create.return_value
-        muser.uuid = 'xxx'
-        muser.id = 15
+        muser.id = 'xxx'
 
         result = fake_app.post_json(self.url, params=new_user)
 

@@ -12,7 +12,7 @@ from rankor.team.models import Team
 class TeamQuery(Query):
     model = Team
 
-    def list_for_game(self, game_uuid):
+    def list_for_game(self, game_id):
         """
         List all questions for the started game. Add information about question
         status (success, fail, not started).
@@ -20,12 +20,12 @@ class TeamQuery(Query):
         return (
             self.database.query(self.model)
             .join(Game)
-            .filter(Game.uuid == game_uuid)
+            .filter(Game.id == game_id)
             .order_by(self.model.created_at)
             .all()
         )
 
-    def list_high_score(self, game_uuid):
+    def list_high_score(self, game_id):
         return (
             self.database.query(
                 self.model.name.label('name'),
@@ -34,7 +34,7 @@ class TeamQuery(Query):
             .join(Game, self.model.game_id == Game.id)
             .join(GameAnswer, GameAnswer.team_id == self.model.id)
             .join(Answer, GameAnswer.answer_id == Answer.id)
-            .filter(Game.uuid == game_uuid)
+            .filter(Game.id == game_id)
             .group_by(self.model.id)
             .all()
         )

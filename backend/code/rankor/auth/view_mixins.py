@@ -17,16 +17,13 @@ class AuthMixin(object):
         user_rd = UserQuery(dbsession)
 
         payload = self.decoded_jwt()
-        return user_rd.get_by_uuid(payload['uuid'])
+        return user_rd.get_by_id(payload['id'])
 
     def is_authenticated(self):
         return self.request.headers.get('JWT') is not None
 
     def get_user_id(self):
         return self.decoded_jwt()['id']
-
-    def get_user_uuid(self):
-        return self.decoded_jwt()['uuid']
 
     def decoded_jwt(self):
         jwt = self.request.headers.get('JWT')

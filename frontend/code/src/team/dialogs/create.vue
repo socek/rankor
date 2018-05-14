@@ -36,20 +36,20 @@
   import dialogform from '@/common/dialogForm'
 
   export default {
-    props: ['game_uuid'],
+    props: ['game_id'],
     extends: baseForm,
     data () {
       return {
         form: this.prepareForm({
           name: '',
-          game_uuid: this.game_uuid
+          game_id: this.game_id
         }),
         resource: teamResource(this)
       }
     },
     methods: {
       saveCall () {
-        return this.resource.save({game_uuid: this.game_uuid}, this.form.fields)
+        return this.resource.save({game_id: this.game_id}, this.form.fields)
       }
     },
     components: {

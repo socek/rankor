@@ -12,13 +12,13 @@ class Client(object):
         self.context = context
         self.redis = context.redis
         self.websocket = websocket
-        self.game_uuid = None
+        self.game_id = None
 
     async def run(self):
         log.info('Connection established')
         async for message in self.websocket:
-            if message.startswith('game_uuid:'):
-                self.game_uuid = message.split(':')[1]
+            if message.startswith('game_id:'):
+                self.game_id = message.split(':')[1]
                 try:
                     await self.run_loop()
                 finally:
@@ -27,7 +27,7 @@ class Client(object):
                 log.error('not understanding: {}'.format(message))
 
     def _get_game_key(self):
-        return self.game_uuid + ':game_view'
+        return self.game_id + ':game_view'
 
     def _get_value(self):
         key = self._get_game_key()

@@ -17,13 +17,13 @@ class AnswerBaseView(QuestionBaseView):
     def answer_command(self):
         return AnswerCommand(self.dbsession)
 
-    def _get_answer_uuid(self):
-        return self.request.matchdict['answer_uuid']
+    def _get_answer_id(self):
+        return self.request.matchdict['answer_id']
 
     @cache_per_request('answer')
     def _get_answer(self):
         try:
-            return self.answer_query.get_by_uuid(self._get_answer_uuid())
+            return self.answer_query.get_by_id(self._get_answer_id())
         except NoResultFound:
             raise HTTPNotFound()
 
@@ -35,7 +35,7 @@ class AnswerBaseView(QuestionBaseView):
 class AdminAnswerListView(AnswerBaseView):
     def get(self):
         answers = self.answer_query.list_for_question(
-            self._get_question_uuid())
+            self._get_question_id())
         schema = AnswerSchema()
         return {'answers': [schema.dump(answer) for answer in answers]}
 
@@ -43,12 +43,12 @@ class AdminAnswerListView(AnswerBaseView):
         question = self._get_question()
 
         fields = self.get_validated_fields(AnswerSchema())
-        fields['question_id'] = question.id
+        fields['question_id'] = question.id.hex
 
         answer = self.answer_command.create(**fields)
 
         return {
-            'answer_uuid': answer.uuid,
+            'answer_id': answer.id.hex,
         }
 
 
@@ -61,4 +61,4 @@ class AdminAnswerView(AnswerBaseView):
     def patch(self):
         answer = self._get_answer()
         fields = self.get_validated_fields(AnswerSchema())
-        self.answer_command.update_by_uuid(answer.uuid, fields)
+        self.answer_command.update_by_id(answer.id, fields)

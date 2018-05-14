@@ -1,8 +1,17 @@
+from uuid import UUID
+
 from sqlalchemy.orm.exc import NoResultFound
 
 from rankor.application.drivers import Command
 from rankor.application.drivers import Query
 from rankor.game_answer.models import GameAnswer
+
+
+def _ensure_uuid(uuid):
+    if isinstance(uuid, UUID):
+        return uuid.hex
+    else:
+        return uuid
 
 
 class GameAnswerQuery(Query):
@@ -11,10 +20,9 @@ class GameAnswerQuery(Query):
     def get_by_game_and_question(self, game_id, question_id):
         return (
             self._query()
-            .filter(self.model.game_id == game_id)
-            .filter(self.model.question_id == question_id)
-            .one()
-        )
+            .filter(self.model.game_id == _ensure_uuid(game_id))
+            .filter(self.model.question_id == _ensure_uuid(question_id))
+            .one())
 
 
 class GameAnswerCommand(Command):
@@ -23,15 +31,15 @@ class GameAnswerCommand(Command):
 
     def upsert(self, game_id, question_id, team_id, answer_id):
         try:
-            game_answer = self.query.get_by_game_and_question(game_id, question_id)
-            game_answer.team_id = team_id
-            game_answer.answer_id = answer_id
+            game_answer = self.query.get_by_game_and_question(
+                game_id, question_id)
+            game_answer.team_id = _ensure_uuid(team_id)
+            game_answer.answer_id = _ensure_uuid(answer_id)
             self.database.commit()
             return game_answer
         except NoResultFound:
             self.create(
-                game_id=game_id,
-                question_id=question_id,
-                team_id=team_id,
-                answer_id=answer_id
-            )
+                game_id=self._ensure_uuid(game_id),
+                question_id=self._ensure_uuid(question_id),
+                team_id=self._ensure_uuid(team_id),
+                answer_id=self._ensure_uuid(answer_id))

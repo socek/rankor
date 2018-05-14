@@ -28,13 +28,13 @@ class BaseView(RestfulView):
     def team_query(self):
         return TeamQuery(self.dbsession)
 
-    def _get_game_uuid(self):
-        return self.request.matchdict['game_uuid']
+    def _get_game_id(self):
+        return self.request.matchdict['game_id']
 
     @cache_per_request('game')
     def _get_game(self):
         try:
-            return self.game_query.get_by_uuid(self._get_game_uuid())
+            return self.game_query.get_by_id(self._get_game_id())
         except NoResultFound:
             raise HTTPNotFound()
 
@@ -59,11 +59,11 @@ class GameView(BaseView):
     def post(self):
         fields = self.get_validated_fields(GameViewSchema())
         view = fields.pop('view')
-        GameScreen(self.redis, self._get_game_uuid()).set_value(
+        GameScreen(self.redis, self._get_game_id()).set_value(
             view=view, view_data=fields)
 
 
 class HighScoreView(BaseView):
     def get(self):
-        elements = self.team_query.list_high_score(self._get_game_uuid())
+        elements = self.team_query.list_high_score(self._get_game_id())
         return HighscoreSchema(many=True).dump(elements)

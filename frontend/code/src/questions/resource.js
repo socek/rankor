@@ -1,8 +1,8 @@
 export default (vue) => {
   return vue.$resource(
-    'admin/contests/{contest_uuid}/questions{/question_uuid}',
+    'admin/contests/{contest_id}/questions{/question_id}',
     {
-      contest_uuid: vue.$route.params.contest_uuid
+      contest_id: vue.$route.params.contest_id
     },
     {
       list: {method: 'GET'},

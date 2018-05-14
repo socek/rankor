@@ -6,4 +6,4 @@ def contest_routing(routing):
     routing.add(
         'rankor.contest.views.AdminContestView',
         'admin_contest',
-        '/admin/contests/{contest_uuid}')
+        '/admin/contests/{contest_id}')

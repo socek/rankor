@@ -12,17 +12,17 @@ from rankor.team.models import Team
 class QuestionQuery(Query):
     model = Question
 
-    def list_for_contest(self, contest_uuid):
+    def list_for_contest(self, contest_id):
         return (
             self._query()
             .join(Contest)
-            .filter(Contest.uuid == contest_uuid)
+            .filter(Contest.id == contest_id)
             .order_by(self.model.category.desc())
             .order_by(self.model.created_at)
             .all()
         )
 
-    def list_for_game(self, game_uuid):
+    def list_for_game(self, game_id):
         """
         List all questions for the started game. Add information about question
         status (success, fail, not started).
@@ -33,20 +33,20 @@ class QuestionQuery(Query):
             .join(Game)
             .outerjoin(GameAnswer, GameAnswer.question_id == self.model.id)
             .outerjoin(Answer, GameAnswer.answer_id == Answer.id)
-            .filter(Game.uuid == game_uuid)
+            .filter(Game.id == game_id)
             .order_by(self.model.category.desc())
             .order_by(self.model.created_at)
             .all()
         )
 
-    def get_for_answer(self, uuid, game_uuid):
+    def get_for_answer(self, id, game_id):
         return (
             self.database.query(
                 self.model.id.label('id'),
-                self.model.uuid.label('uuid'),
+                self.model.name.label('name'),
                 self.model.category.label('category'),
                 self.model.description.label('description'),
-                Contest.uuid.label('contest_uuid'),
+                Contest.id.label('contest_id'),
                 Team.name.label('team')
             )
             .join(Contest)
@@ -54,8 +54,8 @@ class QuestionQuery(Query):
             .outerjoin(GameAnswer, GameAnswer.question_id == self.model.id)
             .outerjoin(Answer, GameAnswer.answer_id == Answer.id)
             .outerjoin(Team, GameAnswer.team_id == Team.id)
-            .filter(Game.uuid == game_uuid)
-            .filter(self.model.uuid == uuid)
+            .filter(Game.id == game_id)
+            .filter(self.model.id == id)
             .one()
         )
 

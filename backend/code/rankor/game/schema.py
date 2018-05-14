@@ -1,13 +1,12 @@
 from marshmallow import Schema
-from marshmallow.fields import Integer
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
 
 class GameSchema(Schema):
-    uuid = String()
-    contest_uuid = String()
-    owner_id = Integer()
+    id = String()
+    contest_id = String()
+    owner_id = String()
     name = String(
         required=True,
         allow_none=False,

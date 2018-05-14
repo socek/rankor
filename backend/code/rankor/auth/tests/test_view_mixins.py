@@ -32,7 +32,6 @@ class TestAuthMixin(object):
         with patch.object(mixin, 'decoded_jwt') as mock:
             mock.return_value = {
                 'id': sentinel.user_id,
-                'uuid': sentinel.user_uuid,
             }
             yield mock
 
@@ -67,8 +66,8 @@ class TestAuthMixin(object):
         mquery = muser_query.return_value
 
         assert get_user(
-            mixin, dbsession=mdb) == mquery.get_by_uuid.return_value
-        mquery.get_by_uuid.assert_called_once_with(sentinel.user_uuid)
+            mixin, dbsession=mdb) == mquery.get_by_id.return_value
+        mquery.get_by_id.assert_called_once_with(sentinel.user_id)
 
     def test_decoded_jwt_no_jwt_provided(
             self,
@@ -114,13 +113,13 @@ class TestAuthMixin(object):
 
         assert mixin.get_user_id() == sentinel.user_id
 
-    def test_get_user_uuid(self, mixin, mdecoded_jwt):
+    def test_get_user_id(self, mixin, mdecoded_jwt):
         """
-        .get_user_uuid should return uuid from jwt
+        .get_user_id should return id from jwt
         """
-        mdecoded_jwt.return_value = {'uuid': sentinel.user_uuid}
+        mdecoded_jwt.return_value = {'id': sentinel.user_id}
 
-        assert mixin.get_user_uuid() == sentinel.user_uuid
+        assert mixin.get_user_id() == sentinel.user_id
 
 
 class TestAuthenticatedView(ViewFixture):

@@ -1,12 +1,11 @@
 from marshmallow import Schema
-from marshmallow.fields import Integer
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
 
 class ContestSchema(Schema):
-    owner_id = Integer()
-    uuid = String()
+    id = String()
+    owner_id = String()
     name = String(
         required=True,
         allow_none=False,

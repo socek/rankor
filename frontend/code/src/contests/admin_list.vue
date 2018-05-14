@@ -15,11 +15,11 @@
             <td scope="row">{{index + 1}}</td>
             <td>{{contest.name}}</td>
             <td>
-              <router-link :to="{name: 'Questions', params: {contest_uuid: contest.uuid}}">
+              <router-link :to="{name: 'Questions', params: {contest_id: contest.id}}">
                 <icon name="list-ol"></icon>
               </router-link>
-              <contestEditDialog @onSuccess="refresh" :contest_uuid="contest.uuid"></contestEditDialog>
-              <gameStart @onSuccess="refresh" :contest_uuid="contest.uuid"></gameStart>
+              <contestEditDialog @onSuccess="refresh" :contest_id="contest.id"></contestEditDialog>
+              <gameStart @onSuccess="refresh" :contest_id="contest.id"></gameStart>
             </td>
           </tr>
         </tbody>

@@ -16,8 +16,8 @@ class NewQuestionSchema(Schema):
 
 
 class QuestionSchema(NewQuestionSchema):
-    uuid = String()
-    contest_uuid = String(
+    id = String()
+    contest_id = String(
         required=True,
         allow_none=False,
     )

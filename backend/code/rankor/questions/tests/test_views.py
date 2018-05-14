@@ -30,16 +30,16 @@ class Fixtures(ViewFixture):
             yield mock.return_value
 
     @fixture
-    def contest_uuid(self, matchdict):
-        contest_uuid = uuid4().hex
-        matchdict['contest_uuid'] = contest_uuid
-        return contest_uuid
+    def contest_id(self, matchdict):
+        contest_id = uuid4().hex
+        matchdict['contest_id'] = contest_id
+        return contest_id
 
     @fixture
-    def question_uuid(self, matchdict):
-        question_uuid = uuid4().hex
-        matchdict['question_uuid'] = question_uuid
-        return question_uuid
+    def question_id(self, matchdict):
+        question_id = uuid4().hex
+        matchdict['question_id'] = question_id
+        return question_id
 
 
 class TestAdminQuestionView(Fixtures):
@@ -51,22 +51,22 @@ class TestAdminQuestionView(Fixtures):
             mrequest,
             mquestion_query,
             mcontest_query,
-            contest_uuid,
-            question_uuid,
+            contest_id,
+            question_id,
     ):
         """
         .get should return list of all questions assigned to a contest.
         """
         obj = MagicMock()
         obj.category = 'my cat'
-        mquestion_query.get_by_uuid.return_value = obj
+        mquestion_query.get_by_id.return_value = obj
 
         assert view.get() == {
-            'uuid': str(obj['uuid']),
+            'id': str(obj['id']),
             'name': str(obj['name']),
             'description': str(obj['description']),
             'category': str(obj['my cat']),
-            'contest_uuid': str(obj['contest_uuid'])
+            'contest_id': str(obj['contest_id'])
         }
 
     def test_get_when_contest_not_found(
@@ -74,15 +74,15 @@ class TestAdminQuestionView(Fixtures):
             view,
             mrequest,
             mcontest_query,
-            contest_uuid,
+            contest_id,
             mget_user,
-            question_uuid,
+            question_id,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'get'
-        mcontest_query.get_by_uuid.side_effect = NoResultFound
+        mcontest_query.get_by_id.side_effect = NoResultFound
 
         with raises(HTTPNotFound):
             view()
@@ -93,39 +93,39 @@ class TestAdminQuestionView(Fixtures):
             mrequest,
             mquestion_command,
             mcontest_query,
-            contest_uuid,
+            contest_id,
             mquestion_query,
     ):
         """
         .patch should create new question assigned to the contest.
         """
-        uuid = uuid4().hex
+        id = uuid4().hex
         mrequest.json_body = {
             'name': 'my name',
             'description': 'my description',
             'category': 'cat'
         }
-        mquestion_query.get_by_uuid.return_value.uuid = uuid
-        mrequest.matchdict = {'question_uuid': uuid}
+        mquestion_query.get_by_id.return_value.id = id
+        mrequest.matchdict = {'question_id': id}
 
         view.patch()
 
-        mquestion_command.update_by_uuid.assert_called_once_with(
-            uuid, mrequest.json_body)
+        mquestion_command.update_by_id.assert_called_once_with(
+            id, mrequest.json_body)
 
     def test_patch_when_contest_not_found(
             self,
             view,
             mrequest,
             mcontest_query,
-            contest_uuid,
+            contest_id,
             mget_user,
     ):
         """
         .patch should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'patch'
-        mcontest_query.get_by_uuid.side_effect = NoResultFound
+        mcontest_query.get_by_id.side_effect = NoResultFound
 
         with raises(HTTPNotFound):
             view()
@@ -152,7 +152,7 @@ class TestAdminQuestionListView(Fixtures):
             mrequest,
             mquestion_query,
             mcontest_query,
-            contest_uuid,
+            contest_id,
     ):
         """
         .get should return list of all questions assigned to a contest.
@@ -162,11 +162,11 @@ class TestAdminQuestionListView(Fixtures):
         mquestion_query.list_for_contest.return_value = [obj]
         assert dict(view.get()['categories']) == {
             'my cat': [{
-                'uuid': str(obj['uuid']),
+                'id': str(obj['id']),
                 'name': str(obj['name']),
                 'description': str(obj['description']),
                 'category': str(obj['my cat']),
-                'contest_uuid': str(obj['contest_uuid'])
+                'contest_id': str(obj['contest_id'])
             }]
         }
 
@@ -175,14 +175,14 @@ class TestAdminQuestionListView(Fixtures):
             view,
             mrequest,
             mcontest_query,
-            contest_uuid,
+            contest_id,
             mget_user,
     ):
         """
         .get should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'get'
-        mcontest_query.get_by_uuid.side_effect = NoResultFound
+        mcontest_query.get_by_id.side_effect = NoResultFound
         with raises(HTTPNotFound):
             view()
 
@@ -192,7 +192,7 @@ class TestAdminQuestionListView(Fixtures):
             mrequest,
             mquestion_command,
             mcontest_query,
-            contest_uuid,
+            contest_id,
     ):
         """
         .post should create new question assigned to the contest.
@@ -209,21 +209,21 @@ class TestAdminQuestionListView(Fixtures):
             name='my name',
             description='my description',
             category='cat',
-            contest_id=mcontest_query.get_by_uuid.return_value.id)
+            contest_id=mcontest_query.get_by_id.return_value.id)
 
     def test_post_when_contest_not_found(
             self,
             view,
             mrequest,
             mcontest_query,
-            contest_uuid,
+            contest_id,
             mget_user,
     ):
         """
         .post should raise HTTPNotFound when contest not found
         """
         mrequest.method = 'POST'
-        mcontest_query.get_by_uuid.side_effect = NoResultFound
+        mcontest_query.get_by_id.side_effect = NoResultFound
         with raises(HTTPNotFound):
             view()
 

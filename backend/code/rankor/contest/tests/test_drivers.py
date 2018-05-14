@@ -21,7 +21,7 @@ class TestContestQuery(IntegrationFixture):
         .list_for_owner should return contests only from provided owner.
         """
         result = query.list_for_owner(user.id)
-        assert result[0].uuid == contest_from_user.uuid
+        assert result[0].id == contest_from_user.id
         assert len(result)
 
 
@@ -34,12 +34,12 @@ class TestContestCommand(IntegrationFixture):
     def command(self, app):
         return ContestCommand(app.dbsession)
 
-    def test_update_by_uuid(self, command, query, contest_from_user):
+    def test_update_by_id(self, command, query, contest_from_user):
         """
-        .update_by_uuid should update object by uuid.
+        .update_by_id should update object by id.
         """
-        command.update_by_uuid(contest_from_user.uuid, {'name': 'new name'})
+        command.update_by_id(contest_from_user.id, {'name': 'new name'})
 
-        contest = query.get_by_uuid(contest_from_user.uuid)
+        contest = query.get_by_id(contest_from_user.id)
 
         assert contest.name == 'new name'

@@ -36,7 +36,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def question_one(self, dbsession, contest_one):
         question_data = dict(self.question_user_data)
-        question_data['contest_id'] = contest_one.id
+        question_data['contest_id'] = contest_one.id.hex
         question = Question(**question_data)
 
         with DeleteOnExit(dbsession, question):
@@ -45,7 +45,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def question_two(self, dbsession, contest_two):
         question_data = dict(self.question_user_data)
-        question_data['contest_id'] = contest_two.id
+        question_data['contest_id'] = contest_two.id.hex
         question = Question(**question_data)
 
         with DeleteOnExit(dbsession, question):
@@ -68,8 +68,8 @@ class TestQuestionQuery(Fixtures):
         """
         .list_for_contest should return only questions from that specyfic contest
         """
-        result = driver.list_for_contest(contest_one.uuid)
-        assert [obj.uuid for obj in result] == [question_one.uuid]
+        result = driver.list_for_contest(contest_one.id)
+        assert [obj.id for obj in result] == [question_one.id]
 
 
 class TestQuestionCommand(Fixtures):
@@ -77,11 +77,11 @@ class TestQuestionCommand(Fixtures):
     def driver(self, app):
         return QuestionCommand(app.dbsession)
 
-    def test_update_by_uuid(self, driver, question_one, dbsession):
+    def test_update_by_id(self, driver, question_one, dbsession):
         """
-        .update_by_uuid should update object by uuid
+        .update_by_id should update object by id
         """
-        driver.update_by_uuid(question_one.uuid, {'name': 'new fine name'})
+        driver.update_by_id(question_one.id, {'name': 'new fine name'})
 
         dbsession.refresh(question_one)
         assert question_one.name == 'new fine name'

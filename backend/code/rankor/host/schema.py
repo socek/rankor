@@ -4,7 +4,7 @@ from marshmallow.fields import String
 
 
 class FullQuestionSchema(Schema):
-    uuid = String()
+    id = String()
     name = String()
     status = String()
     team = String()
@@ -14,7 +14,7 @@ class FullQuestionSchema(Schema):
         (question, is_correct, ga) = data
 
         return {
-            'uuid': question.uuid,
+            'id': question.id.hex,
             'name': question.name,
             'status': self._get_status(is_correct),
             'team': self._get_team(ga)
@@ -34,5 +34,5 @@ class FullQuestionSchema(Schema):
 
 
 class AnswerPostSchema(Schema):
-    team_uuid = String()
-    answer_uuid = String()
+    team_id = String()
+    answer_id = String()

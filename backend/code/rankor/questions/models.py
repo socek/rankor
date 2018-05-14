@@ -1,8 +1,8 @@
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from rankor.application.model import Model
@@ -15,5 +15,5 @@ class Question(Model):
     description = Column(Text, nullable=False)
     category = Column(String, nullable=True, index=True)
 
-    contest_id = Column(Integer, ForeignKey('contests.id'), nullable=False)
+    contest_id = Column(UUID, ForeignKey('contests.id'), nullable=False)
     contest = relationship("Contest", uselist=False, backref='questions')

@@ -23,7 +23,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def question_one(self, dbsession, contest_from_user):
         question_data = dict(self.question_user_data)
-        question_data['contest_id'] = contest_from_user.id
+        question_data['contest_id'] = contest_from_user.id.hex
         question = Question(**question_data)
 
         with DeleteOnExit(dbsession, question):
@@ -32,7 +32,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def question_two(self, dbsession, contest_from_user):
         question_data = dict(self.question_user_data)
-        question_data['contest_id'] = contest_from_user.id
+        question_data['contest_id'] = contest_from_user.id.hex
         question = Question(**question_data)
 
         with DeleteOnExit(dbsession, question):
@@ -41,7 +41,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def answer_one(self, dbsession, question_one):
         answer_data = dict(self.answer_user_data)
-        answer_data['question_id'] = question_one.id
+        answer_data['question_id'] = question_one.id.hex
         answer = Answer(**answer_data)
 
         with DeleteOnExit(dbsession, answer):
@@ -50,7 +50,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def answer_two(self, dbsession, question_two):
         answer_data = dict(self.answer_user_data)
-        answer_data['question_id'] = question_two.id
+        answer_data['question_id'] = question_two.id.hex
         answer = Answer(**answer_data)
 
         with DeleteOnExit(dbsession, answer):
@@ -76,8 +76,8 @@ class TestAnswerQuery(Fixtures):
         """
         .list_for_question should return only answers from that specyfic question
         """
-        result = query.list_for_question(question_one.uuid)
-        assert [obj.uuid for obj in result] == [answer_one.uuid]
+        result = query.list_for_question(question_one.id)
+        assert [obj.id for obj in result] == [answer_one.id]
 
 
 class TestAnswerCommand(Fixtures):
@@ -95,8 +95,7 @@ class TestAnswerCommand(Fixtures):
         answer_one_data = dict(
             name=answer_one.name,
             is_correct=True,
-            id=answer_one.id,
-            uuid=answer_one.uuid)
+            id=answer_one.id)
 
         answer_two_data = dict(
             name='second',
@@ -111,7 +110,7 @@ class TestAnswerCommand(Fixtures):
 
             names = set([
                 answer.name
-                for answer in query.list_for_question(question_one.uuid)
+                for answer in query.list_for_question(question_one.id)
             ])
 
             assert names == set(['name', 'second'])
@@ -121,11 +120,11 @@ class TestAnswerCommand(Fixtures):
              .filter(Answer.name == 'second').delete())
             dbsession.commit()
 
-    def test_update_by_uuid(self, command, answer_one, dbsession):
+    def test_update_by_id(self, command, answer_one, dbsession):
         """
-        .update_by_uuid should update object
+        .update_by_id should update object
         """
-        command.update_by_uuid(answer_one.uuid, {'name': 'updated'})
+        command.update_by_id(answer_one.id, {'name': 'updated'})
 
         dbsession.refresh(answer_one)
         assert answer_one.name == 'updated'

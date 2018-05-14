@@ -21,7 +21,7 @@ class TestGameQuery(IntegrationFixture):
         .list_for_owner should return games only from provided owner.
         """
         result = query.list_for_owner(user.id)
-        assert result[0].uuid == game_from_user.uuid
+        assert result[0].id == game_from_user.id
         assert len(result)
 
 
@@ -34,12 +34,12 @@ class TestGameCommand(IntegrationFixture):
     def command(self, app):
         return GameCommand(app.dbsession)
 
-    def test_update_by_uuid(self, command, query, game_from_user):
+    def test_update_by_id(self, command, query, game_from_user):
         """
-        .update_by_uuid should update object by uuid.
+        .update_by_id should update object by id.
         """
-        command.update_by_uuid(game_from_user.uuid, {'name': 'new name'})
+        command.update_by_id(game_from_user.id, {'name': 'new name'})
 
-        game = query.get_by_uuid(game_from_user.uuid)
+        game = query.get_by_id(game_from_user.id)
 
         assert game.name == 'new name'

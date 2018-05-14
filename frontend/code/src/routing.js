@@ -50,13 +50,13 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/contests/:contest_uuid/questions/',
+      path: '/contests/:contest_id/questions/',
       name: 'Questions',
       component: Questions,
       beforeEnter: requireAuth
     },
     {
-      path: '/contests/:contest_uuid/questions/:question_uuid',
+      path: '/contests/:contest_id/questions/:question_id',
       name: 'Answers',
       component: Answers,
       beforeEnter: requireAuth
@@ -68,19 +68,19 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/games/:game_uuid',
+      path: '/games/:game_id',
       name: 'HostView',
       component: HostView,
       beforeEnter: requireAuth
     },
     {
-      path: '/games/:game_uuid/question/:question_uuid',
+      path: '/games/:game_id/question/:question_id',
       name: 'HostQuestionView',
       component: HostQuestionView,
       beforeEnter: requireAuth
     },
     {
-      path: '/games/:game_uuid/screen',
+      path: '/games/:game_id/screen',
       name: 'GameScreen',
       component: GameScreen
     }
