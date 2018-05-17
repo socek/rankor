@@ -43,12 +43,12 @@ class AdminAnswerListView(AnswerBaseView):
         question = self._get_question()
 
         fields = self.get_validated_fields(AnswerSchema())
-        fields['question_id'] = question.id.hex
+        fields['question_id'] = question.id
 
         answer = self.answer_command.create(**fields)
 
         return {
-            'answer_id': answer.id.hex,
+            'answer_id': answer.id,
         }
 
 

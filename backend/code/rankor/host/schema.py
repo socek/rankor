@@ -14,7 +14,7 @@ class FullQuestionSchema(Schema):
         (question, is_correct, ga) = data
 
         return {
-            'id': question.id.hex,
+            'id': question.id,
             'name': question.name,
             'status': self._get_status(is_correct),
             'team': self._get_team(ga)

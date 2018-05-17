@@ -23,7 +23,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def question_one(self, dbsession, contest_from_user):
         question_data = dict(self.question_user_data)
-        question_data['contest_id'] = contest_from_user.id.hex
+        question_data['contest_id'] = contest_from_user.id
         question = Question(**question_data)
 
         with DeleteOnExit(dbsession, question):
@@ -32,7 +32,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def question_two(self, dbsession, contest_from_user):
         question_data = dict(self.question_user_data)
-        question_data['contest_id'] = contest_from_user.id.hex
+        question_data['contest_id'] = contest_from_user.id
         question = Question(**question_data)
 
         with DeleteOnExit(dbsession, question):
@@ -41,7 +41,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def answer_one(self, dbsession, question_one):
         answer_data = dict(self.answer_user_data)
-        answer_data['question_id'] = question_one.id.hex
+        answer_data['question_id'] = question_one.id
         answer = Answer(**answer_data)
 
         with DeleteOnExit(dbsession, answer):
@@ -50,7 +50,7 @@ class Fixtures(IntegrationFixture):
     @fixture
     def answer_two(self, dbsession, question_two):
         answer_data = dict(self.answer_user_data)
-        answer_data['question_id'] = question_two.id.hex
+        answer_data['question_id'] = question_two.id
         answer = Answer(**answer_data)
 
         with DeleteOnExit(dbsession, answer):

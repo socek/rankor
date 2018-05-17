@@ -160,7 +160,7 @@ class TestAdminAnswerListView(Fixtures):
         manswer_command.create.assert_called_once_with(
             name='my name',
             is_correct=True,
-            question_id=mquestion_query.get_by_id.return_value.id.hex)
+            question_id=mquestion_query.get_by_id.return_value.id)
 
     def test_post_when_contest_not_found(
             self,

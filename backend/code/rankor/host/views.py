@@ -165,10 +165,10 @@ class HostTeamListView(HostBaseView):
         game = self._get_game()
 
         fields = self.get_validated_fields(TeamSchema())
-        fields['game_id'] = game.id.hex
+        fields['game_id'] = game.id
 
         team = self.team_command.create(**fields)
 
         return {
-            'team_id': team.id.hex,
+            'team_id': team.id,
         }

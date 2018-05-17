@@ -48,7 +48,7 @@ class AdminQuestionListView(QuestionBaseView):
 
     def post(self):
         fields = self.get_validated_fields(NewQuestionSchema())
-        fields['contest_id'] = self._get_contest().id.hex
+        fields['contest_id'] = self._get_contest().id
         self.question_command.create(**fields)
 
 

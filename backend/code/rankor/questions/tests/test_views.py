@@ -211,7 +211,7 @@ class TestAdminQuestionListView(Fixtures):
             name='my name',
             description='my description',
             category='cat',
-            contest_id=mcontest_query.get_by_id.return_value.id.hex)
+            contest_id=mcontest_query.get_by_id.return_value.id)
 
     def test_post_when_contest_not_found(
             self,
