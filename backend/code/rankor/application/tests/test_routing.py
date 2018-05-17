@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from pytest import fixture
 
-from rankor.application.routing import RankorRouting
+from rankor.application.plugins.routing import RankorRouting
 
 
 class TestRankorRouting(object):
