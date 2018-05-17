@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from uuid import uuid4
 
 from pytest import fixture
 
@@ -67,7 +68,7 @@ class TestWebSignUpFormView(WebTestFixture):
         }
         mcommand.return_value.id = 10
         muser = mcommand.create.return_value
-        muser.id = 'xxx'
+        muser.id = uuid4()
 
         result = fake_app.post_json(self.url, params=new_user)
 

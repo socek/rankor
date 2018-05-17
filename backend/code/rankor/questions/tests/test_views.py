@@ -66,7 +66,8 @@ class TestAdminQuestionView(Fixtures):
             'name': str(obj['name']),
             'description': str(obj['description']),
             'category': str(obj['my cat']),
-            'contest_id': str(obj['contest_id'])
+            'contest_id': str(obj['contest_id']),
+            'team': str(obj['team'])
         }
 
     def test_get_when_contest_not_found(
@@ -166,7 +167,8 @@ class TestAdminQuestionListView(Fixtures):
                 'name': str(obj['name']),
                 'description': str(obj['description']),
                 'category': str(obj['my cat']),
-                'contest_id': str(obj['contest_id'])
+                'contest_id': str(obj['contest_id']),
+                'team': str(obj['team'])
             }]
         }
 
@@ -209,7 +211,7 @@ class TestAdminQuestionListView(Fixtures):
             name='my name',
             description='my description',
             category='cat',
-            contest_id=mcontest_query.get_by_id.return_value.id)
+            contest_id=mcontest_query.get_by_id.return_value.id.hex)
 
     def test_post_when_contest_not_found(
             self,

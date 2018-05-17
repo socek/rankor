@@ -20,8 +20,8 @@ class TestUserQuery(IntegrationFixture):
 
 class TestUserCommand(IntegrationFixture):
     data = dict(
-        name='user1',
-        email='user1@my.pl',
+        name='user2',
+        email='user2@my.pl',
         is_admin=False,
         password='mypassword')
 

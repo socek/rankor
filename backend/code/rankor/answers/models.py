@@ -15,5 +15,5 @@ class Answer(Model):
     name = Column(String, nullable=False)
     is_correct = Column(Boolean, nullable=False, default=False)
 
-    question_id = Column(UUID, ForeignKey(Question.id), nullable=False)
+    question_id = Column(UUID(as_uuid=True), ForeignKey(Question.id), nullable=False)
     question = relationship("Question", uselist=False, backref='answers')

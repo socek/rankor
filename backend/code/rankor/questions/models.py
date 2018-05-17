@@ -15,5 +15,5 @@ class Question(Model):
     description = Column(Text, nullable=False)
     category = Column(String, nullable=True, index=True)
 
-    contest_id = Column(UUID, ForeignKey('contests.id'), nullable=False)
+    contest_id = Column(UUID(as_uuid=True), ForeignKey('contests.id'), nullable=False)
     contest = relationship("Contest", uselist=False, backref='questions')

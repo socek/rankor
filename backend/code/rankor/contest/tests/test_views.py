@@ -49,7 +49,7 @@ class TestAdminContestListView(Fixtures):
         """
         contest = {
             'name': 'one',
-            'owner_id': 5,
+            'owner_id': 'uuid',
             'id': 'three',
         }
         mquery.list_for_owner.return_value = [contest]

@@ -11,8 +11,8 @@ class Game(Model):
     __tablename__ = 'games'
 
     name = Column(String, nullable=False)
-    contest_id = Column(UUID, ForeignKey('contests.id'), nullable=False)
-    owner_id = Column(UUID, ForeignKey('users.id'), nullable=False)
+    contest_id = Column(UUID(as_uuid=True), ForeignKey('contests.id'), nullable=False)
+    owner_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
 
     contest = relationship("Contest", uselist=False)
     owner = relationship("User", uselist=False)

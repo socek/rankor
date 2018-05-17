@@ -12,5 +12,5 @@ class Team(Model):
 
     name = Column(String, nullable=False)
 
-    game_id = Column(UUID, ForeignKey('games.id'), nullable=False)
+    game_id = Column(UUID(as_uuid=True), ForeignKey('games.id'), nullable=False)
     game = relationship("Game", uselist=False, backref='teams')

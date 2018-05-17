@@ -10,10 +10,10 @@ from rankor.team.models import Team
 class GameAnswer(Model):
     __tablename__ = 'game_answers'
 
-    game_id = Column(UUID, ForeignKey('games.id'), nullable=False)
-    question_id = Column(UUID, ForeignKey('questions.id'), nullable=False)
-    answer_id = Column(UUID, ForeignKey('answers.id'), nullable=True)
-    team_id = Column(UUID, ForeignKey('teams.id'), nullable=True)
+    game_id = Column(UUID(as_uuid=True), ForeignKey('games.id'), nullable=False)
+    question_id = Column(UUID(as_uuid=True), ForeignKey('questions.id'), nullable=False)
+    answer_id = Column(UUID(as_uuid=True), ForeignKey('answers.id'), nullable=True)
+    team_id = Column(UUID(as_uuid=True), ForeignKey('teams.id'), nullable=True)
 
     game = relationship("Game", uselist=False)
     question = relationship("Question", uselist=False)

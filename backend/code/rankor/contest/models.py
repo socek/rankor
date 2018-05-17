@@ -12,5 +12,5 @@ class Contest(Model):
 
     name = Column(String, nullable=False)
 
-    owner_id = Column(UUID, ForeignKey('users.id'), nullable=False)
+    owner_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     owner = relationship("User", uselist=False, backref='contests')

@@ -21,12 +21,8 @@ NAMING_CONVENTION = {
 metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
 
-def uuid_default():
-    return uuid4()
-
-
 class Base(object):
-    id = Column(UUID(as_uuid=True), default=uuid_default, primary_key=True)
+    id = Column(UUID(as_uuid=True), default=uuid4, primary_key=True)
 
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)

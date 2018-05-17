@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from pytest import fixture
 from pytest import raises
 from sqlalchemy.orm.exc import NoResultFound
@@ -21,7 +23,7 @@ class TestQuery(IntegrationFixture):
         does not exists
         """
         with raises(NoResultFound):
-            driver.get_by_id('not-an-id')
+            driver.get_by_id(uuid4())
 
     def test_get_by_id_when_exists(self, driver, user):
         """
