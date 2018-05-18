@@ -2,8 +2,22 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-12">
       <div v-if="showView('connecting')">
+        <icon name="sync" scale="2" spin></icon>
         Connecting...
       </div>
+
+      <div v-if="showView('network_problems')">
+        <div>
+          <icon name="sync" scale="2" spin></icon>
+        </div>
+        <div>
+          Connecting or network problems...
+        </div>
+        <b-btn variant="primary" @click="onConnect">
+          Try to reconnect
+        </b-btn>
+      </div>
+
 
       <welcome v-if="showView('welcome')">
       </welcome>
@@ -40,6 +54,9 @@
     methods: {
       showView (name) {
         return this.view === name
+      },
+      onConnect () {
+        this.$connect()
       }
     },
     created () {
@@ -50,6 +67,7 @@
           screen_id: this.$route.params.screen_id
         }
         this.$socket.send(JSON.stringify(payload))
+        console.log('Connection established')
       }
       this.$options.sockets.onmessage = (event) => {
         let data = JSON.parse(event.data)
@@ -62,6 +80,16 @@
           }
         }
         methods[data['name']](data)
+      }
+      this.$options.sockets.onclose = () => {
+        console.log('Connection closed')
+        this.connected = false
+        this.view = 'network_problems'
+      }
+      this.$options.sockets.onerror = () => {
+        console.log('Connection error')
+        this.connected = false
+        this.view = 'network_problems'
       }
       this.$connect()
     },
