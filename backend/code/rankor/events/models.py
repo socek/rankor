@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
@@ -18,6 +20,15 @@ class Screen(Model):
     )
     view = Column(String)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'game_id': self.game_id,
+            'view': self.view,
+            'created_at': self.created_at.replace(tzinfo=timezone.utc).timestamp(),
+            'updated_at': self.updated_at.replace(tzinfo=timezone.utc).timestamp()
+        }
+
 
 class ScreenEvent(Model):
     __tablename__ = 'screen_events'
@@ -30,6 +41,15 @@ class ScreenEvent(Model):
     name = Column(String, nullable=True)
     view = Column(String)
 
-    __table_args__ = (
-        Index('screen_event_index', "created_at", "screen_id", "name"),
-    )
+    __table_args__ = (Index('screen_event_index', "created_at", "screen_id",
+                            "name"), )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'screen_id': self.screen_id,
+            'view': self.view,
+            'name': self.name,
+            'created_at': self.created_at.replace(tzinfo=timezone.utc).timestamp(),
+            'updated_at': self.updated_at.replace(tzinfo=timezone.utc).timestamp()
+        }

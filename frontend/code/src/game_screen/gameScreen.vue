@@ -45,16 +45,23 @@
     created () {
       this.$options.sockets.onopen = (data) => {
         this.connected = true
-        this.$socket.send('game_id:' + this.$route.params.game_id)
+        let payload = {
+          game_id: this.$route.params.game_id,
+          screen_id: this.$route.params.screen_id
+        }
+        this.$socket.send(JSON.stringify(payload))
       }
       this.$options.sockets.onmessage = (event) => {
         let data = JSON.parse(event.data)
-        this.view = data.view
-        this.question_id = data.view_data.question_id
-        this.team_name = data.view_data.team_name
-        this.answer_id = data.view_data.answer_id
-        this.is_correct = data.view_data.is_correct
-        this.timestamp = data.timestamp
+        let methods = {
+          change_view: (data) => {
+            this.view = data.view
+          },
+          init: (data) => {
+            this.view = data.view
+          }
+        }
+        methods[data['name']](data)
       }
       this.$connect()
     },

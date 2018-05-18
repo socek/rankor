@@ -61,8 +61,8 @@ class ScreenCommand(Driver):
         self.objects().filter(Screen.id == screen_id).update(kwargs)
 
     def send_event(self, name, screen_id, **kwargs):
-        event = self._create_event(screen_id, name, **kwargs)
         self._update_screen(screen_id, **kwargs)
+        event = self._create_event(screen_id, name, **kwargs)
         self.database.commit()
         return event
 
