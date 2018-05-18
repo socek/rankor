@@ -126,8 +126,8 @@ class HostQuestionView(HostQuestionBaseView):
                 question.id,
             )
             return {
-                'team_id': str(game_answer.team.id),
-                'answer_id': str(game_answer.answer.id)
+                'team_id': game_answer.team.id,
+                'answer_id': game_answer.answer.id
             }
         except NoResultFound:
             return {'team_id': None, 'answer_id': None}
@@ -148,8 +148,8 @@ class HostQuestionView(HostQuestionBaseView):
             view='question',
             view_data={
                 'team_name': team.name,
-                'question_id': str(question.id),
-                'answer_id': str(answer.id),
+                'question_id': question.id,
+                'answer_id': answer.id,
                 'is_correct': answer.is_correct
             })
 

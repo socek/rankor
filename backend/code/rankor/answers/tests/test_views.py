@@ -81,21 +81,18 @@ class TestAdminAnswerListView(Fixtures):
         """
         .get should return list of all answers assigned to a contest.
         """
+        uuid = uuid4()
         manswer_query.list_for_question.return_value = [{
-            'name':
-            'my name',
-            'description':
-            'my description',
-            'is_correct':
-            True,
-            'question_id':
-            'id',
+            'name': 'my name',
+            'description': 'my description',
+            'is_correct': True,
+            'question_id': uuid,
         }]
         assert view.get() == {
             'answers': [{
                 'name': 'my name',
                 'is_correct': True,
-                'question_id': 'id',
+                'question_id': uuid.hex,
             }]
         }
 

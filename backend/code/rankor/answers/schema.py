@@ -3,9 +3,11 @@ from marshmallow.fields import Boolean
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
+from rankor.application.marshmellow import UUID
+
 
 class AnswerSchema(Schema):
-    id = String()
+    id = UUID()
     name = String(
         required=True,
         allow_none=False,
@@ -14,6 +16,4 @@ class AnswerSchema(Schema):
         ],
     )
     is_correct = Boolean(required=True)
-    question_id = String(
-        allow_none=False,
-    )
+    question_id = UUID(allow_none=False, )

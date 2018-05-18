@@ -78,7 +78,7 @@ class TestScreenDrivers(IntegrationFixture):
         """
         .send_event should create event and update screen object
         """
-        event = command.send_event(screen.id, 'change view', view='newview')
+        event = command.send_event('change view', screen.id, view='newview')
         with DeleteOnExit(dbsession, event):
             dbsession.refresh(screen)
 
@@ -90,9 +90,9 @@ class TestScreenDrivers(IntegrationFixture):
         .list_event_after should list events after specyfic date in order of
         creation
         """
-        event1 = command.send_event(screen.id, 'view')
-        event2 = command.send_event(screen.id, 'view')
-        event3 = command.send_event(screen.id, 'view')
+        event1 = command.send_event('view', screen.id)
+        event2 = command.send_event('view', screen.id)
+        event3 = command.send_event('view', screen.id)
 
         with DeleteOnExit(dbsession, event1):
             with DeleteOnExit(dbsession, event2):
@@ -108,7 +108,7 @@ class TestScreenDrivers(IntegrationFixture):
         creation
         """
         timestamp = time()
-        event = command.send_event(screen.id, 'view')
+        event = command.send_event('view', screen.id)
 
         with DeleteOnExit(dbsession, event):
             result = query.list_events_after(screen.id, timestamp)

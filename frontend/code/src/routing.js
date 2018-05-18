@@ -80,7 +80,7 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/games/:game_id/screen',
+      path: '/games/:game_id/screen/:screen_id',
       name: 'GameScreen',
       component: GameScreen
     }

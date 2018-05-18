@@ -5,6 +5,9 @@
         Connecting...
       </div>
 
+      <welcome v-if="showView('welcome')">
+      </welcome>
+
       <highscore v-if="showView('highscore')">
       </highscore>
 
@@ -23,6 +26,7 @@
 <script>
   import question from '@/game_screen/question'
   import highscore from '@/game_screen/highscore'
+  import welcome from '@/game_screen/welcome'
 
   export default {
     data () {
@@ -56,7 +60,8 @@
     },
     components: {
       question,
-      highscore
+      highscore,
+      welcome
     }
   }
 </script>

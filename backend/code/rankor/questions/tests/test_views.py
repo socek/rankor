@@ -57,17 +57,23 @@ class TestAdminQuestionView(Fixtures):
         """
         .get should return list of all questions assigned to a contest.
         """
-        obj = MagicMock()
-        obj.category = 'my cat'
+        obj = {
+            'id': uuid4(),
+            'contest_id': uuid4(),
+            'name': 'my name',
+            'category': 'my cat',
+            'team': 'my team',
+            'description': 'my description'
+        }
         mquestion_query.get_by_id.return_value = obj
 
         assert view.get() == {
-            'id': str(obj['id']),
-            'name': str(obj['name']),
-            'description': str(obj['description']),
-            'category': str(obj['my cat']),
-            'contest_id': str(obj['contest_id']),
-            'team': str(obj['team'])
+            'id': obj['id'].hex,
+            'name': obj['name'],
+            'description': obj['description'],
+            'category': obj['category'],
+            'contest_id': obj['contest_id'].hex,
+            'team': obj['team']
         }
 
     def test_get_when_contest_not_found(
@@ -159,16 +165,24 @@ class TestAdminQuestionListView(Fixtures):
         .get should return list of all questions assigned to a contest.
         """
         obj = MagicMock()
+        obj.id = uuid4()
+        obj.contest_id = uuid4()
+        obj.name = 'my name'
         obj.category = 'my cat'
+        obj.team = 'my team'
+        obj.description = 'my description'
+        obj.__getitem__.side_effect = lambda name: getattr(obj, name)
+
         mquestion_query.list_for_contest.return_value = [obj]
+
         assert dict(view.get()['categories']) == {
             'my cat': [{
-                'id': str(obj['id']),
-                'name': str(obj['name']),
-                'description': str(obj['description']),
-                'category': str(obj['my cat']),
-                'contest_id': str(obj['contest_id']),
-                'team': str(obj['team'])
+                'id': obj['id'].hex,
+                'name': obj['name'],
+                'description': obj['description'],
+                'category': obj['category'],
+                'contest_id': obj['contest_id'].hex,
+                'team': obj['team']
             }]
         }
 

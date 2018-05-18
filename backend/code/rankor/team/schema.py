@@ -3,9 +3,11 @@ from marshmallow.fields import Integer
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
+from rankor.application.marshmellow import UUID
+
 
 class TeamSchema(Schema):
-    id = String()
+    id = UUID()
     name = String(
         required=True,
         allow_none=False,

@@ -2,9 +2,11 @@ from marshmallow import Schema
 from marshmallow import pre_dump
 from marshmallow.fields import String
 
+from rankor.application.marshmellow import UUID
+
 
 class FullQuestionSchema(Schema):
-    id = String()
+    id = UUID()
     name = String()
     status = String()
     team = String()
@@ -34,5 +36,5 @@ class FullQuestionSchema(Schema):
 
 
 class AnswerPostSchema(Schema):
-    team_id = String()
-    answer_id = String()
+    team_id = UUID()
+    answer_id = UUID()

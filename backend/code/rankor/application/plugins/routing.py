@@ -9,6 +9,7 @@ from rankor.home.routing import home_routing
 from rankor.host.routing import host_routing
 from rankor.menu.routing import meny_routing
 from rankor.questions.routing import questions_routing
+from rankor.events.routing import screen_routing
 
 
 class RankorRouting(Routing):
@@ -22,3 +23,4 @@ class RankorRouting(Routing):
         game_routing(self)
         host_routing(self)
         game_view_routing(self)
+        screen_routing(self)

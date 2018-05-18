@@ -2,6 +2,8 @@ from marshmallow import Schema
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
+from rankor.application.marshmellow import UUID
+
 
 class NewQuestionSchema(Schema):
     name = String(
@@ -16,8 +18,8 @@ class NewQuestionSchema(Schema):
 
 
 class QuestionSchema(NewQuestionSchema):
-    id = String()
-    contest_id = String(
+    id = UUID()
+    contest_id = UUID(
         required=True,
         allow_none=False,
     )

@@ -49,10 +49,12 @@ class TestAdminContestListView(Fixtures):
         """
         contest = {
             'name': 'one',
-            'owner_id': 'uuid',
-            'id': 'three',
+            'owner_id': uuid4(),
+            'id': uuid4(),
         }
-        mquery.list_for_owner.return_value = [contest]
+        mquery.list_for_owner.return_value = [dict(contest)]
+        contest['id'] = contest['id'].hex
+        contest['owner_id'] = contest['owner_id'].hex
 
         assert view.get() == {'contests': [contest]}
 

@@ -2,11 +2,13 @@ from marshmallow import Schema
 from marshmallow.fields import String
 from marshmallow.validate import Length
 
+from rankor.application.marshmellow import UUID
+
 
 class GameSchema(Schema):
-    id = String()
-    contest_id = String()
-    owner_id = String()
+    id = UUID()
+    contest_id = UUID()
+    owner_id = UUID()
     name = String(
         required=True,
         allow_none=False,
