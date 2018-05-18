@@ -7,6 +7,7 @@ from sapp.plugins.pyramid.testing import BaseWebTestFixture
 from sapp.plugins.pyramid.testing import ViewFixtureMixin
 from sapp.plugins.sqlalchemy.recreate import RecreateDatabases
 from sapp.plugins.sqlalchemy.testing import BaseIntegrationFixture
+from sqlalchemy.exc import InvalidRequestError
 
 from rankor.application.app import RankorConfigurator
 from rankor.auth.models import User
@@ -25,7 +26,10 @@ class DeleteOnExit(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.dbsession.delete(self.obj)
-        self.dbsession.commit()
+        try:
+            self.dbsession.commit()
+        except InvalidRequestError:
+            self.dbsession.rollback()
 
 
 class RankorFixturesMixin(object):

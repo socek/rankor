@@ -14,6 +14,7 @@ import rankor.questions.models
 import rankor.game.models
 import rankor.team.models
 import rankor.game_answer.models
+import rankor.events.models
 
 
 AlembicScript(app, Model, 'dbsession').run()
