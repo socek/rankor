@@ -1,5 +1,8 @@
+from rankor.events.actions import ChangeView
 from rankor.events.drivers import ScreenCommand
 from rankor.events.drivers import ScreenQuery
+from rankor.events.schemas import ChangeViewCommandSchema
+from rankor.events.schemas import CommandSchema
 from rankor.events.schemas import ScreenSchema
 from rankor.host.views import HostBaseView
 
@@ -35,3 +38,18 @@ class HostScreenView(ScreenBaseView):
 
     def delete(self):
         self.screen_command.delete_screen(self._get_screen_id())
+
+    schemas = {
+        'change_view': ChangeViewCommandSchema(),
+    }
+
+    def patch(self):
+        fields = self.get_validated_fields(CommandSchema())
+        schema = self.schemas[fields['name']]
+        fields = self.get_validated_fields(schema)
+
+        method = getattr(self, fields['name'])
+        return method(fields['data'])
+
+    def change_view(self, fields):
+        ChangeView(self._get_screen_id(), fields['view']).send()
