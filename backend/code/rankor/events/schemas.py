@@ -20,3 +20,20 @@ class ChangeViewCommandSchema(CommandSchema):
         view = String()
 
     data = Nested(ChangeView)
+
+
+class ShowQuestionCommandSchema(CommandSchema):
+    class ShowQuestion(Schema):
+        view = String()
+        question_id = UUID()
+        team_id = UUID()
+
+    data = Nested(ShowQuestion)
+
+
+class AttachTeamCommandSchema(CommandSchema):
+    class AttachTeam(Schema):
+        view = String()
+        team_id = UUID()
+
+    data = Nested(AttachTeam)

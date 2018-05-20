@@ -17,3 +17,10 @@ class Question(Model):
 
     contest_id = Column(UUID(as_uuid=True), ForeignKey('contests.id'), nullable=False)
     contest = relationship("Contest", uselist=False, backref='questions')
+
+    def to_dict(self):
+        data = super().to_dict()
+        data['name'] = self.name
+        data['description'] = self.description
+        data['category'] = self.category
+        return data

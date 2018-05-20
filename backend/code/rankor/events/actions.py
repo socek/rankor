@@ -12,7 +12,7 @@ class Event(object):
             command.send_event(self.name, **self.data)
 
 
-class ChangeView(Event):
+class ChangeViewEvent(Event):
     name = 'change_view'
 
     _views = ('welcome', 'highscore', 'question')
@@ -22,30 +22,30 @@ class ChangeView(Event):
         super().__init__(screen_id=screen_id, view=view)
 
 
-class ShowQuestion(Event):
+class ShowQuestionEvent(Event):
     name = 'show_question'
-
-    def __init__(self, screen_id, question_id):
-        super().__init__(
-            screen_id=screen_id,
-            view='question',
-            question_id=question_id,
-        )
-
-
-class AttachTeam(Event):
-    name = 'attach_team'
 
     def __init__(self, screen_id, question_id, team_id):
         super().__init__(
             screen_id=screen_id,
             view='question',
             question_id=question_id,
+            team_id=team_id
+        )
+
+
+class AttachTeamEvent(Event):
+    name = 'attach_team'
+
+    def __init__(self, screen_id, team_id):
+        super().__init__(
+            screen_id=screen_id,
+            view='question',
             team_id=team_id,
         )
 
 
-class SelectAnswer(Event):
+class SelectAnswerEvent(Event):
     name = 'select_answer'
 
     def __init__(self, screen_id, question_id, answer_id):
@@ -57,7 +57,7 @@ class SelectAnswer(Event):
         )
 
 
-class VeryfiAnswer(Event):
+class VeryfiAnswerEvent(Event):
     name = 'veryfi_answer'
 
     def __init__(self, screen_id, question_id, team_id, answer_id):

@@ -5,7 +5,7 @@
         <icon name="plus"></icon>
       </b-btn>
     </h2>
-    <ul>
+    <ul class="screens">
       <li v-for="(screen, index) in screens">
         Screen {{ index + 1 }}
         <b-btn @click="onWelcome(screen)" variant="primary" size="small">
@@ -85,8 +85,8 @@
   }
 </script>
 
-<style scoped>
-  ul li {
+<style>
+  ul.screens li {
     margin-top: 3px;
     margin-bottom: 3px;
   }

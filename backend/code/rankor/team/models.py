@@ -14,3 +14,8 @@ class Team(Model):
 
     game_id = Column(UUID(as_uuid=True), ForeignKey('games.id'), nullable=False)
     game = relationship("Game", uselist=False, backref='teams')
+
+    def to_dict(self):
+        data = super().to_dict()
+        data['name'] = self.name
+        return data

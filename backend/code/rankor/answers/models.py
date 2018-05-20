@@ -17,3 +17,9 @@ class Answer(Model):
 
     question_id = Column(UUID(as_uuid=True), ForeignKey(Question.id), nullable=False)
     question = relationship("Question", uselist=False, backref='answers')
+
+    def to_dict(self):
+        data = super().to_dict()
+        data['name'] = self.name
+        data['is_correct'] = self.is_correct
+        return data

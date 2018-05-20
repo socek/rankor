@@ -27,11 +27,9 @@
 
       <question
                 v-if="showView('question')"
-                :question_id="question_id"
-                :timestamp="timestamp"
-                :team_name="team_name"
-                :answer_id="answer_id"
-                :is_correct="is_correct"
+                :question="question"
+                :team="team"
+                :answer="answer"
       ></question>
     </div>
   </div>
@@ -47,14 +45,16 @@
       return {
         view: 'connecting',
         connected: false,
-        question_id: null,
-        timestamp: null
+        question: null,
+        answer: null,
+        team: null
       }
     },
     methods: {
       showView (name) {
         return this.view === name
       },
+
       onConnect () {
         this.$connect()
       }
@@ -77,9 +77,19 @@
           },
           init: (data) => {
             this.view = data.view
+            this.question = data.question || null
+            this.team = data.team || null
+            this.answer = data.answer || null
           },
-          ping: (data) => {
-            console.log('ping recieved')
+          ping: (data) => {},
+          show_question: (data) => {
+            this.view = data.view
+            this.question = data.question || null
+            this.team = data.team || null
+            this.answer = data.answer || null
+          },
+          attach_team: (data) => {
+            this.team = data.team || null
           }
         }
         methods[data['name']](data)

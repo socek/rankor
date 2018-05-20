@@ -20,3 +20,10 @@ class GameAnswer(Model):
     answer = relationship("Answer", uselist=False)
     team = relationship(Team, uselist=False)
 
+    def to_dict(self):
+        data = super().to_dict()
+        data['game_id'] = self.game_id
+        data['question_id'] = self.question_id
+        data['answer_id'] = self.answer_id
+        data['team_id'] = self.team_id
+        return data

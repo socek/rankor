@@ -1,9 +1,13 @@
-from rankor.events.actions import ChangeView
+from rankor.events.actions import AttachTeamEvent
+from rankor.events.actions import ChangeViewEvent
+from rankor.events.actions import ShowQuestionEvent
 from rankor.events.drivers import ScreenCommand
 from rankor.events.drivers import ScreenQuery
+from rankor.events.schemas import AttachTeamCommandSchema
 from rankor.events.schemas import ChangeViewCommandSchema
 from rankor.events.schemas import CommandSchema
 from rankor.events.schemas import ScreenSchema
+from rankor.events.schemas import ShowQuestionCommandSchema
 from rankor.host.views import HostBaseView
 
 
@@ -41,6 +45,8 @@ class HostScreenView(ScreenBaseView):
 
     schemas = {
         'change_view': ChangeViewCommandSchema(),
+        'show_question': ShowQuestionCommandSchema(),
+        'attach_team': AttachTeamCommandSchema(),
     }
 
     def patch(self):
@@ -52,4 +58,14 @@ class HostScreenView(ScreenBaseView):
         return method(fields['data'])
 
     def change_view(self, fields):
-        ChangeView(self._get_screen_id(), fields['view']).send()
+        ChangeViewEvent(self._get_screen_id(), fields['view']).send()
+
+    def show_question(self, fields):
+        ShowQuestionEvent(
+            self._get_screen_id(),
+            fields['question_id'],
+            fields['team_id'],
+        ).send()
+
+    def attach_team(self, fields):
+        AttachTeamEvent(self._get_screen_id(), fields['team_id']).send()

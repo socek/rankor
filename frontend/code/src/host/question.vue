@@ -10,6 +10,15 @@
     <h2>Description</h2>
     <p>{{ description }}</p>
 
+    <ul class="screens">
+      <li v-for="(screen, index) in screens">
+        Screen {{ index + 1 }}
+        <b-btn @click="onSendToScreen(screen)" :variant="getScreenVariant(screen)" size="small">
+          Send to screen
+        </b-btn>
+      </li>
+    </ul>
+
     <form @submit.prevent="onSave">
       <b-form-invalid-feedback  v-for="error in form.errors._schema"
                                 :key="error"
@@ -41,7 +50,7 @@
 
         <ul>
           <li v-for="(answer, index) in answers">
-            <input :id="'answer_' + index" type="radio" :value="answer.value" v-model="form.fields.answer_id" @change="sendUpdate">
+            <input :id="'answer_' + index" type="radio" :value="answer.value" v-model="form.fields.answer_id">
             <label :for="'answer_' + index" :class="{correct: answer.is_correct}">
               {{ answer.text }}
             </label>
@@ -58,6 +67,7 @@
 <script>
   import hostResource from '@/host/resource'
   import baseForm from '@/forms'
+  import screenResource from '@/screen/resource'
 
   export default {
     extends: baseForm,
@@ -72,30 +82,35 @@
         }),
         teams: [],
         answers: [],
+        screens: [],
 
         game_id: this.$route.params.game_id,
         question_id: this.$route.params.question_id,
+        currentScreens: [],
 
-        hostResource: hostResource(this)
+        hostResource: hostResource(this),
+        screenResource: screenResource(this)
       }
     },
     created () {
       this.refresh()
     },
     methods: {
-      sendUpdate () {
-        let params = {
-          question_id: this.$route.params.question_id,
-          game_id: this.$route.params.game_id,
-          view: 'question',
-          team_name: this.getTeamName(),
-          answer_id: this.form.fields.answer_id
-        }
-        this.hostResource.change_view(params, params)
+      getScreenVariant (screen) {
+        return (this.currentScreens.indexOf(screen) >= 0) ? 'danger' : 'primary'
       },
       onChangeTeam (event) {
         this.form.fields.team_id = event
-        this.sendUpdate()
+        this.currentScreens.forEach(screen => {
+          const params = this.makeParams(screen)
+          const data = {
+            'name': 'attach_team',
+            'data': {
+              'team_id': event
+            }
+          }
+          return this.screenResource.doCommand(params, data)
+        })
       },
       getTeamName () {
         for (let loop = 0; loop < this.teams.length; loop++) {
@@ -144,11 +159,21 @@
             })
           })
           this.form.fields = response.data.answer
-          this.sendUpdate()
+          // this.sendUpdate()
+
+          this.screenResource.listScreens(params).then(response => {
+            this.screens = response.data
+          })
         })
       },
       saveCall () {
         return this.hostResource.save_answer(this.params(), this.form.fields)
+      },
+      makeParams (screen) {
+        return {
+          game_id: this.game_id,
+          screen_id: screen.id
+        }
       },
       onSave () {
         this.saveCall().then((response) => {
@@ -159,6 +184,19 @@
             }
           })
         }).catch(this.onError)
+      },
+      onSendToScreen (screen) {
+        this.currentScreens.push(screen)
+        const params = this.makeParams(screen)
+        const data = {
+          'name': 'show_question',
+          'data': {
+            'view': 'question',
+            'question_id': this.question_id,
+            'team_id': this.form.fields.team_id
+          }
+        }
+        return this.screenResource.doCommand(params, data)
       }
     }
   }

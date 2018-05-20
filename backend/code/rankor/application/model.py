@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timezone
 from uuid import uuid4
 
 from sqlalchemy import Column
@@ -26,6 +27,13 @@ class Base(object):
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'created_at': self.created_at.replace(tzinfo=timezone.utc).timestamp(),
+            'updated_at': self.updated_at.replace(tzinfo=timezone.utc).timestamp(),
+        }
 
 
 Model = declarative_base(metadata=metadata, cls=Base)

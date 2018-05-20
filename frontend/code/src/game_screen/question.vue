@@ -1,12 +1,12 @@
 <template>
   <span>
     <h1>Pytanie:</h1>
-    <h2>Drużyna: {{ team }}</h2>
-    <h3>Kategoria: {{ category }}</h3>
-    <p>{{ description }}</p>
+    <h2>Drużyna: {{ getTeamName() }}</h2>
+    <h3>Kategoria: {{ getCategory() }}</h3>
+    <p>{{ getDescription() }}</p>
     <ul>
       <li v-for="(answer, index) in answers" >
-        {{ index + 1 }}: <span :class='{selected: answer.value === answer_id, answer: true, success: answer.value === answer_id && is_correct === true, fail: answer.value === answer_id && is_correct === false}'>{{ answer.text }}</span>
+        {{ index + 1 }}: <span :class='getAnswerClass(answer)'>{{ answer.text }}</span>
       </li>
     </ul>
   </span>
@@ -16,51 +16,55 @@
   import hostResource from '@/host/resource'
 
   export default {
-    props: ['question_id', 'timestamp', 'team_name', 'answer_id', 'is_correct'],
+    props: ['question', 'team', 'answer'],
     data () {
       return {
-        team: this.team_name,
-        description: null,
-        category: null,
         answers: [],
         hostResource: hostResource(this)
       }
     },
     created () {
-      this.fillQuestion()
+      this.refresh()
     },
     methods: {
-      refresh () {
-        this.team = this.team_name
-        this.description = null
-        this.answers = []
+      getTeamName () {
+        return this.team ? this.team.name : null
       },
-      fillQuestion () {
-        this.refresh()
-        let params = {
-          game_id: this.$route.params.game_id,
-          question_id: this.question_id
+      getCategory () {
+        return this.question ? this.question.category : null
+      },
+      getDescription () {
+        return this.question ? this.question.description : null
+      },
+      getAnswerClass (answer) {
+        let answerId = answer.id
+        let selectedId = this.answer ? this.answer.id : null
+        let isCorrect = this.answer ? this.answers.is_correct : false
+        return {
+          answer: true,
+          selected: answerId === selectedId,
+          success: answerId === selectedId && isCorrect,
+          fail: answerId === selectedId && !isCorrect
         }
+      },
+      refresh () {
+        this.answers = []
+        if (this.question) {
+          let params = {
+            game_id: this.$route.params.game_id,
+            question_id: this.question.id
+          }
 
-        this.hostResource.get_question(params).then(response => {
-          const question = response.data.question
-          this.name = question.name
-          this.description = question.description
-          this.category = question.category
-
-          this.answers = []
-          response.data.answers.forEach(answer => {
-            this.answers.push({
-              value: answer.id,
-              text: answer.name
+          this.hostResource.get_question(params).then(response => {
+            this.answers = []
+            response.data.answers.forEach(answer => {
+              this.answers.push({
+                value: answer.id,
+                text: answer.name
+              })
             })
           })
-        })
-      }
-    },
-    watch: {
-      timestamp (val) {
-        this.fillQuestion()
+        }
       }
     }
   }

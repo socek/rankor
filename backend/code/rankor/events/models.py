@@ -1,45 +1,79 @@
-from datetime import timezone
-
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.orm import relationship
 
+from rankor.answers.models import Answer
 from rankor.application.model import Model
+from rankor.auth.models import User # noqa
+from rankor.contest.models import Contest # noqa
+from rankor.game.models import Game # noqa
+from rankor.game_answer.models import GameAnswer
+from rankor.questions.models import Question
+from rankor.team.models import Team
 
 
 class ScreenMixin(object):
     view = Column(String, default='welcome')
 
     @declared_attr
-    def question_id(cls):
-        return Column(UUID(as_uuid=True), ForeignKey('questions.id'), nullable=True)
+    def question_id(cls):  # noqa
+        return Column(
+            UUID(as_uuid=True), ForeignKey('questions.id'), nullable=True)
 
     @declared_attr
-    def answer_id(cls):
-        return Column(UUID(as_uuid=True), ForeignKey('answers.id'), nullable=True)
+    def answer_id(cls):  # noqa
+        return Column(
+            UUID(as_uuid=True), ForeignKey('answers.id'), nullable=True)
 
     @declared_attr
-    def team_id(cls):
-        return Column(UUID(as_uuid=True), ForeignKey('teams.id'), nullable=True)
+    def team_id(cls):  # noqa
+        return Column(
+            UUID(as_uuid=True), ForeignKey('teams.id'), nullable=True)
 
     @declared_attr
-    def game_answer_id(cls):
-        return Column(UUID(as_uuid=True), ForeignKey('game_answers.id'), nullable=True)
+    def game_answer_id(cls):  # noqa
+        return Column(
+            UUID(as_uuid=True), ForeignKey('game_answers.id'), nullable=True)
+
+    @declared_attr
+    def question(cls):  # noqa
+        return relationship(Question, uselist=False)
+
+    @declared_attr
+    def answer(cls):  # noqa
+        return relationship(Answer, uselist=False)
+
+    @declared_attr
+    def team(cls):  # noqa
+        return relationship(Team, uselist=False)
+
+    @declared_attr
+    def game_answer(cls):  # noqa
+        return relationship(GameAnswer, uselist=False)
 
     def to_dict(self):
-        return {
-            'id': self.id,
+        data = super().to_dict()
+        data.update({
             'view': self.view,
-            'created_at': self.created_at.replace(tzinfo=timezone.utc).timestamp(),
-            'updated_at': self.updated_at.replace(tzinfo=timezone.utc).timestamp(),
             'question_id': self.question_id,
             'answer_id': self.answer_id,
             'team_id': self.team_id,
             'game_answer_id': self.game_answer_id,
-        }
+        })
+        if self.question:
+            data['question'] = self.question.to_dict()
+        if self.team:
+            data['team'] = self.team.to_dict()
+        if self.answer:
+            data['answer'] = self.answer.to_dict()
+        if self.game_answer:
+            data['game_answer'] = self.game_answer.to_dict()
+
+        return data
 
 
 class Screen(ScreenMixin, Model):
