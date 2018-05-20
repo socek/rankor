@@ -90,6 +90,10 @@
           },
           attach_team: (data) => {
             this.team = data.team || null
+          },
+          select_answer: (data) => {
+            this.answer = data.answer || null
+            console.log('answer =>', this.answer)
           }
         }
         methods[data['name']](data)

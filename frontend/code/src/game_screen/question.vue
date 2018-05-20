@@ -37,15 +37,16 @@
         return this.question ? this.question.description : null
       },
       getAnswerClass (answer) {
-        let answerId = answer.id
+        let answerId = answer.value
         let selectedId = this.answer ? this.answer.id : null
-        let isCorrect = this.answer ? this.answers.is_correct : false
-        return {
+        let isCorrect = this.answer ? this.answers.is_correct : null
+        let data = {
           answer: true,
           selected: answerId === selectedId,
-          success: answerId === selectedId && isCorrect,
-          fail: answerId === selectedId && !isCorrect
+          success: answerId === selectedId && isCorrect === true,
+          fail: answerId === selectedId && isCorrect === false
         }
+        return data
       },
       refresh () {
         this.answers = []

@@ -37,3 +37,11 @@ class AttachTeamCommandSchema(CommandSchema):
         team_id = UUID()
 
     data = Nested(AttachTeam)
+
+
+class SelectAnswerCommandSchema(CommandSchema):
+    class SelectAnswer(Schema):
+        view = String()
+        answer_id = UUID()
+
+    data = Nested(SelectAnswer)

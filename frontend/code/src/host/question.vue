@@ -13,7 +13,11 @@
     <ul class="screens">
       <li v-for="(screen, index) in screens">
         Screen {{ index + 1 }}
-        <b-btn @click="onSendToScreen(screen)" :variant="getScreenVariant(screen)" size="small">
+        <b-btn
+          @click="onSendToScreen(screen)"
+          :variant="getScreenVariant(screen)"
+          size="small"
+          :disabled="form.fields.team_id === null">
           Send to screen
         </b-btn>
       </li>
@@ -30,7 +34,7 @@
                     label="Team:"
                     label-for="teamField">
         <b-form-select  id="teamField"
-                        @change="onChangeTeam"
+                        @change="onSelectTeam"
                         v-model="form.fields.team_id"
                         :options="teams"
                         :state="form.errors.team_id.length == 0 ? null : false"
@@ -50,7 +54,7 @@
 
         <ul>
           <li v-for="(answer, index) in answers">
-            <input :id="'answer_' + index" type="radio" :value="answer.value" v-model="form.fields.answer_id">
+            <input :id="'answer_' + index" type="radio" :value="answer.value" v-model="form.fields.answer_id" @change="onSelectAnswer">
             <label :for="'answer_' + index" :class="{correct: answer.is_correct}">
               {{ answer.text }}
             </label>
@@ -99,17 +103,21 @@
       getScreenVariant (screen) {
         return (this.currentScreens.indexOf(screen) >= 0) ? 'danger' : 'primary'
       },
-      onChangeTeam (event) {
+      onSelectTeam (event) {
         this.form.fields.team_id = event
-        this.currentScreens.forEach(screen => {
-          const params = this.makeParams(screen)
-          const data = {
-            'name': 'attach_team',
-            'data': {
-              'team_id': event
-            }
+        return this.doCommand({
+          'name': 'attach_team',
+          'data': {
+            'team_id': event
           }
-          return this.screenResource.doCommand(params, data)
+        })
+      },
+      onSelectAnswer (event) {
+        return this.doCommand({
+          'name': 'select_answer',
+          'data': {
+            'answer_id': event.target.value
+          }
         })
       },
       getTeamName () {
@@ -187,16 +195,22 @@
       },
       onSendToScreen (screen) {
         this.currentScreens.push(screen)
-        const params = this.makeParams(screen)
-        const data = {
+        return this.doCommand({
           'name': 'show_question',
           'data': {
             'view': 'question',
             'question_id': this.question_id,
             'team_id': this.form.fields.team_id
-          }
-        }
-        return this.screenResource.doCommand(params, data)
+          },
+          screen
+        })
+      },
+      doCommand (data, screen) {
+        let screens = screen ? [screen] : this.currentScreens
+        screens.forEach(screen => {
+          const params = this.makeParams(screen)
+          return this.screenResource.doCommand(params, data)
+        })
       }
     }
   }

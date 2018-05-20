@@ -48,11 +48,10 @@ class AttachTeamEvent(Event):
 class SelectAnswerEvent(Event):
     name = 'select_answer'
 
-    def __init__(self, screen_id, question_id, answer_id):
+    def __init__(self, screen_id, answer_id):
         super().__init__(
             screen_id=screen_id,
             view='question',
-            question_id=question_id,
             answer_id=answer_id,
         )
 
