@@ -10,6 +10,8 @@ log = getLogger(__name__)
 
 
 class Client(object):
+    PING_EVERY = 100
+
     def __init__(self, context, websocket):
         self.context = context
         self.redis = context.redis
@@ -17,6 +19,7 @@ class Client(object):
         self.websocket = websocket
         self.game_id = None
         self.screen_id = None
+        self.tick = 0
 
     @property
     def screen_query(self):
@@ -38,25 +41,36 @@ class Client(object):
                     timestamp = await self.send_current_state()
                     await self.run_loop(timestamp)
                 except Exception as error:
-                    print(error)
+                    log.error(error, exc_info=True)
                 finally:
                     log.info('Connection lost')
             except JSONDecodeError:
-                log.error('not understanding: {}'.format(message))
+                log.error(
+                    'not understanding: {}'.format(message), exc_info=True)
 
     async def run_loop(self, timestamp):
         while True:
-            events = self.screen_query.list_events_after(self.screen_id, timestamp)
+            events = self.screen_query.list_events_after(
+                self.screen_id, timestamp)
             for event in events:
-                log.debug('parsing event {}:{}...'.format(event.name, event.id))
-                await self.websocket.send(dumps(event.to_dict()))
+                log.debug('sending event {}:{}'.format(event.name,
+                                                       event.id.hex))
+                await self._send(event.to_dict())
                 timestamp = event.created_at
+
+            await self.send_ping()
             await sleep(0.1)
 
     async def send_current_state(self):
         screen = self.screen_query.get_by_id(self.screen_id)
         data = screen.to_dict()
         data['name'] = 'init'
-        value = dumps(data)
-        await self.websocket.send(value)
+        await self._send(data)
         return screen.updated_at
+
+    async def send_ping(self):
+        self.tick += 1
+        if self.tick % self.PING_EVERY == 0:
+            self.tick = 0
+            log.debug('sending ping')
+            await self._send({'name': 'ping'})

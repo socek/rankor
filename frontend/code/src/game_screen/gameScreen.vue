@@ -77,6 +77,9 @@
           },
           init: (data) => {
             this.view = data.view
+          },
+          ping: (data) => {
+            console.log('ping recieved')
           }
         }
         methods[data['name']](data)
