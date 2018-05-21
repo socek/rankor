@@ -29,8 +29,8 @@ class GameAnswerCommand(Command):
             self.database.commit()
             return game_answer
         except NoResultFound:
-            self.create(
-                game_id=self.game_id,
-                question_id=self.question_id,
-                team_id=self.team_id,
-                answer_id=self.answer_id)
+            return self.create(
+                game_id=game_id,
+                question_id=question_id,
+                team_id=team_id,
+                answer_id=answer_id)

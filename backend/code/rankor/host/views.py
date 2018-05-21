@@ -7,6 +7,7 @@ from rankor.answers.drivers import AnswerQuery
 from rankor.answers.schema import AnswerSchema
 from rankor.application.cache import cache_per_request
 from rankor.auth.view_mixins import AuthenticatedView
+from rankor.events.actions import VeryfiAnswerEvent
 from rankor.game.drivers import GameQuery
 from rankor.game_answer.drivers import GameAnswerCommand
 from rankor.game_answer.drivers import GameAnswerQuery
@@ -75,8 +76,8 @@ class HostQuestionBaseView(HostBaseView):
     @cache_per_request('question')
     def _get_question(self):
         try:
-            return self.question_query.get_for_answer(
-                self._get_question_id(), self._get_game_id())
+            return self.question_query.get_for_answer(self._get_question_id(),
+                                                      self._get_game_id())
         except NoResultFound:
             raise HTTPNotFound()
 
@@ -111,8 +112,7 @@ class HostQuestionView(HostQuestionBaseView):
         return TeamSchema(many=True).dump(elements)
 
     def _get_answers_result(self):
-        answers = self.answer_query.list_for_question(
-            self._get_question_id())
+        answers = self.answer_query.list_for_question(self._get_question_id())
         schema = AnswerSchema()
         return [schema.dump(answer) for answer in answers]
 
@@ -134,24 +134,20 @@ class HostQuestionView(HostQuestionBaseView):
 
     def post(self):
         fields = self.get_validated_fields(AnswerPostSchema())
-        game = self._get_game()
-        question = self._get_question()
-        team = self.team_query.get_by_id(fields['team_id'])
-        answer = self.answer_query.get_by_id(fields['answer_id'])
-        self.game_answer_command.upsert(
-            game.id,
-            question.id,
-            team.id,
-            answer.id,
+        game_answer = self.game_answer_command.upsert(
+            self._get_game_id(),
+            self._get_question_id(),
+            fields['team_id'],
+            fields['answer_id'],
         )
-        self.game_screen().set_value(
-            view='question',
-            view_data={
-                'team_name': team.name,
-                'question_id': question.id,
-                'answer_id': answer.id,
-                'is_correct': answer.is_correct
-            })
+        for screen_id in fields['screen_ids']:
+            VeryfiAnswerEvent(
+                screen_id,
+                self._get_question_id(),
+                fields['team_id'],
+                fields['answer_id'],
+                game_answer.id,
+            ).send()
 
 
 class HostTeamListView(HostBaseView):

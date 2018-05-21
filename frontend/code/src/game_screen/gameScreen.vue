@@ -30,6 +30,7 @@
                 :question="question"
                 :team="team"
                 :answer="answer"
+                :is_correct="is_correct"
       ></question>
     </div>
   </div>
@@ -47,7 +48,8 @@
         connected: false,
         question: null,
         answer: null,
-        team: null
+        team: null,
+        is_correct: null
       }
     },
     methods: {
@@ -80,6 +82,7 @@
             this.question = data.question || null
             this.team = data.team || null
             this.answer = data.answer || null
+            this.is_correct = data.is_correct || null
           },
           ping: (data) => {},
           show_question: (data) => {
@@ -87,13 +90,16 @@
             this.question = data.question || null
             this.team = data.team || null
             this.answer = data.answer || null
+            this.is_correct = data.is_correct || null
           },
           attach_team: (data) => {
             this.team = data.team || null
           },
           select_answer: (data) => {
             this.answer = data.answer || null
-            console.log('answer =>', this.answer)
+          },
+          veryfi_answer: (data) => {
+            this.is_correct = data.is_correct
           }
         }
         methods[data['name']](data)

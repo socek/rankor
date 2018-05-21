@@ -16,7 +16,7 @@
   import hostResource from '@/host/resource'
 
   export default {
-    props: ['question', 'team', 'answer'],
+    props: ['question', 'team', 'answer', 'is_correct'],
     data () {
       return {
         answers: [],
@@ -39,7 +39,7 @@
       getAnswerClass (answer) {
         let answerId = answer.value
         let selectedId = this.answer ? this.answer.id : null
-        let isCorrect = this.answer ? this.answers.is_correct : null
+        let isCorrect = this.is_correct
         let data = {
           answer: true,
           selected: answerId === selectedId,

@@ -167,7 +167,6 @@
             })
           })
           this.form.fields = response.data.answer
-          // this.sendUpdate()
 
           this.screenResource.listScreens(params).then(response => {
             this.screens = response.data
@@ -175,7 +174,12 @@
         })
       },
       saveCall () {
-        return this.hostResource.save_answer(this.params(), this.form.fields)
+        let fields = this.form.fields
+        fields['screen_ids'] = []
+        this.currentScreens.forEach(screen => {
+          fields['screen_ids'].push(screen.id)
+        })
+        return this.hostResource.save_answer(this.params(), fields)
       },
       makeParams (screen) {
         return {

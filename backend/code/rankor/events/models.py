@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
@@ -14,6 +16,8 @@ from rankor.game.models import Game # noqa
 from rankor.game_answer.models import GameAnswer
 from rankor.questions.models import Question
 from rankor.team.models import Team
+
+log = getLogger(__name__)
 
 
 class ScreenMixin(object):
@@ -72,6 +76,11 @@ class ScreenMixin(object):
             data['answer'] = self.answer.to_dict()
         if self.game_answer:
             data['game_answer'] = self.game_answer.to_dict()
+
+        if self.game_answer_id:
+            data['is_correct'] = self.answer.is_correct or False
+        else:
+            data['is_correct'] = None
 
         return data
 
