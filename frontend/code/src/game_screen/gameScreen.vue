@@ -25,13 +25,8 @@
       <highscore v-if="showView('highscore')">
       </highscore>
 
-      <question
-                v-if="showView('question')"
-                :question="question"
-                :team="team"
-                :answer="answer"
-                :is_correct="is_correct"
-      ></question>
+      <question v-if="showView('question')">
+      </question>
     </div>
   </div>
 </template>
@@ -44,12 +39,7 @@
   export default {
     data () {
       return {
-        view: 'connecting',
-        connected: false,
-        question: null,
-        answer: null,
-        team: null,
-        is_correct: null
+        connected: false
       }
     },
     methods: {
@@ -59,6 +49,11 @@
 
       onConnect () {
         this.$connect()
+      }
+    },
+    computed: {
+      view () {
+        return this.$store.state.screen.view
       }
     },
     created () {
@@ -73,36 +68,7 @@
       }
       this.$options.sockets.onmessage = (event) => {
         let data = JSON.parse(event.data)
-        let methods = {
-          change_view: (data) => {
-            this.view = data.view
-          },
-          init: (data) => {
-            this.view = data.view
-            this.question = data.question || null
-            this.team = data.team || null
-            this.answer = data.answer || null
-            this.is_correct = data.is_correct || null
-          },
-          ping: (data) => {},
-          show_question: (data) => {
-            this.view = data.view
-            this.question = data.question || null
-            this.team = data.team || null
-            this.answer = data.answer || null
-            this.is_correct = data.is_correct || null
-          },
-          attach_team: (data) => {
-            this.team = data.team || null
-          },
-          select_answer: (data) => {
-            this.answer = data.answer || null
-          },
-          veryfi_answer: (data) => {
-            this.is_correct = data.is_correct
-          }
-        }
-        methods[data['name']](data)
+        this.$store.dispatch('screen/parseData', data)
       }
       this.$options.sockets.onclose = () => {
         console.log('Connection closed')

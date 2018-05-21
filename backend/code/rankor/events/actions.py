@@ -25,12 +25,13 @@ class ChangeViewEvent(Event):
 class ShowQuestionEvent(Event):
     name = 'show_question'
 
-    def __init__(self, screen_id, question_id, team_id):
+    def __init__(self, screen_id, question_id, team_id, answer_id):
         super().__init__(
             screen_id=screen_id,
             view='question',
             question_id=question_id,
-            team_id=team_id
+            team_id=team_id,
+            answer_id=answer_id
         )
 
 

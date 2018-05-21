@@ -68,6 +68,7 @@ class HostScreenView(ScreenBaseView):
             self._get_screen_id(),
             fields['question_id'],
             fields['team_id'],
+            fields['answer_id']
         ).send()
 
     def attach_team(self, fields):

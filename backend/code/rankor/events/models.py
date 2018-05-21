@@ -77,7 +77,7 @@ class ScreenMixin(object):
         if self.game_answer:
             data['game_answer'] = self.game_answer.to_dict()
 
-        if self.game_answer_id:
+        if self.answer and self.game_answer_id:
             data['is_correct'] = self.answer.is_correct or False
         else:
             data['is_correct'] = None

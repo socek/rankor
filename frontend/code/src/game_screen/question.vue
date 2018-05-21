@@ -16,7 +16,6 @@
   import hostResource from '@/host/resource'
 
   export default {
-    props: ['question', 'team', 'answer', 'is_correct'],
     data () {
       return {
         answers: [],
@@ -24,7 +23,23 @@
       }
     },
     created () {
-      this.refresh()
+      this.onNewQuestion(this.question)
+    },
+    computed: {
+      question () {
+        let question = this.$store.state.screen.question
+        this.onNewQuestion(question)
+        return question
+      },
+      team () {
+        return this.$store.state.screen.team
+      },
+      answer () {
+        return this.$store.state.screen.answer
+      },
+      isCorrect () {
+        return this.$store.state.screen.isCorrect
+      }
     },
     methods: {
       getTeamName () {
@@ -39,21 +54,22 @@
       getAnswerClass (answer) {
         let answerId = answer.value
         let selectedId = this.answer ? this.answer.id : null
-        let isCorrect = this.is_correct
+        let isCorrect = this.isCorrect
         let data = {
           answer: true,
           selected: answerId === selectedId,
           success: answerId === selectedId && isCorrect === true,
           fail: answerId === selectedId && isCorrect === false
         }
+        // console.log(answer.text, data.selected, answerId, selectedId)
         return data
       },
-      refresh () {
+      onNewQuestion (question) {
         this.answers = []
-        if (this.question) {
+        if (question) {
           let params = {
             game_id: this.$route.params.game_id,
-            question_id: this.question.id
+            question_id: question.id
           }
 
           this.hostResource.get_question(params).then(response => {
@@ -74,7 +90,6 @@
 <style>
   .selected {
     background-color: yellow;
-    /*color: white;*/
   }
   .answer {
     padding: 5px;

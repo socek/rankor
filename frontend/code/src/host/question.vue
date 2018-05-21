@@ -206,12 +206,14 @@
         if (this.currentScreens.indexOf(screen) === -1) {
           this.currentScreens.push(screen)
         }
+        console.log('current answer', this.form.fields.answer_id)
         return this.doCommand({
           'name': 'show_question',
           'data': {
             'view': 'question',
             'question_id': this.question_id,
-            'team_id': this.form.fields.team_id
+            'team_id': this.form.fields.team_id,
+            'answer_id': this.form.fields.answer_id
           },
           screen
         })

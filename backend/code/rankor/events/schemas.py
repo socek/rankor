@@ -32,6 +32,7 @@ class ShowQuestionCommandSchema(CommandSchema):
         view = String()
         question_id = UUID()
         team_id = UUID()
+        answer_id = UUID(allow_none=True)
 
     data = Nested(ShowQuestion)
 
