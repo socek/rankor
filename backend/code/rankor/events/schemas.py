@@ -8,6 +8,11 @@ from rankor.application.marshmellow import UUID
 
 class ScreenSchema(Schema):
     id = UUID()
+    question_id = UUID()
+    answer_id = UUID()
+    team_id = UUID()
+    game_answer_id = UUID()
+    view = String()
 
 
 class CommandSchema(Schema):

@@ -170,6 +170,11 @@
 
           this.screenResource.listScreens(params).then(response => {
             this.screens = response.data
+            this.screens.forEach(screen => {
+              if (screen.view === 'question' && screen.question_id === this.question_id) {
+                this.currentScreens.push(screen)
+              }
+            })
           })
         })
       },

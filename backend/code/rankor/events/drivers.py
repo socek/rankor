@@ -24,7 +24,12 @@ class ScreenQuery(Driver):
         return self.objects().filter(Screen.id == id).one()
 
     def list_for_game(self, game_id):
-        return self.objects().filter(Screen.game_id == game_id).all()
+        return (
+            self.objects()
+            .filter(Screen.game_id == game_id)
+            .order_by(Screen.created_at)
+            .all()
+        )
 
     def list_events_after(self, screen_id, date):
         if type(date) is float:
