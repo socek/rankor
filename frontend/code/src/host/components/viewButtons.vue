@@ -8,21 +8,31 @@
     <ul class="screens">
       <li v-for="(screen, index) in screens">
         Screen {{ index + 1 }}
-        <b-btn @click="onWelcome(screen)" variant="primary" size="small">
-          Show Welcome
-        </b-btn>
+        <div>
+          Commands:
+          <b-btn @click="onWelcome(screen)" :variant="getScreenVariant(screen, 'welcome')" size="small">
+            Show Welcome
+          </b-btn>
 
-        <b-btn @click="onHighscore(screen)" variant="primary" size="small">
-          Show Highscore
-        </b-btn>
+          <b-btn @click="onHighscore(screen)" :variant="getScreenVariant(screen, 'highscore')" size="small">
+            Show Highscore
+          </b-btn>
 
-        <b-btn :to="{name: 'GameScreen', params: makeParams(screen)}" variant="warning" size="small">
-          <icon name="play"></icon>
-        </b-btn>
+          <b-btn :disabled="true" :variant="getScreenVariant(screen, 'question')" size="small">
+            Question
+          </b-btn>
+        </div>
 
-        <b-btn @click="onDelete(screen)" variant="danger" size="small">
-          <icon name="trash"></icon>
-        </b-btn>
+        <div>
+          Actions:
+          <b-btn :to="{name: 'GameScreen', params: makeParams(screen)}" variant="warning" size="small">
+            <icon name="play"></icon>
+          </b-btn>
+
+          <b-btn @click="onDelete(screen)" variant="danger" size="small">
+            <icon name="trash"></icon>
+          </b-btn>
+        </div>
       </li>
     </ul>
   </div>
@@ -43,6 +53,9 @@
     },
     created () { this.refresh() },
     methods: {
+      getScreenVariant (screen, view) {
+        return screen.view === view ? 'danger' : 'primary'
+      },
       refresh () {
         this.screenResource.listScreens(this.params).then(response => {
           this.screens = response.data
@@ -62,7 +75,9 @@
             'view': view
           }
         }
-        return this.screenResource.doCommand(params, data)
+        return this.screenResource.doCommand(params, data).then(response => {
+          screen.view = view
+        })
       },
       onWelcome (screen) {
         this.changeView(screen, 'welcome')
