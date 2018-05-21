@@ -203,7 +203,9 @@
         }).catch(this.onError)
       },
       onSendToScreen (screen) {
-        this.currentScreens.push(screen)
+        if (this.currentScreens.indexOf(screen) === -1) {
+          this.currentScreens.push(screen)
+        }
         return this.doCommand({
           'name': 'show_question',
           'data': {
