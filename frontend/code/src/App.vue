@@ -17,6 +17,8 @@
       </b-collapse>
     </b-navbar>
 
+    <breadcrumb v-if="isNavbar"></breadcrumb>
+
     <div class="container" id="content_container">
       <router-view></router-view>
     </div>
@@ -28,7 +30,8 @@
   import '@/contests/admin_list.css'
 
   import login from '@/auth/login'
-  import register from '@/auth/register.vue'
+  import register from '@/auth/register'
+  import breadcrumb from '@/breadcrumb/component'
 
   export default {
     computed: {
@@ -42,7 +45,8 @@
     name: 'app',
     components: {
       login,
-      register
+      register,
+      breadcrumb
     }
   }
 </script>

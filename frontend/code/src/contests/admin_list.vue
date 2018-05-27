@@ -42,6 +42,7 @@
       }
     },
     created () {
+      this.$store.dispatch('breadcrumb/Contests', this)
       this.refresh()
     },
     methods: {

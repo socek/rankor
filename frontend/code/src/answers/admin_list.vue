@@ -44,6 +44,7 @@
       }
     },
     created: function () {
+      this.$store.dispatch('breadcrumb/Answers', this)
       this.refresh()
     },
     methods: {

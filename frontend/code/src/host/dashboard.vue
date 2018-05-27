@@ -25,6 +25,7 @@
       }
     },
     created () {
+      this.$store.dispatch('breadcrumb/HostView', this)
       this.refresh()
     },
     methods: {

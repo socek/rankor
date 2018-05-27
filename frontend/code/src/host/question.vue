@@ -97,6 +97,7 @@
       }
     },
     created () {
+      this.$store.dispatch('breadcrumb/HostQuestionView', this)
       this.refresh()
     },
     methods: {

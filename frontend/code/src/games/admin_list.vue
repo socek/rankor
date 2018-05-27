@@ -39,6 +39,7 @@
       }
     },
     created () {
+      this.$store.dispatch('breadcrumb/Games', this)
       this.refresh()
     },
     methods: {
