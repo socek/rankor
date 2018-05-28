@@ -16,3 +16,4 @@ class GameSchema(Schema):
             Length(min=4, error="Name must have at lest {min} characters.")
         ],
     )
+    welcome_message = String()

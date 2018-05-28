@@ -26,6 +26,24 @@
           {{ error }}
         </b-form-invalid-feedback>
       </b-form-group>
+
+      <b-form-group id="welcomeMessageFieldGroup"
+                          label="Welcome message:"
+                          label-for="welcomeMessageField">
+        <b-form-textarea id="welcomeMessageField"
+                      v-model.trim="form.fields.welcome_message"
+                      type="text"
+                      :state="form.errors.welcome_message.length == 0 ? null : false"
+                      :rows="3"
+                      :max-rows="6"
+                      placeholder="welcome message"></b-form-textarea>
+        <b-form-invalid-feedback  v-for="error in form.errors.welcome_message"
+                                  class="modal-invalid-feedback"
+                                  :key="error">
+          {{ error }}
+        </b-form-invalid-feedback>
+      </b-form-group>
+
       <input type="hidden" v.model.trim="form.fields.contest_id">
     </template>
   </dialogform>
@@ -43,6 +61,7 @@
       return {
         form: this.prepareForm({
           name: '',
+          welcome_message: '',
           contest_id: this.contest_id
         }),
         resource: gameResource(this)
