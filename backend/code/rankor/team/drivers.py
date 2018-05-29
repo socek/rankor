@@ -1,3 +1,4 @@
+from sqlalchemy import desc
 from sqlalchemy import func
 
 from rankor.application.drivers import Command
@@ -36,6 +37,8 @@ class TeamQuery(Query):
             .join(Answer, GameAnswer.answer_id == Answer.id)
             .filter(Game.id == game_id)
             .group_by(self.model.id)
+            .order_by(desc('wins'))
+            .order_by(desc('count'))
             .all()
         )
 

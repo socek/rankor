@@ -1,7 +1,7 @@
 <template>
   <table class="table table-striped">
-    <thead class="thead-dark">
-      <tr>
+    <thead>
+      <tr class="table-success">
         <th scope="col">#</th>
         <th scope="col">Nazwa</th>
         <th scope="col">Odpowiedzi</th>
@@ -30,8 +30,12 @@
       }
     },
     methods: {
+      getHighscore () {
+        const params = {game_id: this.$route.params.game_id}
+        return this.resource.get_highscore(params)
+      },
       refresh () {
-        this.resource.get_highscore({game_id: this.$route.params.game_id}).then(response => {
+        this.getHighscore().then(response => {
           this.teams = response.body
         })
       }
