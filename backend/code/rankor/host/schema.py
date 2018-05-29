@@ -11,6 +11,7 @@ class FullQuestionSchema(Schema):
     name = String()
     status = String()
     team = String()
+    category = String()
 
     @pre_dump()
     def convert(self, data):
@@ -19,6 +20,7 @@ class FullQuestionSchema(Schema):
         return {
             'id': question.id,
             'name': question.name,
+            'category': question.category,
             'status': self._get_status(is_correct),
             'team': self._get_team(ga)
         }

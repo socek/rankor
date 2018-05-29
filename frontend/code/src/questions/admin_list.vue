@@ -63,9 +63,3 @@
     }
   }
 </script>
-
-<style>
-  tr.title th {
-    text-align: center;
-  }
-</style>

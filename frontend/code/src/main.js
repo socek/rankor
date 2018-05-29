@@ -13,6 +13,7 @@ import store from '@/store'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import '@/common/style.css'
 
 Vue.config.productionTip = true
 Vue.use(BootstrapVue)

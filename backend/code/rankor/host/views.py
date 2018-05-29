@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from pyramid.httpexceptions import HTTPNotFound
 from sapp.decorators import WithContext
 from sqlalchemy.orm.exc import NoResultFound
@@ -89,8 +91,12 @@ class HostQuestionBaseView(HostBaseView):
 class HostQuestionListView(HostBaseView):
     def get(self):
         id = self._get_game_id()
-        elements = self.question_query.list_for_game(id)
-        result = FullQuestionSchema(many=True).dump(elements)
+        schema = FullQuestionSchema()
+        questions = self.question_query.list_for_game(id)
+        result = {'categories': defaultdict(list)}
+        for question in questions:
+            result['categories'][question[0].category].append(
+                schema.dump(question))
         return result
 
 
