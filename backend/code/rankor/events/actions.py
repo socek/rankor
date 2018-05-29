@@ -15,7 +15,7 @@ class Event(object):
 class ChangeViewEvent(Event):
     name = 'change_view'
 
-    _views = ('welcome', 'highscore', 'question')
+    _views = ('welcome', 'highscore', 'question', 'questions')
 
     def __init__(self, screen_id, view):
         assert view in self._views

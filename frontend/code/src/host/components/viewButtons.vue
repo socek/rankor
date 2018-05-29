@@ -18,6 +18,10 @@
             Show Highscore
           </b-btn>
 
+          <b-btn @click="onQuestions(screen)" :variant="getScreenVariant(screen, 'questions')" size="small">
+            Show Questions
+          </b-btn>
+
           <b-btn :disabled="true" :variant="getScreenVariant(screen, 'question')" size="small">
             Question
           </b-btn>
@@ -84,6 +88,9 @@
       },
       onHighscore (screen) {
         this.changeView(screen, 'highscore')
+      },
+      onQuestions (screen) {
+        this.changeView(screen, 'questions')
       },
       onCreate () {
         this.screenResource.createScreen(this.params, {}).then(response => {

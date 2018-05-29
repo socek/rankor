@@ -27,19 +27,24 @@
 
       <question v-if="showView('question')">
       </question>
+
+      <questions v-if="showView('questions')" :game_id="game_id">
+      </questions>
     </div>
   </div>
 </template>
 
 <script>
   import question from '@/game_screen/question'
+  import questions from '@/game_screen/questions'
   import highscore from '@/game_screen/highscore'
   import welcome from '@/game_screen/welcome'
 
   export default {
     data () {
       return {
-        connected: false
+        connected: false,
+        game_id: this.$route.params.game_id
       }
     },
     methods: {
@@ -85,7 +90,8 @@
     components: {
       question,
       highscore,
-      welcome
+      welcome,
+      questions
     }
   }
 </script>
