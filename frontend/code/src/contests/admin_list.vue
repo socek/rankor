@@ -18,8 +18,13 @@
               <router-link :to="{name: 'Questions', params: {contest_id: contest.id}}">
                 <icon name="list-ol"></icon>
               </router-link>
-              <contestEditDialog @onSuccess="refresh" :contest_id="contest.id"></contestEditDialog>
-              <gameStart @onSuccess="refresh" :contest_id="contest.id"></gameStart>
+              <contestEditDialog  @onSuccess="refresh"
+                                  :contest_id="contest.id" />
+              </contestEditDialog>
+              <gameStart  @onSuccess="refresh"
+                          :contest_id="contest.id" />
+              <contestDeleteDialog :contest="contest"
+                                   @deleted="refresh" />
             </td>
           </tr>
         </tbody>
@@ -31,6 +36,7 @@
 <script>
   import contestCreateDialog from '@/contests/dialogs/create'
   import contestEditDialog from '@/contests/dialogs/edit'
+  import contestDeleteDialog from '@/contests/dialogs/delete'
   import contestResource from '@/contests/resource'
   import gameStart from '@/games/dialogs/start'
 
@@ -55,6 +61,7 @@
     components: {
       contestCreateDialog,
       contestEditDialog,
+      contestDeleteDialog,
       gameStart
     }
   }

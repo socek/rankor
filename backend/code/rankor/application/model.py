@@ -2,6 +2,7 @@ from datetime import datetime
 from datetime import timezone
 from uuid import uuid4
 
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy.dialects.postgresql import UUID
@@ -25,6 +26,7 @@ metadata = MetaData(naming_convention=NAMING_CONVENTION)
 class Base(object):
     id = Column(UUID(as_uuid=True), default=uuid4, primary_key=True)
 
+    is_active = Column(Boolean, default=True, nullable=False, server_default='true')
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

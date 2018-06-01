@@ -49,3 +49,7 @@ class AdminContestView(ContestBaseView):
         contest = self._get_contest()
         fields = self.get_validated_fields(ContestSchema())
         self.contest_command.update_by_id(contest.id, fields)
+
+    def delete(self):
+        contest = self._get_contest()
+        self.contest_command.soft_delete(contest.id)

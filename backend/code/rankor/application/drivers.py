@@ -8,8 +8,14 @@ class Query(BaseQuery):
     - model
     """
 
+    def _list_active(self):
+        return (
+            self._query()
+            .filter(self.model.is_active.is_(True))
+        )
+
     def _get_by_id(self, id):
-        return self._query().filter(self.model.id == id)
+        return self._list_active().filter(self.model.id == id)
 
     def get_by_id(self, id):
         return self._get_by_id(id).one()
@@ -31,4 +37,8 @@ class Command(BaseCommand):
         for key, value in update.items():
             update_raw[getattr(self.model, key)] = value
         self.query._get_by_id(id).update(update_raw)
+        self.database.commit()
+
+    def soft_delete(self, id):
+        self.query._get_by_id(id).update({'is_active': False})
         self.database.commit()
