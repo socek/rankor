@@ -32,7 +32,7 @@
                           label="Welcome message:"
                           label-for="welcomeMessageField">
         <b-form-textarea id="welcomeMessageField"
-                      v-model.trim="form.fields.welcome_message"
+                      v-model="form.fields.welcome_message"
                       type="text"
                       :state="form.errors.welcome_message.length == 0 ? null : false"
                       :rows="3"
