@@ -12,8 +12,8 @@
 
         <slot name="content"></slot>
 
-        <input type="submit" value="Save" class="btn btn-primary">
-        <b-btn variant="danger" @click="hideModal">Cancel</b-btn>
+        <input type="submit" value="Save" class="btn btn-primary save">
+        <b-btn class="cancel" variant="danger" @click="hideModal">Cancel</b-btn>
       </form>
       <div v-show="isLoading" class="modal-spiner">
         <icon name="sync" scale="2" spin></icon>
@@ -67,8 +67,14 @@
   }
 </script>
 
-<style>
+<style scoped>
   .modal-spiner {
     text-align: center;
+  }
+  .save {
+    float: left;
+  }
+  .cancel {
+    float: right;
   }
 </style>
