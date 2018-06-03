@@ -42,6 +42,9 @@
         return this.$route.name !== 'GameScreen'
       }
     },
+    created () {
+      this.$store.commit('init', this)
+    },
     name: 'app',
     components: {
       login,

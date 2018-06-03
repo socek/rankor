@@ -1,4 +1,4 @@
-const Contests = (commit, vue) => {
+const Contests = (commit, rootGetters, vue) => {
   commit('clear')
   commit(
     'addCrumb',
@@ -11,13 +11,13 @@ const Contests = (commit, vue) => {
   )
 }
 
-const Questions = (commit, vue) => {
-  Contests(commit, vue)
+const Questions = (commit, rootGetters, vue) => {
+  Contests(commit, rootGetters, vue)
 
   commit(
     'addCrumb',
     {
-      text: 'Questions',
+      textMethod: () => rootGetters['contest/name'],
       to: {
         name: 'Questions',
         params: {
@@ -28,8 +28,8 @@ const Questions = (commit, vue) => {
   )
 }
 
-const Answers = (commit, vue) => {
-  Questions(commit, vue)
+const Answers = (commit, rootGetters, vue) => {
+  Questions(commit, rootGetters, vue)
 
   commit(
     'addCrumb',
@@ -46,7 +46,7 @@ const Answers = (commit, vue) => {
   )
 }
 
-const Games = (commit, vue) => {
+const Games = (commit, rootGetters, vue) => {
   commit('clear')
   commit(
     'addCrumb',
@@ -63,8 +63,8 @@ const Games = (commit, vue) => {
   )
 }
 
-const HostView = (commit, vue) => {
-  Games(commit, vue)
+const HostView = (commit, rootGetters, vue) => {
+  Games(commit, rootGetters, vue)
 
   commit(
     'addCrumb',
@@ -80,8 +80,8 @@ const HostView = (commit, vue) => {
   )
 }
 
-const HostQuestionView = (commit, vue) => {
-  HostView(commit, vue)
+const HostQuestionView = (commit, rootGetters, vue) => {
+  HostView(commit, rootGetters, vue)
 
   commit(
     'addCrumb',
@@ -114,11 +114,11 @@ export default {
     }
   },
   actions: {
-    Contests: ({commit}, vue) => Contests(commit, vue),
-    Questions: ({commit}, vue) => Questions(commit, vue),
-    Answers: ({commit}, vue) => Answers(commit, vue),
-    Games: ({commit}, vue) => Games(commit, vue),
-    HostView: ({commit}, vue) => HostView(commit, vue),
-    HostQuestionView: ({commit}, vue) => HostQuestionView(commit, vue)
+    Contests: ({commit, rootGetters}, vue) => Contests(commit, rootGetters, vue),
+    Questions: ({commit, rootGetters}, vue) => Questions(commit, rootGetters, vue),
+    Answers: ({commit, rootGetters}, vue) => Answers(commit, rootGetters, vue),
+    Games: ({commit, rootGetters}, vue) => Games(commit, rootGetters, vue),
+    HostView: ({commit, rootGetters}, vue) => HostView(commit, rootGetters, vue),
+    HostQuestionView: ({commit, rootGetters}, vue) => HostQuestionView(commit, rootGetters, vue)
   }
 }
