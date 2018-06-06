@@ -1,0 +1,2 @@
+#!/bin/bash
+python /code/rankor/services/gateway.py

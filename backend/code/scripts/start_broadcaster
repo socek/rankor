@@ -1,0 +1,2 @@
+#!/bin/bash
+celery -A rankor.services.broadcaster.app worker -Q broadcaster

@@ -1,0 +1,2 @@
+#!/bin/bash
+celery -A rankor.services.starter_s2.celery_app worker -Q s2
